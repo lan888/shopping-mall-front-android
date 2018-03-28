@@ -85,7 +85,6 @@ public class UpdateShippingActivity extends BaseActivity {
             @Override
             public void onUiThread(Object o, String json) {
                 if (json.contains("ERR_INVALID_AUTH")){
-
                     Utils.showShortToast(context,getResources().getString(R.string.login_loss));
                     Utils.start_Activity(context,LoginActivity.class);
 
