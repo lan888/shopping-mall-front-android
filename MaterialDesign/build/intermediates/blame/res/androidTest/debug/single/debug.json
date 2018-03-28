@@ -1,0 +1,302 @@
+[
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_template_part_chronometer.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\layout\\notification_template_part_chronometer.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4_notify_panel_notification_icon_bg.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-mdpi-v4\\notify_panel_notification_icon_bg.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_template_lines_media.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\1c31b51ffb1b3fe4fe6dd0fb742191f5\\res\\layout\\notification_template_lines_media.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_background_checkbox_uncheck.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable\\background_checkbox_uncheck.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_background_checkbox_check.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable\\background_checkbox_check.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_background_button.9.png.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable\\background_button.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4_notification_bg_low_pressed.9.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-hdpi-v4\\notification_bg_low_pressed.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout-v21_notification_template_custom_big.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\layout-v21\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_template_media_custom.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\1c31b51ffb1b3fe4fe6dd0fb742191f5\\res\\layout\\notification_template_media_custom.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout-v21_notification_action.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\layout-v21\\notification_action.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4_notify_panel_notification_icon_bg.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-hdpi-v4\\notify_panel_notification_icon_bg.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_background_switch_ball_uncheck.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable\\background_switch_ball_uncheck.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_template_media.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\1c31b51ffb1b3fe4fe6dd0fb742191f5\\res\\layout\\notification_template_media.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4_sprite_check.png.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\sprite_check.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_number_indicator_spinner.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\layout\\number_indicator_spinner.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4_notification_bg_normal_pressed.9.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-hdpi-v4\\notification_bg_normal_pressed.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout-v21_notification_template_icon_group.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\layout-v21\\notification_template_icon_group.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim_dialog_root_show_amin.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\anim\\dialog_root_show_amin.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_action.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\layout\\notification_action.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_dialog.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\layout\\dialog.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_notification_bg.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable\\notification_bg.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4_notification_bg_low_normal.9.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-hdpi-v4\\notification_bg_low_normal.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4_sprite_check.png.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\sprite_check.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_action_tombstone.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\layout\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_template_big_media_narrow_custom.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\1c31b51ffb1b3fe4fe6dd0fb742191f5\\res\\layout\\notification_template_big_media_narrow_custom.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_notification_bg_normal_pressed.9.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-xhdpi-v4\\notification_bg_normal_pressed.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim_dialog_root_hide_amin.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\anim\\dialog_root_hide_amin.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim_dialog_main_show_amination.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\anim\\dialog_main_show_amination.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim_progress_indeterminate_animation.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\anim\\progress_indeterminate_animation.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_shadow_down.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable\\shadow_down.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_float_button1_shadowp.png.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\float_button1_shadowp.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4_notification_bg_normal.9.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-mdpi-v4\\notification_bg_normal.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim_snackbar_hide_animation.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\anim\\snackbar_hide_animation.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_background_button_float.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable\\background_button_float.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_sprite_check.png.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\sprite_check.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_notification_bg_low_normal.9.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-xhdpi-v4\\notification_bg_low_normal.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_snackbar.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\layout\\snackbar.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4_ic_launcher.png.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable-mdpi-v4\\ic_launcher.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim_snackbar_show_animation.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\anim\\snackbar_show_animation.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_template_part_time.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\layout\\notification_template_part_time.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_notification_bg_normal.9.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-xhdpi-v4\\notification_bg_normal.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_shadow_right.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable\\shadow_right.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4_notification_bg_normal.9.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-hdpi-v4\\notification_bg_normal.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4_sprite_check.png.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable-mdpi-v4\\sprite_check.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_notification_tile_bg.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable\\notification_tile_bg.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim_dialog_main_hide_amination.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\anim\\dialog_main_hide_amination.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_float_button_shadow1.png.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\float_button_shadow1.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout-v21_notification_action_tombstone.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\layout-v21\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_template_big_media.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\1c31b51ffb1b3fe4fe6dd0fb742191f5\\res\\layout\\notification_template_big_media.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_ic_launcher.png.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\ic_launcher.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_notification_bg_low.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable\\notification_bg_low.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_template_icon_group.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\layout\\notification_template_icon_group.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-v21_notification_action_background.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-v21\\notification_action_background.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_color_selector.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\layout\\color_selector.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_progress_dialog.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\layout\\progress_dialog.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_background_progress.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable\\background_progress.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_dialog_background.9.png.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\dialog_background.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_media_cancel_action.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\1c31b51ffb1b3fe4fe6dd0fb742191f5\\res\\layout\\notification_media_cancel_action.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_background_button_rectangle.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable\\background_button_rectangle.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_template_custom_big.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\layout\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4_notification_bg_low_normal.9.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-mdpi-v4\\notification_bg_low_normal.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4_ic_launcher.png.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ic_launcher.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_media_action.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\1c31b51ffb1b3fe4fe6dd0fb742191f5\\res\\layout\\notification_media_action.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout-v16_notification_template_custom_big.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\layout-v16\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_template_big_media_custom.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\1c31b51ffb1b3fe4fe6dd0fb742191f5\\res\\layout\\notification_template_big_media_custom.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_notification_bg_low_pressed.9.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-xhdpi-v4\\notification_bg_low_pressed.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4_notification_bg_low_pressed.9.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-mdpi-v4\\notification_bg_low_pressed.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_notification_icon_background.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable\\notification_icon_background.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_notification_template_big_media_narrow.xml.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\1c31b51ffb1b3fe4fe6dd0fb742191f5\\res\\layout\\notification_template_big_media_narrow.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_background_checkbox.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable\\background_checkbox.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-ldpi-v4_sprite_check.png.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable-ldpi-v4\\sprite_check.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4_notification_bg_normal_pressed.9.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-mdpi-v4\\notification_bg_normal_pressed.9.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_ic_reloj_max.png.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\ic_reloj_max.png"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_background_transparent.xml.flat",
+        "source": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\bundles\\debug\\res\\drawable\\background_transparent.xml"
+    },
+    {
+        "merged": "E:\\GuzzuDemo\\MaterialDesign\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4_notify_panel_notification_icon_bg.png.flat",
+        "source": "C:\\Users\\Ian\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\d69d56a325077f90be9f9d6b0de0a0c1\\res\\drawable-xhdpi-v4\\notify_panel_notification_icon_bg.png"
+    }
+]

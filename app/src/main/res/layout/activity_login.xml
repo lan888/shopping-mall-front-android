@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fadingEdge="none"
+    android:scrollbars="none">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_header"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/APP_TITLE"
+            android:textSize="24dp"
+            android:textColor="@color/black"
+            android:gravity="center"
+            />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/email"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:maxLines="1"
+            android:inputType="textEmailAddress"
+            android:hint="@string/APP_EMAIL"
+            android:textSize="20sp"
+            app:met_bottomTextSize="20dp"
+            app:met_floatingLabel="highlight"
+            app:met_primaryColor="?colorAccent"
+        />
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/password"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:maxLines="1"
+            android:inputType="textPassword"
+            android:hint="@string/APP_PASSWORD"
+            android:textSize="20sp"
+            app:met_bottomTextSize="20dp"
+            app:met_floatingLabel="highlight"
+            app:met_primaryColor="?colorAccent"
+            />
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:id="@+id/btn_login"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:background="@color/colorPrimary"
+            android:text="@string/APP_LOGIN_BTN"
+            android:textSize="12sp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <!--<com.gc.materialdesign.views.ButtonFlat-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="start"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:text="@string/register"-->
+                <!--android:textSize="15sp"-->
+
+                <!--/>-->
+
+            <!--<com.gc.materialdesign.views.ButtonFlat-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_marginLeft="130dp"-->
+                <!--android:layout_marginStart="130dp"-->
+                <!--android:text="@string/forget_password"-->
+                <!--android:textSize="15sp" />-->
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+</ScrollView>
