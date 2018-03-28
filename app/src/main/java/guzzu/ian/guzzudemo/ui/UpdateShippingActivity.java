@@ -141,7 +141,7 @@ public class UpdateShippingActivity extends BaseActivity {
 
                         }else {
                             hintKeyboard();
-                            Utils.finish(context);
+                            Utils.start_Activity(context,OrderActivity.class);
                             Utils.showShortToast(context,getResources().getString(R.string.ship_success));
                         }
 

@@ -65,6 +65,7 @@ public class OrderActivity extends BaseActivity {
     Filter filter = new Filter();
     Filter.Filters filters = new Filter.Filters();
     Filter.Filters.isArchived isArchived = new Filter.Filters.isArchived();
+    String filtersInfo;
     private ArrayList<String> mBill_num = new ArrayList<String>();
     private ArrayList<String> mBill_createAt = new ArrayList<String>();
     private ArrayList<String> mOrder_status = new ArrayList<String>();
@@ -113,10 +114,10 @@ public class OrderActivity extends BaseActivity {
         filters.setIsArchived(isArchived);
         filter.setFilters(filters);
         Gson gson = new Gson();
-        String filters = gson.toJson(filter, Filter.class);
+        filtersInfo = gson.toJson(filter, Filter.class);
 
         Log.e("filter", "f:" + filters);
-        OkHttp3Utils.doPostJson(Api.CUZZU_API + Api.Order_FIND, filters, user_id, new GsonObjectCallback<Order>() {
+        OkHttp3Utils.doPostJson(Api.CUZZU_API + Api.Order_FIND, filtersInfo, user_id, new GsonObjectCallback<Order>() {
 
             @Override
             public void onUiThread(Order order, String json) {
@@ -191,6 +192,62 @@ public class OrderActivity extends BaseActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        mOrder_id.clear();
+                        mBill_num.clear();
+                        mBill_createAt.clear();
+                        mOrder_status.clear();
+                        mPayment_status.clear();
+                        mShipping_status.clear();
+                        mCustomer_name.clear();
+                        mTotal_pay.clear();
+                        OkHttp3Utils.doPostJson(Api.CUZZU_API + Api.Order_FIND, filtersInfo, user_id, new GsonObjectCallback<Order>() {
+                            @Override
+                            public void onUiThread(Order order, String json) {
+                                if (json.contains("ERR_INVALID_AUTH")||json.contains("ERR_INVALID_PARAM")) {
+
+                                    Utils.showShortToast(context, getResources().getString(R.string.login_loss));
+                                    Utils.start_Activity(context, LoginActivity.class);
+                                    finish();
+
+                                } else {
+                                    if (order.getTotal() != 0) {
+                                        store = order.getResults().get(0).getStore().getName().getZh();
+                                        int j = order.getResults().size();
+                                        for (int i = 0; i < j; i++) {
+                                            String orderId = order.getResults().get(i).get_id();
+                                            String refId = order.getResults().get(i).getRefId();
+                                            String createAt = order.getResults().get(i).getCreatedAt();
+                                            String orderStatus = order.getResults().get(i).getStatus();
+                                            String paymentStatus = order.getResults().get(i).getPaymentStatus();
+                                            String shippingStatus = order.getResults().get(i).getShippingStatus();
+                                            String totalPaid = Integer.toString(order.getResults().get(i).getTotalPaid());
+                                            String customer_name = order.getResults().get(i).getShippingAddress().getName();
+                                            String createAtTime = Utils.getTimeFromUTC(createAt);
+                                            double paid = Double.parseDouble(totalPaid);
+                                            totalPaid = Double.toString(paid / 100);
+                                            mBill_createAt.add(createAtTime);
+                                            mBill_num.add(refId);
+                                            mOrder_status.add(orderStatus);
+                                            mPayment_status.add(paymentStatus);
+                                            mShipping_status.add(shippingStatus);
+                                            mTotal_pay.add("¥" + totalPaid);
+                                            mCustomer_name.add(customer_name);
+                                            mOrder_id.add(orderId);
+
+                                        }
+                                    }
+
+                                    mAdapter = new OrderRvAdapter(OrderActivity.this, store_id, user_id, mOrder_id, mBill_num, mBill_createAt
+                                            , mOrder_status, mPayment_status, mShipping_status, mCustomer_name, mTotal_pay);
+                                    mRecyclerView.setAdapter(mAdapter);
+                                }
+                            }
+
+                            @Override
+                            public void onFailed(Call call, IOException exception) {
+
+                            }
+                        });
                         mAdapter.notifyDataSetChanged();
                         srl.setRefreshing(false);
                     }
