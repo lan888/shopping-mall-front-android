@@ -152,7 +152,7 @@ public class LoginActivity extends BaseActivity {
                     });
                 } else {
                     Utils.putValue(context, "username", user.getUser().getName());
-                    PushServiceFactory.getCloudPushService().bindAccount(object.get_id(), new CommonCallback() {
+                    PushServiceFactory.getCloudPushService().bindAccount(object.getUser().get_id(), new CommonCallback() {
                         @Override
                         public void onSuccess(String s) {
                             Log.i("DeviceId:",PushServiceFactory.getCloudPushService().getDeviceId()+"注册成功");
