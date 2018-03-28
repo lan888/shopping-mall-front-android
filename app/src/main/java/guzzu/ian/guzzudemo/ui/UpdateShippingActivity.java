@@ -137,7 +137,7 @@ public class UpdateShippingActivity extends BaseActivity {
                     @Override
                     public void onUiThread(Objects objects, String json) {
                         if (json.contains("ERR_INVALID_PARAM")){
-                            Utils.showShortToast(context,getResources().getString(R.string.ship_ERROR));
+                            Utils.showShortToast(context,getResources().getString(R.string.ship_error));
 
                         }else {
                             hintKeyboard();

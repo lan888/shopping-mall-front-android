@@ -4,7 +4,7 @@
     <string name="ship_success">Order is marked as "shipped"</string>
     <string name="ship_title">Fulfill Order</string>
     <string name="ship_tracking_num">Tracking Number</string>
-    <string name="ship_ERROR">Tracking Number is error</string>
+    <string name="ship_error">Tracking Number is error</string>
     <string name="ship_shipping_provider">Shipping Provider</string>
     <string name="ship_info">Tracking information (optional)</string>
     <string name="submit">SUBMIT</string>

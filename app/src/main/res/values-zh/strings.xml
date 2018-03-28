@@ -6,6 +6,7 @@
     <string name="ship_tracking_num">快递号码</string>
     <string name="ship_shipping_provider">快递公司</string>
     <string name="ship_info">快递信息（可选择的）</string>
+    <string name="ship_error">快递号码有误</string>
     <string name="submit">提交</string>
     <string name="logining">登录中。。。</string>
     <string name="login_loss">登录失效，请重新登录</string>
