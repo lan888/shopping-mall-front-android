@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="首页"
+        android:icon="@drawable/ic_home_24dp"
+        android:id="@+id/home_item"/>
+
+    <item
+        android:id="@+id/category_item"
+        android:icon="@drawable/ic_category_24dp"
+        android:title="分类" />
+    <item
+        android:icon="@drawable/ic_shopping_cart_24dp"
+        android:id="@+id/shoppingcart_item"
+        android:title="购物车" />
+    <item
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:id="@+id/my_item"
+        android:title="我的" />
+
+</menu>

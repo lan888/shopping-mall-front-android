@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cuzzu.ian.cuzzudemo.MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.MainActivity">
+    <android.support.v4.view.ViewPager
+        android:id="@+id/mViewPager"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_above="@id/mBottom"
+        >
+    </android.support.v4.view.ViewPager>
+    <View
+        android:id="@+id/line"
+        android:layout_above="@id/mBottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_size"
+        android:background="@color/divider"
+        />
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/mBottom"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.design.widget.BottomNavigationView>
 
-</android.support.constraint.ConstraintLayout>
+
+</RelativeLayout>

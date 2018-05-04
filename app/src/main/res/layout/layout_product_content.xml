@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_large"
+        android:textStyle="bold"
+        android:paddingTop="6dp"
+        android:paddingLeft="18dp"
+        android:textColor="@color/md_black_1000"
+        android:id="@+id/product_name"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_large"
+        android:paddingLeft="18dp"
+        android:textColor="@color/red"
+        android:textStyle="bold"
+        android:id="@+id/product_prize"
+        />
+    <View
+        android:id="@+id/line"
+        android:layout_marginTop="10dp"
+        android:layout_height="1dp"
+        android:layout_width="match_parent"
+        android:background="@color/md_grey_300"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/option"
+            android:text="已选：请选择颜色 型号 分类"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:layout_gravity="start"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_right"
+            android:layout_alignParentRight="true"
+
+            />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="上拉查看图文详情"
+        android:gravity="center"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
+        />
+    <include layout="@layout/layout_webview"/>
+</LinearLayout>

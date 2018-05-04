@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.WaitDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowIsFloating">true</item><!-- 设置为浮动窗口 -->
+        <item name="android:windowFrame">@null</item><!-- 设置无边框 -->
+        <item name="android:windowNoTitle">true</item><!-- 设置无标题 -->
+        <item name="android:windowBackground">@android:color/transparent</item><!-- 设置完全透明 -->
+        <item name="android:backgroundDimEnabled">true</item><!-- 设置屏幕变暗 -->
+    </style>
+    <style name="Widget.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="contentInsetStart">24dp</item>
+    </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>
