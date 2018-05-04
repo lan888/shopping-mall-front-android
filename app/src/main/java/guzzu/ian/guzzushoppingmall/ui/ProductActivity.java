@@ -57,6 +57,16 @@ public class ProductActivity extends BaseActivity {
         showLoading("加载中");
         mTab.addTab(mTab.newTab().setText("商品"));
         mTab.addTab(mTab.newTab().setText("详情"));
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.finish(context);
+            }
+        });
     }
 
     @Override
@@ -106,6 +116,12 @@ public class ProductActivity extends BaseActivity {
                     mToolbar.setAlpha(percent);
                     mTab.setAlpha(percent);
                 }
+                if (percent==0){
+                    mToolbar.setVisibility(View.GONE);
+                }else {
+                    mToolbar.setVisibility(View.VISIBLE);
+
+                }
                 if (mIndex==1) {
                     TabLayout.Tab tab = mTab.getTabAt(1);
                     if (tab != null) {
@@ -141,7 +157,15 @@ public class ProductActivity extends BaseActivity {
 
                     @Override
                     public void onTabReselected(TabLayout.Tab tab) {
-
+                        switch (tab.getPosition()){
+                            case 0:
+                                mRvProduct.smoothScrollToPosition(0);
+                                break;
+                            case 1:
+                                mRvProduct.smoothScrollToPosition(1);
+                                percent = 1f;
+                                break;
+                        }
                     }
                 });
                 Log.d(TAG, "onScrolled: "+percent+","+dy+","+recyclerView.getChildAt(0).getTop());
