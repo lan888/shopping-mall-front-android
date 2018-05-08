@@ -1,5 +1,6 @@
 package guzzu.ian.guzzushoppingmall.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ import guzzu.ian.guzzushoppingmall.viewholder.ProductTopViewHolder;
 public class ProductRvAdapter extends RecyclerView.Adapter {
     private final LayoutInflater mLayoutInflater;
     private final Context mContext;
+    private Dialog dialog;
     private Product product;
     private int currentType = TOP;
     /**
@@ -35,6 +37,9 @@ public class ProductRvAdapter extends RecyclerView.Adapter {
         this.product = product;
     }
 
+    public void setDialog(Dialog dialog) {
+        this.dialog = dialog;
+    }
 
     @NonNull
     @Override
@@ -69,7 +74,7 @@ public class ProductRvAdapter extends RecyclerView.Adapter {
             }
         }else if (getItemViewType(position)==MIDDLE){
             ProductMiddleViewHolder productMiddleViewHolder = (ProductMiddleViewHolder) holder;
-            productMiddleViewHolder.setData(product,mContext);
+            productMiddleViewHolder.setData(product,mContext,dialog);
 
         }
     }
