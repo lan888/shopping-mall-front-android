@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     >
-        <guzzu.ian.guzzushoppingmall.widget.MyImageView
+        <guzzu.cnshoppingmall.aa.widget.MyImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="2dp"

@@ -39,7 +39,7 @@
         android:text="规格："
         android:paddingLeft="@dimen/font_normal"
         android:layout_below="@id/img"/>
-        <guzzu.ian.guzzushoppingmall.widget.FlowRadioGroup
+        <guzzu.cnshoppingmall.aa.widget.FlowRadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/option"
