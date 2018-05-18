@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -34,9 +35,10 @@ import static android.support.constraint.Constraints.TAG;
 public class CategoryTabFragment extends Fragment {
 
     private Context mContext;
-    private ImageView mTv;
-    private GridView mGv;
-    private ArrayList<Map<String,Object>>dataList ;
+//    private ImageView mTv;
+//    private GridView mGv;
+//    private ArrayList<Map<String,Object>>dataList ;
+    private RecyclerView mRv;
     private Categories categories;
     public static CategoryTabFragment newInstance(String content) {
         Bundle args = new Bundle();
@@ -61,40 +63,45 @@ public class CategoryTabFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mTv = view.findViewById(R.id.tv);
-        mGv = view.findViewById(R.id.gv);
+//        mTv = view.findViewById(R.id.tv);
+//        mGv = view.findViewById(R.id.gv);
+        mRv = view.findViewById(R.id.rv_category);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Gson gson = new Gson();
-        String[] from={"img","text"};
-        int[] to={R.id.img,R.id.text};
-        initData();
+//        String[] from={"img","text"};
+//        int[] to={R.id.img,R.id.text};
+//        initData();
         String img = getArguments().getString("content");
         categories = gson.fromJson(img,Categories.class);
-        ViewGroup.LayoutParams lp = mTv.getLayoutParams();
-        lp.height = mTv.getMeasuredWidth()*categories.getImage().getOriginal().getHeight()/categories.getImage().getOriginal().getWidth();
-        mTv.setLayoutParams(lp);
-        Glide.with(mContext).load(categories.getImage().getUrl()).apply(RequestOptions.centerCropTransform()).into(mTv);
-        mGv.setAdapter(new SimpleAdapter(mContext,dataList,R.layout.gridview_item,from,to));
-        Log.d(TAG, "onActivityCreated: "+img);
+//        ViewGroup.LayoutParams lp = mTv.getLayoutParams();
+//        lp.height = categories.getImage().getOriginal().getHeight();
+//        mTv.setLayoutParams(lp);
+//        Glide.with(mContext).load(categories.getImage().getUrl()).apply(RequestOptions.centerCropTransform()).into(mTv);
+//        mGv.setAdapter(new SimpleAdapter(mContext,dataList,R.layout.gridview_item,from,to));
+//        Log.d(TAG, "onActivityCreated: "+img);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(mContext,categories);
+        FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(mContext);
+        mRv.setLayoutManager(flexboxLayoutManager);
+        mRv.setAdapter(categoryAdapter);
 
 
 
     }
-    void initData() {
-        //图标
-        int icno[] = { R.drawable.ic_launcher_background };
-        //图标下的文字
-        String name[]={"时钟","信号","宝箱","秒钟","大象","FF","记事本","书签","印象","商店","主题","迅雷"};
-        dataList = new ArrayList<>();
-        for (int i = 0; i <name.length; i++) {
-            Map<String, Object> map=new HashMap<String, Object>();
-            map.put("img", icno[0]);
-            map.put("text",name[i]);
-            dataList.add(map);
-        }
-    }
+//    void initData() {
+//        //图标
+//        int icno[] = { R.drawable.ic_launcher_background };
+//        //图标下的文字
+//        String name[]={"时钟","信号","宝箱","秒钟","大象","FF","记事本","书签","印象","商店","主题","迅雷"};
+//        dataList = new ArrayList<>();
+//        for (int i = 0; i <name.length; i++) {
+//            Map<String, Object> map=new HashMap<String, Object>();
+//            map.put("img", icno[0]);
+//            map.put("text",name[i]);
+//            dataList.add(map);
+//        }
+//    }
 }

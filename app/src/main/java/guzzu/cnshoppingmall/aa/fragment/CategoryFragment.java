@@ -92,6 +92,17 @@ public class CategoryFragment extends BaseFragment<MainActivity> {
                         return 0;
                     }
                 });
+                mVTab.addOnTabSelectedListener(new VerticalTabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabView tab, int position) {
+                        mViewpager.setCurrentItem(position);
+                    }
+
+                    @Override
+                    public void onTabReselected(TabView tab, int position) {
+
+                    }
+                });
                 mViewpager.setAdapter(new YFragmentPagerAdapter(getChildFragmentManager()) {
                     @Override
                     public Fragment getItem(int position) {
