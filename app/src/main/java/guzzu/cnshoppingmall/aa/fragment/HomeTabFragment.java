@@ -34,7 +34,7 @@ import guzzu.cnshoppingmall.aa.bean.BlockTitle;
 import guzzu.cnshoppingmall.aa.bean.Blocks;
 import okhttp3.Call;
 
-public class TabFragment extends Fragment{
+public class HomeTabFragment extends Fragment{
 
     private List<Blocks> blocksList = new ArrayList<>();
     private RecyclerView mRv;
@@ -49,10 +49,10 @@ public class TabFragment extends Fragment{
     private BlockTitle blockTitle;
     private BlockSpacer blockSpacer;
     private Blocks blocks;
-    public static TabFragment newInstance(String content) {
+    public static HomeTabFragment newInstance(String content) {
         Bundle args = new Bundle();
         args.putString("content", content);
-        TabFragment fragment = new TabFragment();
+        HomeTabFragment fragment = new HomeTabFragment();
         fragment.setArguments(args);
         return fragment;
     }

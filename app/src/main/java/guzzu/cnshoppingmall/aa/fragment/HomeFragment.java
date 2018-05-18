@@ -52,7 +52,7 @@ public class HomeFragment extends BaseFragment<MainActivity> {
                 for (int i = 0;i<pagesList.size();i++){
                     mTab.addTab(mTab.newTab().setText(pagesList.get(i).getTabLabel()));
                     mShoppingMallPageId = pagesList.get(i).get_id();
-                    mFragments.add(TabFragment.newInstance(mShoppingMallPageId));
+                    mFragments.add(HomeTabFragment.newInstance(mShoppingMallPageId));
                 }
                 mPagerAdapter=new FragmentPagerAdapter(getChildFragmentManager()) {
                     @Override

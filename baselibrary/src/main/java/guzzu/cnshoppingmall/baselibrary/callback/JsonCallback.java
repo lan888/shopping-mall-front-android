@@ -35,7 +35,7 @@ public abstract class JsonCallback implements Callback {
                 }
             });
         }catch (Exception e){
-            Log.e("json",e+"json返回空");
+            Log.e("json",e.toString());
         }
 
     }

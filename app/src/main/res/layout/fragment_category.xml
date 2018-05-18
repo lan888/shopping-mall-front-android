@@ -16,5 +16,33 @@
             android:theme="@style/AppTheme.AppBarOverlay">
     <include layout="@layout/include_toolbar"/>
         </android.support.design.widget.AppBarLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <q.rorbin.verticaltablayout.VerticalTabLayout
+                android:layout_width="72dp"
+                android:layout_height="match_parent"
+                android:id="@+id/vTab"
+                android:background="#FFFFFF"
+                app:indicator_color="@color/colorPrimary"
+                app:indicator_gravity="left"
+                app:tab_height="60dp"
+                app:tab_mode="scrollable" >
+            </q.rorbin.verticaltablayout.VerticalTabLayout>
+            <View
+                android:id="@+id/line1"
+                android:layout_height="match_parent"
+                android:layout_width="1px"
+                android:background="@color/md_grey_300"
+                />
+            <cn.youngkaaa.yviewpager.YViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:orientation="vertical"
+                >
+            </cn.youngkaaa.yviewpager.YViewPager>
+        </LinearLayout>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
