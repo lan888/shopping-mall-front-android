@@ -60,7 +60,9 @@ public abstract class BaseFragment<M> extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
+        if (unbinder!=null){
+            unbinder.unbind();
+        }
     }
 
     protected int getLayoutResId() {

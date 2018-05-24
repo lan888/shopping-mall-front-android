@@ -10,8 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
@@ -26,9 +28,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.youngkaaa.yviewpager.YViewPager;
 import guzzu.cnshoppingmall.aa.R;
 import guzzu.cnshoppingmall.aa.adapter.CategoryAdapter;
 import guzzu.cnshoppingmall.aa.bean.Categories;
+import guzzu.cnshoppingmall.aa.widget.MySwipeRecyclerView;
+import guzzu.cnshoppingmall.baselibrary.util.Utils;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -38,8 +43,9 @@ public class CategoryTabFragment extends Fragment {
 //    private ImageView mTv;
 //    private GridView mGv;
 //    private ArrayList<Map<String,Object>>dataList ;
-    private RecyclerView mRv;
+    private MySwipeRecyclerView mRv;
     private Categories categories;
+
     public static CategoryTabFragment newInstance(String content) {
         Bundle args = new Bundle();
         args.putString("content", content);
@@ -47,6 +53,11 @@ public class CategoryTabFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    public CategoryTabFragment() {
+        // Required empty public constructor
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,14 +95,16 @@ public class CategoryTabFragment extends Fragment {
 //        mGv.setAdapter(new SimpleAdapter(mContext,dataList,R.layout.gridview_item,from,to));
 //        Log.d(TAG, "onActivityCreated: "+img);
         CategoryAdapter categoryAdapter = new CategoryAdapter(mContext,categories);
-        FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(mContext);
+        LinearLayoutManager flexboxLayoutManager = new LinearLayoutManager(mContext);
         mRv.setLayoutManager(flexboxLayoutManager);
         mRv.setAdapter(categoryAdapter);
 
 
 
     }
-//    void initData() {
+
+
+    //    void initData() {
 //        //图标
 //        int icno[] = { R.drawable.ic_launcher_background };
 //        //图标下的文字

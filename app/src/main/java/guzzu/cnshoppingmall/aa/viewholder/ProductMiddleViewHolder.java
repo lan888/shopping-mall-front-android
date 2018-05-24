@@ -41,7 +41,7 @@ public class ProductMiddleViewHolder extends RecyclerView.ViewHolder {
         mLinear.addView(mWebView);
         Log.e("log", "setData: "+data);
         mProductName.setText(product.getName());
-        mProductPrize.setText("￥" + String.valueOf(product.getPrice() / 100));
+        mProductPrize.setText("¥" + String.valueOf(product.getPrice() / 100));
         mRelative.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

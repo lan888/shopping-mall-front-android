@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import guzzu.cnshoppingmall.baselibrary.base.BaseApp;
 import guzzu.cnshoppingmall.baselibrary.base.BaseFragment;
 import guzzu.cnshoppingmall.baselibrary.callback.GsonArrayCallback;
 import guzzu.cnshoppingmall.baselibrary.util.ContentView;
@@ -34,7 +35,11 @@ public class HomeFragment extends BaseFragment<MainActivity> {
     private List<Pages> pagesList;
     private String mShoppingMallPageId;
     private FragmentPagerAdapter mPagerAdapter;
-        @Override
+
+    public HomeFragment() {
+    }
+
+    @Override
         protected void initialToolbar() {
             if (mToolbar != null) {
                 mToolbar.setTitle("首页");
@@ -50,7 +55,7 @@ public class HomeFragment extends BaseFragment<MainActivity> {
                 pagesList =list;
                 mFragments = new ArrayList<>();
                 for (int i = 0;i<pagesList.size();i++){
-                    mTab.addTab(mTab.newTab().setText(pagesList.get(i).getTabLabel()));
+                    mTab.addTab(mTab.newTab().setText(pagesList.get(i).getPageTitle()));
                     mShoppingMallPageId = pagesList.get(i).get_id();
                     mFragments.add(HomeTabFragment.newInstance(mShoppingMallPageId));
                 }
@@ -67,6 +72,7 @@ public class HomeFragment extends BaseFragment<MainActivity> {
                 };
                 mViewPager.setAdapter(mPagerAdapter);
                 mViewPager.setOffscreenPageLimit(3);
+                mViewPager.setPageMargin(BaseApp.width);
                 Log.d("fragment", "onUiThread: "+mFragments.size());
             }
 

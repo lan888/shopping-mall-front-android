@@ -49,6 +49,10 @@ public class HomeTabFragment extends Fragment{
     private BlockTitle blockTitle;
     private BlockSpacer blockSpacer;
     private Blocks blocks;
+
+    public HomeTabFragment() {
+    }
+
     public static HomeTabFragment newInstance(String content) {
         Bundle args = new Bundle();
         args.putString("content", content);

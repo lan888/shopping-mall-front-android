@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
   <android.support.v7.widget.RecyclerView
@@ -13,14 +12,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/white"
+            >
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:layout_marginTop="6dp"
                 android:alpha="0"
                 android:tag="toolbar"
+                app:navigationIcon="@drawable/ic_chevron_left_black_24dp"
                 android:visibility="gone"
                 >
                 <android.support.design.widget.TabLayout
@@ -39,20 +42,35 @@
             </android.support.v7.widget.Toolbar>
 
         </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginLeft="12dp">
+        <guzzu.cnshoppingmall.baselibrary.widget.CircleImageView
+            android:id="@+id/iv_circle_back"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_chevron_left_white_36dp"
+            app:civ_fill_color="@color/md_grey_600"
+            />
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="42dp">
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="客服"
-                android:padding="12dp"
+                android:drawableTop="@drawable/ic_person_24dp"
+                android:paddingRight="12dp"
+                android:paddingLeft="12dp"
                 android:background="@color/white"
                 android:gravity="center"
                 android:layout_weight="1"
@@ -65,11 +83,14 @@
                 />
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="收藏"
-                android:padding="12dp"
-                android:background="@color/white"
+                android:paddingRight="12dp"
+                android:paddingLeft="12dp"
                 android:gravity="center"
+                android:drawableTop="@drawable/ic_favorite_24dp"
+                android:textSize="10dp"
+                android:background="@color/white"
                 android:layout_weight="1"
                 />
             <View
@@ -80,16 +101,19 @@
                 />
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="购物车"
+                android:drawableTop="@drawable/ic_shopping_cart_24dp"
                 android:background="@color/white"
+                android:textSize="10dp"
                 android:gravity="center"
-                android:padding="12dp"
+                android:paddingRight="12dp"
+                android:paddingLeft="12dp"
                 android:layout_weight="1"
                 />
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/tv_buy"
                 android:text="立即购买"
                 android:gravity="center"
@@ -102,7 +126,7 @@
             <TextView
                 android:id="@+id/tv_addcart"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="12dp"
                 android:background="@color/md_red_300"
@@ -112,4 +136,4 @@
                 />
         </LinearLayout>
     </LinearLayout>
-</android.support.v4.widget.DrawerLayout>
+</RelativeLayout>

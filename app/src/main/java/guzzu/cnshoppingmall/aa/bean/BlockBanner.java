@@ -49,7 +49,7 @@ public class BlockBanner {
         private Image image;
         private String linkType;
         private String product;
-        private Title title;
+        private String title;
 
         public Image getImage() {
             return image;
@@ -75,11 +75,11 @@ public class BlockBanner {
             this.product = product;
         }
 
-        public Title getTitle() {
+        public String getTitle() {
             return title;
         }
 
-        public void setTitle(Title title) {
+        public void setTitle(String title) {
             this.title = title;
         }
 
@@ -413,20 +413,6 @@ public class BlockBanner {
             }
         }
 
-        public static class Title {
-            /**
-             * en :
-             */
 
-            private String en;
-
-            public String getEn() {
-                return en;
-            }
-
-            public void setEn(String en) {
-                this.en = en;
-            }
-        }
     }
 }

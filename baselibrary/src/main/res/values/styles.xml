@@ -14,4 +14,11 @@
         <item name="contentInsetStart">24dp</item>
     </style>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Widget.MultiState.Button" parent="Widget.AppCompat.Button">
+        <item name="android:paddingLeft">@dimen/spacing_micro</item>
+        <item name="android:paddingRight">@dimen/spacing_micro</item>
+        <item name="android:textSize">@dimen/font_normal</item>
+        <item name="android:textColor">@color/md_white_1000</item>
+        <item name="android:background">@drawable/selector_blue_corners_button</item>
+    </style>
 </resources>

@@ -37,6 +37,7 @@
         android:layout_marginTop="@dimen/font_normal"
         android:id="@+id/tv_opt"
         android:text="规格："
+        android:textColor="@color/md_black_1000"
         android:paddingLeft="@dimen/font_normal"
         android:layout_below="@id/img"/>
         <guzzu.cnshoppingmall.aa.widget.FlowRadioGroup
@@ -46,11 +47,32 @@
             android:layout_below="@id/tv_opt"
             android:layout_marginTop="@dimen/font_normal"
             />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv1"
+        android:text="数量"
+        android:textColor="@color/md_black_1000"
+        android:layout_below="@id/option"
+        android:padding="@dimen/font_normal"
+        />
+    <guzzu.cnshoppingmall.aa.widget.ShoppingCartAmountView
+        android:id="@+id/amount_view"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_below="@id/option"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="@dimen/font_normal"
+        app:btnTextSize="@dimen/font_large"
+        app:btnWidth="36dp"
+        app:tvWidth="48dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@id/option"
+        android:layout_below="@id/tv1"
         android:layout_marginTop="@dimen/font_normal"
         >
         <TextView

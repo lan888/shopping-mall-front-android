@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--圆形图片-->
+    <declare-styleable name="CircleImageView">
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+        <attr name="civ_border_overlay" format="boolean" />
+        <attr name="civ_fill_color" format="color" />
+    </declare-styleable>
+    <declare-styleable name="MultiStateView">
+        <attr name="msv_loadingView" format="reference" />
+        <attr name="msv_errorView" format="reference" />
+        <attr name="msv_emptyView" format="reference" />
+        <attr name="msv_unauthView" format="reference" />
+        <attr name="msv_viewState" format="enum">
+            <enum name="content" value="0" />
+            <enum name="loading" value="1" />
+            <enum name="error" value="2" />
+            <enum name="empty" value="3" />
+            <enum name="unauth" value="4" />
+        </attr>
+    </declare-styleable>
+</resources>

@@ -22,10 +22,12 @@ import guzzu.cnshoppingmall.aa.Api;
 import guzzu.cnshoppingmall.aa.R;
 import guzzu.cnshoppingmall.aa.bean.Categories;
 import guzzu.cnshoppingmall.aa.ui.MainActivity;
+import guzzu.cnshoppingmall.baselibrary.base.BaseApp;
 import guzzu.cnshoppingmall.baselibrary.base.BaseFragment;
 import guzzu.cnshoppingmall.baselibrary.callback.GsonArrayCallback;
 import guzzu.cnshoppingmall.baselibrary.util.ContentView;
 import guzzu.cnshoppingmall.baselibrary.util.OkHttp3Utils;
+import guzzu.cnshoppingmall.baselibrary.util.Utils;
 import okhttp3.Call;
 import q.rorbin.badgeview.Badge;
 import q.rorbin.verticaltablayout.VerticalTabLayout;
@@ -42,10 +44,13 @@ public class CategoryFragment extends BaseFragment<MainActivity> {
     Toolbar mToolbar;
     @BindView(R.id.vTab)
     VerticalTabLayout mVTab;
-    Unbinder unbinder;
     @BindView(R.id.viewpager)
     YViewPager mViewpager;
     private ArrayList<Fragment> mFragments;
+
+    public CategoryFragment() {
+    }
+
     @Override
     protected void initialToolbar() {
         if (mToolbar != null) {
@@ -117,7 +122,7 @@ public class CategoryFragment extends BaseFragment<MainActivity> {
                 mViewpager.addOnPageChangeListener(new YViewPager.OnPageChangeListener() {
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                        Log.d(TAG, "onPageScrolled: "+position+positionOffset);
                     }
 
                     @Override
@@ -131,6 +136,7 @@ public class CategoryFragment extends BaseFragment<MainActivity> {
                     }
                 });
                 mViewpager.setOffscreenPageLimit(2);
+                mViewpager.setPageMargin(BaseApp.height/3);
 
 
 
@@ -155,7 +161,7 @@ public class CategoryFragment extends BaseFragment<MainActivity> {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+
     }
 
 }

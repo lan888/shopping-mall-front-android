@@ -34,13 +34,16 @@ public class ProductTopViewHolder extends RecyclerView.ViewHolder {
         List<String> product_img = new ArrayList<>();
         if (product.getImage() != null) {
             product_img.add(product.getImage().getUrl());
-        }
-        if (product.getGallery().size() > 0) {
-            for (int i = 0; i < product.getGallery().size(); i++) {
-                product_img.add(product.getGallery().get(i).getUrl());
-                Log.d("top", "setData: "+product.getGallery().get(i).getUrl());
+
+        if (product.getGallery()!=null){
+            if (product.getGallery().size() > 0) {
+                for (int i = 0; i < product.getGallery().size(); i++) {
+                    product_img.add(product.getGallery().get(i).getUrl());
+                    Log.d("top", "setData: "+product.getGallery().get(i).getUrl());
+                }
             }
         }
+
         ViewGroup.LayoutParams lp = banner.getLayoutParams();
         DisplayMetrics dm = itemView.getContext().getResources().getDisplayMetrics();
         if (product.getImage().getOriginal()!=null){
@@ -70,6 +73,6 @@ public class ProductTopViewHolder extends RecyclerView.ViewHolder {
         });
 
 
-
+        }
     }
 }

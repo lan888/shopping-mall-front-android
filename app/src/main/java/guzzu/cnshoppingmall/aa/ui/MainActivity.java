@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import guzzu.cnshoppingmall.aa.fragment.ShoppingCartFragment;
 import guzzu.cnshoppingmall.baselibrary.base.BaseActivity;
 import guzzu.cnshoppingmall.baselibrary.base.BaseFragment;
 import guzzu.cnshoppingmall.aa.R;
@@ -39,6 +40,7 @@ public class MainActivity extends BaseActivity {
         mFragments = new ArrayList<>();
         mFragments.add(new HomeFragment());
         mFragments.add(new CategoryFragment());
+        mFragments.add(new ShoppingCartFragment());
 
     }
 
@@ -59,7 +61,7 @@ public class MainActivity extends BaseActivity {
                         mBottom.getMenu().getItem(curPosition).setChecked(true);
                         break;
                     case R.id.shoppingcart_item:
-                        curPosition = 0;
+                        curPosition = 2;
                         mBottom.getMenu().getItem(curPosition).setChecked(true);
                         break;
                     case R.id.my_item:

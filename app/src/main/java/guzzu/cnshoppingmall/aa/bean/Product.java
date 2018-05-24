@@ -703,6 +703,7 @@ public class Product {
 
         private String _id;
         private int price;
+        private int maxQuantity;
         private String name;
         private String inventoryPolicy;
 
@@ -738,6 +739,13 @@ public class Product {
             this.inventoryPolicy = inventoryPolicy;
         }
 
+        public int getMaxQuantity() {
+            return maxQuantity;
+        }
+
+        public void setMaxQuantity(int maxQuantity) {
+            this.maxQuantity = maxQuantity;
+        }
     }
 
     public static class Gallery {

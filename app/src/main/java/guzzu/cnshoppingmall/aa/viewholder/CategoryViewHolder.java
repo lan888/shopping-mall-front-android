@@ -2,6 +2,7 @@ package guzzu.cnshoppingmall.aa.viewholder;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -26,6 +27,8 @@ import guzzu.cnshoppingmall.aa.Api;
 import guzzu.cnshoppingmall.aa.R;
 import guzzu.cnshoppingmall.aa.bean.Categories;
 import guzzu.cnshoppingmall.aa.bean.Category;
+import guzzu.cnshoppingmall.aa.bean.Product;
+import guzzu.cnshoppingmall.aa.ui.ProductActivity;
 import guzzu.cnshoppingmall.aa.widget.MyImageView;
 import guzzu.cnshoppingmall.baselibrary.base.BaseViewHolder;
 import guzzu.cnshoppingmall.baselibrary.callback.GsonObjectCallback;
@@ -58,21 +61,26 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         OkHttp3Utils.doGet(Api.CATEGORIES + "/" + categoryId, new GsonObjectCallback<Category>() {
             @Override
             public void onUiThread(Category category, String json) {
-                final ViewGroup.LayoutParams lp = mCategoryImg.getLayoutParams();
-                final int h = category.getImage().getOriginal().getHeight();
-                final int w = category.getImage().getOriginal().getWidth();
-                ViewTreeObserver vto = mCategoryImg.getViewTreeObserver();
-                vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        mCategoryImg.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        mImgViewWidth = mCategoryImg.getMeasuredWidth();
-                        Log.d(TAG, "onGlobalLayout: "+mImgViewWidth);
-                        lp.height = h*mImgViewWidth/w;
-                        mCategoryImg.setLayoutParams(lp);
+                try {
+                    final ViewGroup.LayoutParams lp = mCategoryImg.getLayoutParams();
+                    final int h = category.getImage().getOriginal().getHeight();
+                    final int w = category.getImage().getOriginal().getWidth();
+                    ViewTreeObserver vto = mCategoryImg.getViewTreeObserver();
+                    vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            mCategoryImg.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                            mImgViewWidth = mCategoryImg.getMeasuredWidth();
+                            Log.d(TAG, "onGlobalLayout: "+mImgViewWidth);
+                            lp.height = h*mImgViewWidth/w;
+                            mCategoryImg.setLayoutParams(lp);
 
-                    }
-                });
+                        }
+                    });
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
 
                 try {
                     Glide.with(context).load(category.getImage().getUrl()).into(mCategoryImg);
@@ -81,6 +89,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
                     e.printStackTrace();
                 }
                 mTv.setText(category.getDescription());
+                if (category.getProducts()==null||category.getProducts().size()==0) return;
                 DataBindingViewUtil.bindDataToLayout(category.getProducts(), mFbl, itemLayout, new DataBindingViewUtil.OnBindingDataWithLayoutParamsListener<Category.ProductsBean>() {
                     @Override
                     public ViewGroup.LayoutParams onCreateLayoutParams(View v) {
@@ -95,7 +104,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
                     }
 
                     @Override
-                    public void onBindData(@NonNull View v, Category.ProductsBean data, int position) {
+                    public void onBindData(@NonNull View v, final Category.ProductsBean data, int position) {
                         pic = v.findViewById(R.id.pic);
                         title =v.findViewById(R.id.product_group_title);
                         price = v.findViewById(R.id.product_group_price);
@@ -109,6 +118,12 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
                         }
                         title.setText(data.getName());
                         price.setText("￥"+String.valueOf(data.getPrice()/100));
+                        v.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Utils.start_Activity(context, ProductActivity.class,"productId",data.get_id());
+                            }
+                        });
                     }
                 });
             }

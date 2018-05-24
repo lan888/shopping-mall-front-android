@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,17 +27,20 @@ import com.gyf.barlibrary.ImmersionBar;
 import java.io.IOException;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
-import guzzu.cnshoppingmall.baselibrary.base.BaseActivity;
-import guzzu.cnshoppingmall.baselibrary.callback.JsonCallback;
-import guzzu.cnshoppingmall.baselibrary.util.OkHttp3Utils;
-import guzzu.cnshoppingmall.baselibrary.util.Utils;
-import guzzu.cnshoppingmall.baselibrary.widget.LoadingDialog;
 import guzzu.cnshoppingmall.aa.Api;
 import guzzu.cnshoppingmall.aa.R;
 import guzzu.cnshoppingmall.aa.adapter.ProductRvAdapter;
 import guzzu.cnshoppingmall.aa.bean.Product;
 import guzzu.cnshoppingmall.aa.widget.FlowRadioGroup;
+import guzzu.cnshoppingmall.aa.widget.ShoppingCartAmountView;
+import guzzu.cnshoppingmall.baselibrary.base.BaseActivity;
+import guzzu.cnshoppingmall.baselibrary.callback.JsonCallback;
+import guzzu.cnshoppingmall.baselibrary.util.OkHttp3Utils;
+import guzzu.cnshoppingmall.baselibrary.util.Utils;
+import guzzu.cnshoppingmall.baselibrary.widget.CircleImageView;
+import guzzu.cnshoppingmall.baselibrary.widget.LoadingDialog;
 import okhttp3.Call;
 
 public class ProductActivity extends BaseActivity {
@@ -51,6 +55,8 @@ public class ProductActivity extends BaseActivity {
     TextView mTvAddcart;
     @BindView(R.id.tv_buy)
     TextView mTvBuy;
+    @BindView(R.id.iv_circle_back)
+    CircleImageView mIvCircleBack;
 
     private Product product;
     private ProductRvAdapter productRvAdapter;
@@ -80,6 +86,12 @@ public class ProductActivity extends BaseActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.finish(context);
+            }
+        });
+        mIvCircleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Utils.finish(context);
@@ -135,6 +147,8 @@ public class ProductActivity extends BaseActivity {
                     Log.d(TAG, "product: " + percent + "," + top + "," + imgHeight);
                     mToolbar.setAlpha(percent);
                     mTab.setAlpha(percent);
+                    mIvCircleBack.setAlpha(1-percent<0.2?0:1-percent);
+
                 }
                 if (percent == 0) {
                     mToolbar.setVisibility(View.GONE);
@@ -249,8 +263,10 @@ public class ProductActivity extends BaseActivity {
         final TextView tv_name = contentView.findViewById(R.id.name);
         final TextView tv_price = contentView.findViewById(R.id.price);
         final ImageView iv = contentView.findViewById(R.id.img);
+        final ShoppingCartAmountView mAmountView = contentView.findViewById(R.id.amount_view);
         FlowRadioGroup frg = contentView.findViewById(R.id.option);
         int i = 0;
+        if (product.getProductOptions() == null) return;
         for (; i < product.getProductOptions().size(); i++) {
             RadioButton button = new RadioButton(this);
             setRdBtnAttribute(button, i);
@@ -264,12 +280,22 @@ public class ProductActivity extends BaseActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 selected = checkedId;
                 tv_name.setText(product.getProductOptions().get(checkedId).getName());
-                tv_price.setText("￥" + String.valueOf(product.getPrice() / 100));
+                tv_price.setText("¥" + String.valueOf(product.getProductOptions().get(checkedId).getPrice() / 100));
+                mAmountView.setAmount(1);
+                mAmountView.setGoods_storage(product.getProductOptions().get(checkedId).getMaxQuantity());
                 Log.d(TAG, "onCheckedChanged: " + checkedId);
             }
         });
+
+        mAmountView.setOnAmountChangeListener(new ShoppingCartAmountView.OnAmountChangeListener() {
+            @Override
+            public void onAmountChange(View view, int amount) {
+
+            }
+        });
         tv_name.setText(product.getName());
-        tv_price.setText("￥" + String.valueOf(product.getPrice() / 100));
+        tv_price.setText("¥" + String.valueOf(product.getPrice() / 100));
+        mAmountView.setGoods_storage(product.getProductOptions().get(0).getMaxQuantity());
         Glide.with(context).load(product.getImage().getUrl()).apply(RequestOptions.fitCenterTransform()).into(iv);
         bottomDialog.setContentView(contentView);
         ViewGroup.LayoutParams layoutParams = contentView.getLayoutParams();
@@ -306,7 +332,6 @@ public class ProductActivity extends BaseActivity {
     }
 
 
-
     @OnClick({R.id.tv_buy, R.id.tv_addcart})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -320,4 +345,5 @@ public class ProductActivity extends BaseActivity {
                 break;
         }
     }
+
 }
