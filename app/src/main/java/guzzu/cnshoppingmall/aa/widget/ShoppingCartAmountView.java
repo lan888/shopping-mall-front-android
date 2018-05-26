@@ -84,6 +84,9 @@ public class ShoppingCartAmountView extends LinearLayout implements View.OnTouch
         this.amount = amount;
         etAmount.setText(String.valueOf(amount));
         setBtnEnable();
+        if (mListener != null) {
+            mListener.onAmountChange(this, amount);
+        }
     }
 
 

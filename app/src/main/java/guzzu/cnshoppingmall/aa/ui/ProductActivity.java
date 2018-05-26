@@ -4,17 +4,17 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -23,20 +23,28 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.gyf.barlibrary.ImmersionBar;
+import com.squareup.otto.Subscribe;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import guzzu.cnshoppingmall.aa.Api;
 import guzzu.cnshoppingmall.aa.R;
-import guzzu.cnshoppingmall.aa.adapter.ProductRvAdapter;
+import guzzu.cnshoppingmall.aa.adapter.ItemTitlePagerAdapter;
+import guzzu.cnshoppingmall.aa.bean.ActivityChangeEvent;
+import guzzu.cnshoppingmall.aa.bean.FragmentChangeEvent;
 import guzzu.cnshoppingmall.aa.bean.Product;
+import guzzu.cnshoppingmall.aa.fragment.GoodsDetailFragment;
+import guzzu.cnshoppingmall.aa.fragment.GoodsInfoFragment;
 import guzzu.cnshoppingmall.aa.widget.FlowRadioGroup;
+import guzzu.cnshoppingmall.aa.widget.NoScrollViewPager;
 import guzzu.cnshoppingmall.aa.widget.ShoppingCartAmountView;
 import guzzu.cnshoppingmall.baselibrary.base.BaseActivity;
 import guzzu.cnshoppingmall.baselibrary.callback.JsonCallback;
+import guzzu.cnshoppingmall.baselibrary.util.EventUtil;
 import guzzu.cnshoppingmall.baselibrary.util.OkHttp3Utils;
 import guzzu.cnshoppingmall.baselibrary.util.Utils;
 import guzzu.cnshoppingmall.baselibrary.widget.CircleImageView;
@@ -45,8 +53,6 @@ import okhttp3.Call;
 
 public class ProductActivity extends BaseActivity {
 
-    @BindView(R.id.rv_product)
-    RecyclerView mRvProduct;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.tab)
@@ -57,18 +63,21 @@ public class ProductActivity extends BaseActivity {
     TextView mTvBuy;
     @BindView(R.id.iv_circle_back)
     CircleImageView mIvCircleBack;
+    @BindView(R.id.vp_content)
+    NoScrollViewPager mVpContent;
 
+    private String optionName;
+    private int optionCount;
     private Product product;
-    private ProductRvAdapter productRvAdapter;
-    private LinearLayoutManager manager;
     private int imgHeight;
     private LoadingDialog mLoading;
     private Dialog bottomDialog;
-    int mIndex = 0;
-    int top = 0;
-    int middle = 0;
-    float percent = 0;
-    int selected = 0;
+    private TabLayout.OnTabSelectedListener mOnTabSelectedListener;
+    private WebView mWebView;
+    private List<Fragment> fragmentList = new ArrayList<>();
+    private GoodsInfoFragment goodsInfoFragment;
+    private boolean isHided = false;
+    private int selected = 0;
 
     @Override
     public int initLayout() {
@@ -102,19 +111,21 @@ public class ProductActivity extends BaseActivity {
 
     @Override
     public void initData() {
-
         String mProductId = getIntent().getStringExtra("productId");
+        fragmentList.add(goodsInfoFragment = GoodsInfoFragment.newInstance(mProductId));
+        fragmentList.add(GoodsDetailFragment.newInstance(mProductId));
+        mVpContent.setAdapter(new ItemTitlePagerAdapter(getSupportFragmentManager(),
+                fragmentList, new String[]{"商品", "详情"}));
+        mVpContent.setOffscreenPageLimit(1);
+        mTab.setupWithViewPager(mVpContent);
         OkHttp3Utils.doGet(Api.PRODUCT + mProductId, new JsonCallback() {
             @Override
             public void onUiThread(String json) {
                 Gson gson = new Gson();
                 product = gson.fromJson(json, Product.class);
-                manager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-                mRvProduct.setLayoutManager(manager);
-                productRvAdapter = new ProductRvAdapter(ProductActivity.this, product);
-                mRvProduct.setAdapter(productRvAdapter);
                 cancelLoading();
                 initBottom();
+                goodsInfoFragment.setBottomDialog(bottomDialog);
             }
 
             @Override
@@ -122,115 +133,56 @@ public class ProductActivity extends BaseActivity {
 
             }
         });
+
     }
 
     @Override
     public void initListener() {
-        mRvProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                Log.d(TAG, "onScrollStateChanged: " + newState);
-            }
 
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                mIndex = manager.findFirstVisibleItemPosition();
-                if (mIndex < recyclerView.getChildCount() && mIndex < 1) {
-                    top = recyclerView.getChildAt(mIndex).getTop();
-                    middle = recyclerView.getChildAt(mIndex + 1).getTop();
-                    imgHeight = Utils.getIntValue(context, "imgHeight");
-                    if (imgHeight != 0) {
-                        percent = (float) Math.abs(top) / (float) imgHeight;
-                    }
-                    Log.d(TAG, "product: " + percent + "," + top + "," + imgHeight);
-                    mToolbar.setAlpha(percent);
-                    mTab.setAlpha(percent);
-                    mIvCircleBack.setAlpha(1-percent<0.2?0:1-percent);
-
-                }
-                if (percent == 0) {
-                    mToolbar.setVisibility(View.GONE);
-                } else {
-                    mToolbar.setVisibility(View.VISIBLE);
-
-                }
-                if (mIndex == 1) {
-                    TabLayout.Tab tab = mTab.getTabAt(1);
-                    if (tab != null) {
-                        mTab.clearOnTabSelectedListeners();
-                        tab.select();
-
-                    }
-                } else {
-                    TabLayout.Tab tab = mTab.getTabAt(0);
-                    if (tab != null) {
-                        mTab.clearOnTabSelectedListeners();
-                        tab.select();
-                    }
-                }
-                mTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        switch (tab.getPosition()) {
-                            case 0:
-                                mRvProduct.smoothScrollToPosition(0);
-                                break;
-                            case 1:
-                                mRvProduct.smoothScrollBy(0, middle);
-                                percent = 1f;
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-
-                    }
-
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-                        switch (tab.getPosition()) {
-                            case 0:
-                                mRvProduct.smoothScrollToPosition(0);
-                                break;
-                            case 1:
-                                mRvProduct.smoothScrollToPosition(1);
-                                percent = 1f;
-                                break;
-                        }
-                    }
-                });
-                Log.d(TAG, "onScrolled: " + percent + "," + dy + "," + recyclerView.getChildAt(0).getTop());
-            }
-        });
-
-//        mAppbarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-//            @Override
-//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//                Log.e(TAG, "onOffsetChanged: " + verticalOffset + "," + appBarLayout.getTotalScrollRange());
-//                float percent = Float.valueOf(Math.abs(verticalOffset)) / Float.valueOf(appBarLayout.getTotalScrollRange());
-////                mTopContent.setAlpha(Math.abs(percent - 1));
-//                mToolbar.setAlpha(percent);
-//                if (percent == 1) {
-//                    TabLayout.Tab tab = mTab.getTabAt(1);
-//                    if (tab != null) {
-//                        tab.select();
-//                    }
-//                } else {
-//                    TabLayout.Tab tab = mTab.getTabAt(0);
-//                    if (tab != null) {
-//                        tab.select();
-//                    }
-//                }
-//
-//
-//            }
-//        });
+        initOnTabSelectedListener();
+        mTab.addOnTabSelectedListener(mOnTabSelectedListener);
 
     }
 
+    private void initOnTabSelectedListener() {
+        if (mOnTabSelectedListener != null) return;
+        mOnTabSelectedListener = new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        if (isHided){
+                            mToolbar.setVisibility(View.GONE);
+                            mIvCircleBack.setVisibility(View.VISIBLE);
+                        }
+                        break;
+                    case 1:
+                        mToolbar.setVisibility(View.VISIBLE);
+                        mToolbar.setAlpha(1f);
+                        mTab.setAlpha(1f);
+                        mIvCircleBack.setVisibility(View.GONE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+
+                        break;
+                    case 1:
+
+                        break;
+                }
+            }
+        };
+    }
 
     /* @param context context
      * @return 状态栏高度
@@ -240,6 +192,39 @@ public class ProductActivity extends BaseActivity {
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         return context.getResources().getDimensionPixelSize(resourceId);
     }
+
+    @Subscribe
+    public void onPositionChanged(FragmentChangeEvent event){
+        Log.d(TAG, "onPositionChanged: "+event.getDy()+event.isShow());
+        if (event.getDy()>0){
+            mToolbar.setVisibility(View.VISIBLE);
+            mToolbar.setAlpha(1f);
+            mTab.setAlpha(1f);
+            mIvCircleBack.setVisibility(View.GONE);
+            isHided = false;
+        }else {
+            isHided = true;
+            mToolbar.setVisibility(View.GONE);
+            mIvCircleBack.setVisibility(View.VISIBLE);
+        }
+//        if (event.isShow()){
+//            TabLayout.Tab tab = mTab.getTabAt(1);
+//            if (tab != null) {
+//                mTab.clearOnTabSelectedListeners();
+//                tab.select();
+//
+//            }
+//        } else {
+//            TabLayout.Tab tab = mTab.getTabAt(0);
+//            if (tab != null) {
+//                mTab.clearOnTabSelectedListeners();
+//                tab.select();
+//            }
+//        }
+
+
+    }
+
 
     private void showLoading(String text) {
         cancelLoading();
@@ -284,18 +269,15 @@ public class ProductActivity extends BaseActivity {
                 mAmountView.setAmount(1);
                 mAmountView.setGoods_storage(product.getProductOptions().get(checkedId).getMaxQuantity());
                 Log.d(TAG, "onCheckedChanged: " + checkedId);
-            }
-        });
-
-        mAmountView.setOnAmountChangeListener(new ShoppingCartAmountView.OnAmountChangeListener() {
-            @Override
-            public void onAmountChange(View view, int amount) {
+                listener.process(product.getProductOptions().get(selected).getName(),1);
 
             }
         });
+
+
         tv_name.setText(product.getName());
         tv_price.setText("¥" + String.valueOf(product.getPrice() / 100));
-        mAmountView.setGoods_storage(product.getProductOptions().get(0).getMaxQuantity());
+        mAmountView.setGoods_storage(product.getMaxQuantity());
         Glide.with(context).load(product.getImage().getUrl()).apply(RequestOptions.fitCenterTransform()).into(iv);
         bottomDialog.setContentView(contentView);
         ViewGroup.LayoutParams layoutParams = contentView.getLayoutParams();
@@ -303,7 +285,6 @@ public class ProductActivity extends BaseActivity {
         contentView.setLayoutParams(layoutParams);
         bottomDialog.getWindow().setGravity(Gravity.BOTTOM);
         bottomDialog.getWindow().setWindowAnimations(R.style.BottomDialog_Animation);
-        productRvAdapter.setDialog(bottomDialog);
     }
 
     private void setRdBtnAttribute(final RadioButton rdBtn, int pos) {
@@ -345,5 +326,15 @@ public class ProductActivity extends BaseActivity {
                 break;
         }
     }
+    // 2.1 定义用来与外部activity交互，获取到宿主activity
+    private OnOptionClickListener listener;
 
+    // 1 定义了所有activity必须实现的接口方法
+    public interface OnOptionClickListener {
+        void process(String str,int count);
+    }
+
+    public void setListener(OnOptionClickListener listener) {
+        this.listener = listener;
+    }
 }

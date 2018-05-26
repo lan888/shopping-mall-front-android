@@ -7,39 +7,59 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
+import java.io.IOException;
+
+import guzzu.cnshoppingmall.aa.Api;
 import guzzu.cnshoppingmall.aa.R;
 import guzzu.cnshoppingmall.aa.bean.Product;
+import guzzu.cnshoppingmall.aa.bean.Store;
+import guzzu.cnshoppingmall.baselibrary.callback.GsonObjectCallback;
+import guzzu.cnshoppingmall.baselibrary.util.OkHttp3Utils;
+import guzzu.cnshoppingmall.baselibrary.util.Utils;
+import okhttp3.Call;
 
 public class ProductMiddleViewHolder extends RecyclerView.ViewHolder {
 
     private TextView mProductName;
     private TextView mProductPrize;
-    private LinearLayout mLinear;
+    private TextView mStoreName;
+    private ImageView mStoreIv;
     private RelativeLayout mRelative;
-    private WebView mWebView;
+
 
     public ProductMiddleViewHolder(View itemView) {
         super(itemView);
         mProductName = itemView.findViewById(R.id.product_name);
         mProductPrize = itemView.findViewById(R.id.product_prize);
-        mLinear =itemView.findViewById(R.id.mLinear);
         mRelative = itemView.findViewById(R.id.rl_option);
+        mStoreName = itemView.findViewById(R.id.store_name);
+        mStoreIv = itemView.findViewById(R.id.store_src);
     }
-    public void setData(Product product, Context context, final Dialog dialog){
-        mWebView = new WebView(context.getApplicationContext());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mWebView.setLayoutParams(lp);
-        mWebView.setBackgroundColor(context.getResources().getColor(R.color.gray_bg));
-        mWebView.getSettings().setDefaultTextEncodingName("UTF-8");
-        String data=product.getDescription();
-        data="<link rel=\"stylesheet\" href=\"img.css\" type=\"text/css\" />"+data;
-        mWebView.loadDataWithBaseURL("file:///android_asset/",data, "text/html; charset=UTF-8", null,null);
-        mLinear.addView(mWebView);
-        Log.e("log", "setData: "+data);
+    public void setData(Product product, final Dialog dialog){
+        OkHttp3Utils.doGet(Api.STORE + product.getStore(), new GsonObjectCallback<Store>() {
+            @Override
+            public void onUiThread(Store store, String json) {
+                mStoreName.setText(store.getName());
+                try {
+                    Glide.with(itemView.getContext()).load(store.getLogo().getUrl()).into(mStoreIv);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailed(Call call, IOException exception) {
+
+            }
+        });
         mProductName.setText(product.getName());
         mProductPrize.setText("¥" + String.valueOf(product.getPrice() / 100));
         mRelative.setOnClickListener(new View.OnClickListener() {

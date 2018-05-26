@@ -21,10 +21,16 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 />
         </android.support.design.widget.AppBarLayout>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/mRv"
+        <guzzu.cnshoppingmall.baselibrary.widget.MultiStateView
+            android:id="@+id/multi_state_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mRv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </guzzu.cnshoppingmall.baselibrary.widget.MultiStateView>
+
     </LinearLayout>
     <TextView
         android:layout_width="wrap_content"

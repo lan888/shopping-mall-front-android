@@ -14,6 +14,7 @@ import guzzu.cnshoppingmall.aa.R;
 import guzzu.cnshoppingmall.aa.ui.MainActivity;
 import guzzu.cnshoppingmall.baselibrary.base.BaseFragment;
 import guzzu.cnshoppingmall.baselibrary.util.ContentView;
+import guzzu.cnshoppingmall.baselibrary.widget.MultiStateView;
 
 @ContentView(R.layout.fragment_shoppingcart)
 public class ShoppingCartFragment extends BaseFragment<MainActivity> {
@@ -21,6 +22,8 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> {
     Toolbar mToolbar;
     @BindView(R.id.mRv)
     RecyclerView mRv;
+    @BindView(R.id.multi_state_view)
+    MultiStateView mMultiStateView;
 
     public ShoppingCartFragment() {
     }
@@ -33,11 +36,22 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> {
         }
     }
 
+    @Override
+    protected void initData() {
+        mMultiStateView.setState(MultiStateView.STATE_EMPTY)
+                .setTitle("购物车还是空空如也");
 
+    }
+
+    @Override
+    protected void initListener() {
+
+    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
     }
+
 }

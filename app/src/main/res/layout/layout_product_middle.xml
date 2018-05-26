@@ -28,6 +28,31 @@
         android:layout_width="match_parent"
         android:background="@color/md_grey_300"
         />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_margin="@dimen/font_smaller"
+            android:id="@+id/store_src"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+        <TextView
+            android:id="@+id/store_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/font_small"
+            android:layout_gravity="center"
+            android:gravity="left"
+            />
+
+    </LinearLayout>
+    <View
+        android:id="@+id/line1"
+        android:layout_height="1dp"
+        android:layout_width="match_parent"
+        android:background="@color/md_grey_300"
+        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,7 +77,7 @@
             />
     </RelativeLayout>
     <View
-        android:id="@+id/line1"
+        android:id="@+id/line2"
         android:layout_height="3dp"
         android:layout_width="match_parent"
         android:background="@color/md_grey_300"
@@ -65,5 +90,5 @@
         android:paddingTop="24dp"
         android:paddingBottom="24dp"
         />
-    <include layout="@layout/layout_webview"/>
+
 </LinearLayout>
