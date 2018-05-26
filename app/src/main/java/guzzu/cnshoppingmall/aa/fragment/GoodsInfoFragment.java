@@ -35,7 +35,6 @@ import java.util.List;
 
 import guzzu.cnshoppingmall.aa.Api;
 import guzzu.cnshoppingmall.aa.R;
-import guzzu.cnshoppingmall.aa.bean.ActivityChangeEvent;
 import guzzu.cnshoppingmall.aa.bean.FragmentChangeEvent;
 import guzzu.cnshoppingmall.aa.bean.Product;
 import guzzu.cnshoppingmall.aa.bean.Store;
@@ -187,7 +186,7 @@ public class GoodsInfoFragment extends Fragment implements View.OnClickListener,
         String mProductId = getArguments().getString("productId");
         OkHttp3Utils.doGet(Api.PRODUCT + mProductId, new JsonCallback() {
             @Override
-            public void onUiThread(String json) {
+            public void onUiThread(int code,String json) {
                 Gson gson = new Gson();
                 product = gson.fromJson(json, Product.class);
                 initBanner();

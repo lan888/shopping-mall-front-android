@@ -86,7 +86,7 @@ public class HomeTabFragment extends Fragment{
         mShoppingMallPageId = getArguments().getString("content");
         OkHttp3Utils.doGet(Api.GUZZU_API+"/"+mShoppingMallPageId, new JsonCallback() {
             @Override
-            public void onUiThread(final String json) {
+            public void onUiThread(int code,final String json) {
                 blocksList.clear();
                         try {
                             int j ;

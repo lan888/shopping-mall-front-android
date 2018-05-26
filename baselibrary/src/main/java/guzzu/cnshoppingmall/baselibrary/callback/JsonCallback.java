@@ -27,11 +27,12 @@ public abstract class JsonCallback implements Callback {
         //请求json 并直接返回泛型的对象 主线程处理
         try {
             final String json = response.body().string();
+            final int code = response.code();
 
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    onUiThread(json);
+                    onUiThread(code,json);
                 }
             });
         }catch (Exception e){
@@ -41,7 +42,7 @@ public abstract class JsonCallback implements Callback {
     }
 
 
-    public abstract void onUiThread(String json );   //主线程处理
+    public abstract void onUiThread(int code,String json );   //主线程处理
 
 
     public abstract void onFailed(Call call, IOException exception);    //主线程处理

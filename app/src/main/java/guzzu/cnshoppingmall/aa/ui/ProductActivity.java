@@ -34,7 +34,6 @@ import butterknife.OnClick;
 import guzzu.cnshoppingmall.aa.Api;
 import guzzu.cnshoppingmall.aa.R;
 import guzzu.cnshoppingmall.aa.adapter.ItemTitlePagerAdapter;
-import guzzu.cnshoppingmall.aa.bean.ActivityChangeEvent;
 import guzzu.cnshoppingmall.aa.bean.FragmentChangeEvent;
 import guzzu.cnshoppingmall.aa.bean.Product;
 import guzzu.cnshoppingmall.aa.fragment.GoodsDetailFragment;
@@ -120,12 +119,32 @@ public class ProductActivity extends BaseActivity {
         mTab.setupWithViewPager(mVpContent);
         OkHttp3Utils.doGet(Api.PRODUCT + mProductId, new JsonCallback() {
             @Override
-            public void onUiThread(String json) {
-                Gson gson = new Gson();
-                product = gson.fromJson(json, Product.class);
-                cancelLoading();
-                initBottom();
-                goodsInfoFragment.setBottomDialog(bottomDialog);
+            public void onUiThread(int code,String json) {
+                if (code==404){
+                    showLoading("The product is not available\n找不到该商品");
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+                            try {
+                                Thread.sleep(2000);//休眠2秒
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            cancelLoading();
+                            finish();
+                            /**
+                             * 要执行的操作
+                             */
+                        }
+                    }.start();
+                }else {
+                    Gson gson = new Gson();
+                    product = gson.fromJson(json, Product.class);
+                    cancelLoading();
+                    initBottom();
+                    goodsInfoFragment.setBottomDialog(bottomDialog);
+                }
             }
 
             @Override
