@@ -4,8 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +51,7 @@ public class HomeTabFragment extends Fragment{
     private BlockTitle blockTitle;
     private BlockSpacer blockSpacer;
     private Blocks blocks;
+    private FloatingActionButton fab_up_slide;
 
     public HomeTabFragment() {
     }
@@ -78,11 +81,13 @@ public class HomeTabFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRv = view.findViewById(R.id.rv_home);
+        fab_up_slide = view.findViewById(R.id.fab_up_slide);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        fab_up_slide.hide();
         mShoppingMallPageId = getArguments().getString("content");
         OkHttp3Utils.doGet(Api.GUZZU_API+"/"+mShoppingMallPageId, new JsonCallback() {
             @Override
@@ -141,7 +146,24 @@ public class HomeTabFragment extends Fragment{
 
                             }
                             initRv();
+                            mRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                @Override
+                                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                                    FlexboxLayoutManager manager = (FlexboxLayoutManager) recyclerView.getLayoutManager();
+                                    if (manager.findFirstVisibleItemPosition()==0){
+                                        fab_up_slide.hide();
+                                    }else {
+                                        fab_up_slide.show();
+                                    }
+                                }
+                            });
 
+                            fab_up_slide.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mRv.smoothScrollToPosition(0);
+                                }
+                            });
                         }catch (JSONException e){
                             e.printStackTrace();
 
