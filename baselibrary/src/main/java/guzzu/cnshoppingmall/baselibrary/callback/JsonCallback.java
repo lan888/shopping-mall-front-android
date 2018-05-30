@@ -23,7 +23,7 @@ public abstract class JsonCallback implements Callback {
         onFailed(call,e);
     }
     @Override
-    public void onResponse(Call call, Response response) throws IOException {
+    public void onResponse(Call call, Response response) {
         //请求json 并直接返回泛型的对象 主线程处理
         try {
             final String json = response.body().string();

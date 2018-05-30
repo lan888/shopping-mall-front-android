@@ -25,6 +25,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'com.android.support:gridlayout-v7:27.1.1'
     implementation 'q.rorbin:VerticalTabLayout:1.2.5'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-5'
     implementation 'cn.youngkaaa:yviewpager:0.3'
     // 数字提醒
     implementation 'cn.bingoogolapple:bga-badgeview-api:1.1.7'

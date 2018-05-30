@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name="guzzu.cnshoppingmall.aa.ui.ProductActivity" />
+        <activity android:name=".ui.StoreActivity" />
     </application>
 
 </manifest>

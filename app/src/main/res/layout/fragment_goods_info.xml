@@ -13,13 +13,15 @@
         <guzzu.cnshoppingmall.aa.widget.SlideDetailsLayout
             android:id="@+id/sv_switch"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
             <guzzu.cnshoppingmall.aa.widget.MyScrollView
                 android:id="@+id/sv_goods_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="vertical">
+                android:scrollbars="vertical"
+                android:overScrollMode="never">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -81,7 +83,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="￥"
+                                android:text="¥"
                                 android:textColor="#ec0f38"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
@@ -102,7 +104,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="7dp"
                                 android:gravity="center_vertical"
-                                android:text="￥799"
+                                android:text="¥799"
                                 android:textColor="#888888"
                                 android:textSize="13sp" />
 
@@ -163,6 +165,7 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:src="@mipmap/right_img" />
                     </LinearLayout>
 
@@ -194,7 +197,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:id="@+id/ll_store">
                         <ImageView
                             android:layout_margin="@dimen/font_smaller"
                             android:id="@+id/store_src"
@@ -241,16 +245,6 @@
             <include layout="@layout/include_item_tab" />
         </guzzu.cnshoppingmall.aa.widget.SlideDetailsLayout>>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_up_slide"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="30dp"
-            android:src="@mipmap/go_top"
-            app:backgroundTint="#ffffff"
-            app:borderWidth="0dp"
-            app:fabSize="mini"
-            app:rippleColor="#ffffff" />
+
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>

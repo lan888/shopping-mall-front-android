@@ -51,12 +51,12 @@ public class NavGroupViewHolder extends RecyclerView.ViewHolder {
                 DisplayMetrics dm = itemView.getContext().getResources().getDisplayMetrics();
 
                 if (template.equals("image-text")){
-                    Glide.with(itemView.getContext()).load(data.getImage().getUrl()).apply(RequestOptions.overrideOf(dm.widthPixels/nav_info.size(),dm.widthPixels/nav_info.size())).into(imageView);
+                    Glide.with(itemView.getContext()).load(data.getImage().getThumb().getUrl()).apply(RequestOptions.overrideOf(dm.widthPixels/nav_info.size(),dm.widthPixels/nav_info.size())).into(imageView);
                     textView.setText(data.getTitle());
                     imageView.setVisibility(View.VISIBLE);
                     textView.setVisibility(View.VISIBLE);
                 }else if (template.equals("image-only")){
-                    Glide.with(itemView.getContext()).load(data.getImage().getUrl()).apply(RequestOptions.overrideOf(dm.widthPixels/nav_info.size(),dm.widthPixels/nav_info.size())).into(imageView);
+                    Glide.with(itemView.getContext()).load(data.getImage().getThumb().getUrl()).apply(RequestOptions.overrideOf(dm.widthPixels/nav_info.size(),dm.widthPixels/nav_info.size())).into(imageView);
                     imageView.setVisibility(View.VISIBLE);
                 }else {
                     textView.setText(data.getTitle());

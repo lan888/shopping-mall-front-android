@@ -13,6 +13,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/tv"
         android:text="123"
+        android:padding="@dimen/font_small"
+        android:textSize="@dimen/font_normal"
         android:gravity="center"
         android:layout_below="@id/category_img"
         />

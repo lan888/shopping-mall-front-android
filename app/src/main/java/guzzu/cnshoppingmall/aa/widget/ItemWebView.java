@@ -12,6 +12,7 @@ public class ItemWebView extends WebView {
     public float oldY;
     private int t;
     private float oldX;
+    private OnScrollListener listener;
 
     public ItemWebView(Context context) {
         super(context);
@@ -61,6 +62,18 @@ public class ItemWebView extends WebView {
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         this.t = t;
         super.onScrollChanged(l, t, oldl, oldt);
+        if(listener != null){
+
+            //这里我只传了垂直滑动的距离
+            listener.onScroll(t,oldt);
+        }
+    }
+    public void setOnScrollListener(OnScrollListener listener) {
+        this.listener = listener;
     }
 
+    //设置接口
+    public interface OnScrollListener{
+        void onScroll(int scrollY,int oldScrollY);
+    }
 }

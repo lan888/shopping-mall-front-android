@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
+import android.util.Pair;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,6 +20,7 @@ import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -133,6 +135,24 @@ public class OkHttp3Utils {
         OkHttpClient okHttpClient = getOkHttpClient();
         //创建Request
         Request request = new Request.Builder().url(url).build();
+        //得到Call对象
+        Call call = okHttpClient.newCall(request);
+        //执行异步请求
+        call.enqueue(callback);
+
+
+    }
+
+    public static void doGet(String url, Pair<String,String>pair, Callback callback) {
+
+        //创建OkHttpClient请求对象
+        OkHttpClient okHttpClient = getOkHttpClient();
+        //构造get查询的url
+        HttpUrl.Builder builder = HttpUrl.parse(url).newBuilder();
+        builder.addQueryParameter(pair.first,pair.second);
+        String queryUrl = builder.build().toString();
+        //创建Request
+        Request request = new Request.Builder().url(queryUrl).build();
         //得到Call对象
         Call call = okHttpClient.newCall(request);
         //执行异步请求

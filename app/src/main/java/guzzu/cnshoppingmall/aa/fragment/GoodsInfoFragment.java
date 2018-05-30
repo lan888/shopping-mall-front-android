@@ -39,6 +39,7 @@ import guzzu.cnshoppingmall.aa.bean.FragmentChangeEvent;
 import guzzu.cnshoppingmall.aa.bean.Product;
 import guzzu.cnshoppingmall.aa.bean.Store;
 import guzzu.cnshoppingmall.aa.ui.ProductActivity;
+import guzzu.cnshoppingmall.aa.ui.StoreActivity;
 import guzzu.cnshoppingmall.aa.widget.MyScrollView;
 import guzzu.cnshoppingmall.aa.widget.SlideDetailsLayout;
 import guzzu.cnshoppingmall.baselibrary.base.BaseApp;
@@ -57,9 +58,8 @@ import static android.support.constraint.Constraints.TAG;
 public class GoodsInfoFragment extends Fragment implements View.OnClickListener, SlideDetailsLayout.OnSlideDetailsListener {
     private SlideDetailsLayout sv_switch;
     private MyScrollView sv_goods_info;
-    private FloatingActionButton fab_up_slide;
     public Banner banner;
-    private LinearLayout ll_goods_detail, ll_goods_config;
+    private LinearLayout ll_goods_detail, ll_goods_config,ll_store;
     private TextView tv_goods_detail, tv_goods_config;
     private View v_tab_cursor;
     public FrameLayout fl_content;
@@ -134,7 +134,7 @@ public class GoodsInfoFragment extends Fragment implements View.OnClickListener,
     }
 
     private void initListener() {
-        fab_up_slide.setOnClickListener(this);
+
         ll_current_goods.setOnClickListener(this);
         ll_activity.setOnClickListener(this);
         ll_pull_up.setOnClickListener(this);
@@ -144,7 +144,7 @@ public class GoodsInfoFragment extends Fragment implements View.OnClickListener,
     }
 
     private void initView(View rootView) {
-        fab_up_slide = (FloatingActionButton) rootView.findViewById(R.id.fab_up_slide);
+
         sv_switch = (SlideDetailsLayout) rootView.findViewById(R.id.sv_switch);
         sv_goods_info =  rootView.findViewById(R.id.sv_goods_info);
 //        v_tab_cursor = rootView.findViewById(R.id.v_tab_cursor);
@@ -163,11 +163,12 @@ public class GoodsInfoFragment extends Fragment implements View.OnClickListener,
         banner = rootView.findViewById(R.id.banner);
         mStoreName = rootView.findViewById(R.id.store_name);
         mStoreSrc = rootView.findViewById(R.id.store_src);
+        ll_store = rootView.findViewById(R.id.ll_store);
         setDetailData();
 
         //设置文字中间一条横线
         tv_old_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-        fab_up_slide.hide();
+
 
     }
 
@@ -193,13 +194,19 @@ public class GoodsInfoFragment extends Fragment implements View.OnClickListener,
                 initInfoView();
                 OkHttp3Utils.doGet(Api.STORE + product.getStore(), new GsonObjectCallback<Store>() {
                     @Override
-                    public void onUiThread(Store store, String json) {
+                    public void onUiThread(final Store store, String json) {
                         mStoreName.setText(store.getName());
                         try {
                             Glide.with(getContext()).load(store.getLogo().getUrl()).into(mStoreSrc);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        ll_store.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Utils.start_Activity(getContext(), StoreActivity.class,"storeId",store.get_id());
+                            }
+                        });
                         sv_goods_info.setOnScrollListener(new MyScrollView.OnScrollListener() {
                             @Override
                             public void onScroll(int scrollY, int oldScrollY) {
@@ -338,17 +345,18 @@ public class GoodsInfoFragment extends Fragment implements View.OnClickListener,
 
 
     @Override
-    public void onStatucChanged(SlideDetailsLayout.Status status) {
+    public void onStatusChanged(SlideDetailsLayout.Status status) {
+        FragmentChangeEvent event = new FragmentChangeEvent();
         if (status == SlideDetailsLayout.Status.OPEN) {
             //当前为图文详情页
-            fab_up_slide.show();
-            FragmentChangeEvent event = new FragmentChangeEvent();
-            event.setShow(true);
-            EventUtil.sendEvent(event);
+            event.setDetailShow(true);
+
         } else {
             //当前为商品详情页
-            fab_up_slide.hide();
+            event.setShow(true);
+            event.setDetailShow(false);
         }
+        EventUtil.sendEvent(event);
     }
 
     /**

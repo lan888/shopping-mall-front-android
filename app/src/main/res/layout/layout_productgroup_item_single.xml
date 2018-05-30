@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <ImageView
+    android:layout_height="wrap_content">
+    <guzzu.cnshoppingmall.aa.widget.MyImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="2dp"
         android:id="@+id/pic"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_centerHorizontal="true"
         android:layout_below="@id/pic"
         android:textColor="@color/md_black_1000"
         android:id="@+id/product_group_title"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:ellipsize="end"
+        android:lines="2"
+        android:textSize="@dimen/font_normal"
         />
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/orange_text"
+        android:textColor="#ec0f38"
+        android:textSize="@dimen/font_normal"
+        android:textStyle="bold"
         android:gravity="center"
         android:layout_below="@id/product_group_title"
         android:id="@+id/product_group_price"

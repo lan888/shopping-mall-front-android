@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/white</item>
+
     </style>
     <style name="AppTheme.Launcher" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- 通过windowBackground可以设置背景色、背景图片、能解析出图片的XML文件等-->

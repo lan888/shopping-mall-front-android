@@ -103,18 +103,4 @@ public class CategoryTabFragment extends Fragment {
 
     }
 
-
-    //    void initData() {
-//        //图标
-//        int icno[] = { R.drawable.ic_launcher_background };
-//        //图标下的文字
-//        String name[]={"时钟","信号","宝箱","秒钟","大象","FF","记事本","书签","印象","商店","主题","迅雷"};
-//        dataList = new ArrayList<>();
-//        for (int i = 0; i <name.length; i++) {
-//            Map<String, Object> map=new HashMap<String, Object>();
-//            map.put("img", icno[0]);
-//            map.put("text",name[i]);
-//            dataList.add(map);
-//        }
-//    }
 }

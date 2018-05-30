@@ -70,6 +70,7 @@ public class CategoryFragment extends BaseFragment<MainActivity> {
                 for (int i=0 ; i<size ; i++){
                     mFragments.add(CategoryTabFragment.newInstance(gson.toJson(list.get(i))));
                 }
+                mFragments.add(new CategoryStoreTabFragment());
                 mVTab.setTabAdapter(new TabAdapter() {
                     @Override
                     public int getCount() {
@@ -88,8 +89,13 @@ public class CategoryFragment extends BaseFragment<MainActivity> {
 
                     @Override
                     public ITabView.TabTitle getTitle(int position) {
-                        Log.d(TAG, "getTitle: "+list.get(position).getName());
-                        return new ITabView.TabTitle.Builder().setContent(list.get(position).getName()).setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark),0xFF757575).build();
+                        List<String> categoryName = new ArrayList<>();
+                        for (int i = 0;i<list.size();i++){
+                            categoryName.add(list.get(i).getName());
+                        }
+                        categoryName.add("Stores");
+
+                        return new ITabView.TabTitle.Builder().setContent(categoryName.get(position)).setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark),0xFF757575).build();
                     }
 
                     @Override

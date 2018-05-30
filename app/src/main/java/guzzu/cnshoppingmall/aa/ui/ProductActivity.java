@@ -76,6 +76,7 @@ public class ProductActivity extends BaseActivity {
     private List<Fragment> fragmentList = new ArrayList<>();
     private GoodsInfoFragment goodsInfoFragment;
     private boolean isHided = false;
+    private boolean isShow = false;
     private int selected = 0;
 
     @Override
@@ -127,7 +128,7 @@ public class ProductActivity extends BaseActivity {
                         public void run() {
                             super.run();
                             try {
-                                Thread.sleep(2000);//休眠2秒
+                                Thread.sleep(1000);//休眠2秒
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -215,6 +216,7 @@ public class ProductActivity extends BaseActivity {
     @Subscribe
     public void onPositionChanged(FragmentChangeEvent event){
         Log.d(TAG, "onPositionChanged: "+event.getDy()+event.isShow());
+
         if (event.getDy()>0){
             mToolbar.setVisibility(View.VISIBLE);
             mToolbar.setAlpha(1f);
@@ -226,20 +228,15 @@ public class ProductActivity extends BaseActivity {
             mToolbar.setVisibility(View.GONE);
             mIvCircleBack.setVisibility(View.VISIBLE);
         }
-//        if (event.isShow()){
-//            TabLayout.Tab tab = mTab.getTabAt(1);
-//            if (tab != null) {
-//                mTab.clearOnTabSelectedListeners();
-//                tab.select();
-//
-//            }
-//        } else {
-//            TabLayout.Tab tab = mTab.getTabAt(0);
-//            if (tab != null) {
-//                mTab.clearOnTabSelectedListeners();
-//                tab.select();
-//            }
-//        }
+        isShow = event.isShow();
+        if (isShow){
+                mToolbar.setVisibility(View.VISIBLE);
+                mToolbar.setAlpha(1f);
+                mTab.setAlpha(1f);
+                mIvCircleBack.setVisibility(View.GONE);
+                isShow = false;
+        }
+        mVpContent.setNoScroll(event.isDetailShow());
 
 
     }

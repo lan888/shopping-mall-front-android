@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <guzzu.cnshoppingmall.aa.widget.ItemWebView
         android:id="@+id/wv_detail"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:overScrollMode="never"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_up_slide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="30dp"
+        android:src="@mipmap/go_top"
+        app:backgroundTint="#ffffff"
+        app:borderWidth="0dp"
+        app:fabSize="mini"
+        app:rippleColor="#ffffff" />
+</android.support.design.widget.CoordinatorLayout>

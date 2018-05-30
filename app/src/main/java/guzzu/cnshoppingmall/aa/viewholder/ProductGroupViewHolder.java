@@ -66,14 +66,14 @@ public class ProductGroupViewHolder extends RecyclerView.ViewHolder {
 
                     if (data.getImage()!=null){
                         try {
-                            Glide.with(itemView.getContext()).load(data.getImage().getUrl()).apply(RequestOptions.centerCropTransform()).into(pic);
+                            Glide.with(itemView.getContext()).load(data.getImage().getThumb().getUrl()).apply(RequestOptions.centerCropTransform()).into(pic);
                         }catch (Exception e){
                             e.printStackTrace();
                         }
 
                     }
                     title.setText(data.getName());
-                    price.setText("￥"+String.valueOf(data.getPrice()/100));
+                    price.setText("¥"+String.valueOf(data.getPrice()/100));
 
                     v.setOnClickListener(new View.OnClickListener() {
                         @Override
