@@ -8,6 +8,6 @@
     app:justifyContent="space_around"
     app:flexWrap="nowrap"
     android:id="@+id/nav_group"
-
+    android:padding="1dp"
     >
 </com.google.android.flexbox.FlexboxLayout>

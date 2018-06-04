@@ -13,7 +13,7 @@
         android:padding="@dimen/font_small"
         android:visibility="gone"
         android:gravity="center"/>
-    <guzzu.cnshoppingmall.aa.widget.MySwipeRecyclerView
+    <cn.guzzu.shoppingmall.widget.MySwipeRecyclerView
         android:id="@+id/rv_category"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="btn_logining">logining...</string>
+    <string name="btn_login">Login</string>
+    <string name="toast_err_code">您好，验证码不正确，请重试！</string>
+    <string name="tv_unlogin">Not Logged On</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_category">Category</string>
+    <string name="nav_cart">Cart</string>
+    <string name="nav_me">Me</string>
+</resources>

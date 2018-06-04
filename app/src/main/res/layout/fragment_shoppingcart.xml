@@ -21,7 +21,7 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 />
         </android.support.design.widget.AppBarLayout>
-        <guzzu.cnshoppingmall.baselibrary.widget.MultiStateView
+        <cn.guzzu.baselibrary.widget.MultiStateView
             android:id="@+id/multi_state_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -29,7 +29,7 @@
                 android:id="@+id/mRv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-        </guzzu.cnshoppingmall.baselibrary.widget.MultiStateView>
+        </cn.guzzu.baselibrary.widget.MultiStateView>
 
     </LinearLayout>
     <TextView

@@ -10,13 +10,13 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <guzzu.cnshoppingmall.aa.widget.SlideDetailsLayout
+        <cn.guzzu.shoppingmall.widget.SlideDetailsLayout
             android:id="@+id/sv_switch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
 
-            <guzzu.cnshoppingmall.aa.widget.MyScrollView
+            <cn.guzzu.shoppingmall.widget.MyScrollView
                 android:id="@+id/sv_goods_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -240,10 +240,10 @@
                             android:textSize="14dp" />
                     </LinearLayout>
                 </LinearLayout>
-            </guzzu.cnshoppingmall.aa.widget.MyScrollView>
+            </cn.guzzu.shoppingmall.widget.MyScrollView>
 
             <include layout="@layout/include_item_tab" />
-        </guzzu.cnshoppingmall.aa.widget.SlideDetailsLayout>>
+        </cn.guzzu.shoppingmall.widget.SlideDetailsLayout>>
 
 
     </android.support.design.widget.CoordinatorLayout>

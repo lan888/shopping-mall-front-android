@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <guzzu.cnshoppingmall.aa.widget.ItemWebView
+    <cn.guzzu.shoppingmall.widget.ItemWebView
         android:id="@+id/wv_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

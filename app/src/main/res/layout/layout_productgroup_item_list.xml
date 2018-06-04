@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <cn.guzzu.shoppingmall.widget.MyImageView
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginLeft="2dp"
+        android:id="@+id/pic"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/pic"
+        android:textColor="@color/md_black_1000"
+        android:id="@+id/product_group_title"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:ellipsize="end"
+        android:lines="2"
+        android:textSize="@dimen/font_smaller"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#ec0f38"
+        android:textSize="@dimen/font_normal"
+        android:textStyle="bold"
+        android:gravity="left"
+        android:layout_below="@id/product_group_title"
+        android:paddingLeft="@dimen/common_loading_text_margin"
+        android:layout_toRightOf="@id/pic"
+        android:id="@+id/product_group_price"
+        />
+</RelativeLayout>

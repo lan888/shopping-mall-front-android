@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <guzzu.cnshoppingmall.aa.widget.NoScrollViewPager
+    <cn.guzzu.shoppingmall.widget.NoScrollViewPager
         android:layout_above="@id/bottom"
         android:id="@+id/vp_content"
         android:layout_width="match_parent"
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:layout_marginLeft="12dp">
-        <guzzu.cnshoppingmall.baselibrary.widget.CircleImageView
+        <cn.guzzu.baselibrary.widget.CircleImageView
             android:id="@+id/iv_circle_back"
             android:layout_width="32dp"
             android:layout_height="32dp"

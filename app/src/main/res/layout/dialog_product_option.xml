@@ -40,7 +40,7 @@
         android:textColor="@color/md_black_1000"
         android:paddingLeft="@dimen/font_normal"
         android:layout_below="@id/img"/>
-        <guzzu.cnshoppingmall.aa.widget.FlowRadioGroup
+        <cn.guzzu.shoppingmall.widget.FlowRadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/option"
@@ -51,12 +51,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv1"
-        android:text="数量"
+        android:text="数量:"
         android:textColor="@color/md_black_1000"
         android:layout_below="@id/option"
-        android:padding="@dimen/font_normal"
+        android:paddingTop="@dimen/font_small"
+        android:paddingLeft="@dimen/font_normal"
         />
-    <guzzu.cnshoppingmall.aa.widget.ShoppingCartAmountView
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/max"
+        android:text="In stock"
+        android:textColor="@color/red"
+        android:padding="8dp"
+        android:layout_below="@id/tv1"/>
+    <cn.guzzu.shoppingmall.widget.ShoppingCartAmountView
         android:id="@+id/amount_view"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
@@ -72,8 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@id/tv1"
-        android:layout_marginTop="@dimen/font_normal"
+        android:layout_below="@id/max"
         >
         <TextView
             android:layout_width="wrap_content"

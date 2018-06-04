@@ -3,10 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <guzzu.cnshoppingmall.aa.widget.MyImageView
+    <cn.guzzu.shoppingmall.widget.MyImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="2dp"
         android:id="@+id/pic"
         />
     <TextView
@@ -21,7 +20,7 @@
         android:layout_marginStart="12dp"
         android:ellipsize="end"
         android:lines="2"
-        android:textSize="@dimen/font_normal"
+        android:textSize="@dimen/font_smaller"
         />
     <TextView
         android:layout_width="match_parent"
