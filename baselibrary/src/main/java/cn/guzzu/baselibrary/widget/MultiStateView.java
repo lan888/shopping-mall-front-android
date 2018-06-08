@@ -19,6 +19,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import cn.guzzu.baselibrary.R;
+import cn.guzzu.baselibrary.util.Utils;
+import cn.guzzu.baselibrary.util.UtilsLog;
 
 /**
  * 一个提供多种状态切换显示的 layout 组件
@@ -115,6 +117,9 @@ public class MultiStateView extends FrameLayout {
             case STATE_EMPTY:
                 mState = STATE_EMPTY;
                 break;
+            case STATE_UNAUTH:
+                mState = STATE_UNAUTH;
+                break;
             default:
                 // nothing to do
                 break;
@@ -187,6 +192,8 @@ public class MultiStateView extends FrameLayout {
                 return mErrorView;
             case STATE_EMPTY:
                 return mEmptyView;
+            case STATE_UNAUTH:
+                return mUnauthView;
             default:
                 return null;
         }
@@ -456,6 +463,7 @@ public class MultiStateView extends FrameLayout {
         View view = getView(mState);
         if (view != null) {
             View button = view.findViewById(R.id.button);
+            UtilsLog.d(button.toString());
             // 这个button只能是TextView或者Button控件
             if (button != null && (button instanceof Button || button instanceof TextView)) {
                 button.setVisibility(VISIBLE);
@@ -466,6 +474,7 @@ public class MultiStateView extends FrameLayout {
                         ((TextView) button).setText(text);
                     }
                 }
+                UtilsLog.d("login");
                 if (listener != null) {
                     button.setOnClickListener(listener);
                 }

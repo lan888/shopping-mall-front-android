@@ -1,6 +1,7 @@
 package cn.guzzu.shoppingmall.ui;
 
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +21,7 @@ import cn.guzzu.baselibrary.callback.JsonCallback;
 import cn.guzzu.baselibrary.util.OkHttp3Utils;
 import cn.guzzu.baselibrary.util.Utils;
 import cn.guzzu.shoppingmall.Api;
-import cn.guzzu.shoppingmall.bean.LoginChangeEvent;
+import cn.guzzu.shoppingmall.bean.GoHomeEvent;
 import cn.guzzu.shoppingmall.fragment.MeFragment;
 import cn.guzzu.shoppingmall.fragment.ShoppingCartFragment;
 import cn.guzzu.baselibrary.base.BaseActivity;
@@ -36,6 +39,7 @@ public class MainActivity extends BaseActivity {
     private ArrayList<BaseFragment> mFragments;
     private BaseFragment mContext;
     private String categoryId;
+    private String cartAt;
     private int curPosition = 0;
 
     @Override
@@ -49,10 +53,12 @@ public class MainActivity extends BaseActivity {
 
     }
 
+
     @Override
     public void initData() {
         getSession();
         categoryId = getIntent().getStringExtra("categoryId");
+        cartAt = getIntent().getStringExtra("shoppingCart");
         mFragments = new ArrayList<>();
         mFragments.add(new HomeFragment());
         mFragments.add(new CategoryFragment());
@@ -64,15 +70,16 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initListener() {
         if (categoryId!=null){
-
             switchFragment(mContext,mFragments.get(1));
             mBottom.getMenu().getItem(1).setChecked(true);
             CategoryFragment categoryFragment = (CategoryFragment) mFragments.get(1);
             categoryFragment.setCategoryId(categoryId);
+        }else if (cartAt!=null){
+            switchFragment(mContext,mFragments.get(Integer.valueOf(cartAt)));
+            mBottom.getMenu().getItem(Integer.valueOf(cartAt)).setChecked(true);
         }else {
-            switchFragment(mContext,mFragments.get(0));
-        }
-
+                switchFragment(mContext,mFragments.get(0));
+            }
         mBottom.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -123,7 +130,7 @@ public class MainActivity extends BaseActivity {
                     if (fromFragment != null) {
                         transaction.hide(fromFragment);
                     }
-                    transaction.add(R.id.mViewPager, nextFragment).commit();
+                    transaction.add(R.id.mViewPager, nextFragment).commitAllowingStateLoss();
                 } else {
                     //nextFragment被添加过
 
@@ -131,11 +138,12 @@ public class MainActivity extends BaseActivity {
                     if (fromFragment != null) {
                         transaction.hide(fromFragment);
                     }
-                    transaction.show(nextFragment).commit();
+                    transaction.show(nextFragment).commitAllowingStateLoss();
                 }
             }
         }
     }
+
 
     private void getSession(){
         OkHttp3Utils.doPost(Api.GUZZU + Api.SESSION, BaseApp.Constant.userId, "zh", new JsonCallback() {
@@ -157,5 +165,22 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void goHome(GoHomeEvent event){
+        switchFragment(mContext,mFragments.get(0));
+        mBottom.getMenu().getItem(0).setChecked(true);
+
+    }
 }

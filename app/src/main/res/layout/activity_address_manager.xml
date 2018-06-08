@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent">
+    <include layout="@layout/include_toolbar"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:alpha="0.4"
+        android:background="#dddddd" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mRv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/orange_600"
+        android:layout_margin="@dimen/len_8"
+        android:id="@+id/btn_add"
+        android:text="新增收货地址"/>
+
+</LinearLayout>

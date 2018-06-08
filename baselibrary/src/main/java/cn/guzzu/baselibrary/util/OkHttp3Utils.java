@@ -241,6 +241,22 @@ public class OkHttp3Utils {
      * 参数二：请求的JSON
      * 参数三：请求回调
      */
+    public static void doJsonPost(String url, Map<String, String> params, String sessionid,String lang, Callback callback) {
+        Gson gson = new Gson();
+        String jsonParams = gson.toJson(params);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonParams);
+        Request request = new Request.Builder().url(url).addHeader("x-guzzu-sessionid",sessionid).addHeader("x-guzzu-lang",lang).post(requestBody).build();
+        Call call = getOkHttpClient().newCall(request);
+        call.enqueue(callback);
+
+
+    }
+    /**
+     * Post请求发送JSON数据
+     * 参数一：请求Url
+     * 参数二：请求的JSON
+     * 参数三：请求回调
+     */
     public static void doJsonPost(String url, Map<String, String> params, String sessionid, Callback callback) {
         Gson gson = new Gson();
         String jsonParams = gson.toJson(params);
@@ -263,6 +279,21 @@ public class OkHttp3Utils {
         String jsonParams = gson.toJson(params);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonParams);
         Request request = new Request.Builder().url(url).post(requestBody).build();
+        Call call = getOkHttpClient().newCall(request);
+        call.enqueue(callback);
+
+
+    }
+
+    /**
+     * Post请求发送JSON数据
+     * 参数一：请求Url
+     * 参数二：请求的JSON
+     * 参数三：请求回调
+     */
+    public static void doJsonPost(String url, String jsonParams, String sessionid, Callback callback) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonParams);
+        Request request = new Request.Builder().url(url).addHeader("x-guzzu-sessionid",sessionid).post(requestBody).build();
         Call call = getOkHttpClient().newCall(request);
         call.enqueue(callback);
 

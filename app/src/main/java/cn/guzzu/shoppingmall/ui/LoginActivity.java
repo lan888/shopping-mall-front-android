@@ -3,19 +3,19 @@ package cn.guzzu.shoppingmall.ui;
 import android.content.Context;
 import android.os.CountDownTimer;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.google.gson.Gson;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 
-import net.qiujuer.genius.ui.widget.Button;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -30,21 +30,20 @@ import cn.guzzu.baselibrary.util.Utils;
 import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
 import cn.guzzu.baselibrary.base.BaseActivity;
-import cn.guzzu.shoppingmall.bean.LoginChangeEvent;
 import cn.guzzu.shoppingmall.bean.User;
 import okhttp3.Call;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements TextWatcher {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.et_phone)
-    EditText mEtPhone;
+    AppCompatEditText mEtPhone;
     @BindView(R.id.et_code)
-    EditText mEtCode;
+    AppCompatEditText mEtCode;
     @BindView(R.id.btn_code)
     AppCompatButton mBtnCode;
     @BindView(R.id.btn_login)
-    Button mBtnLogin;
+    ButtonRectangle mBtnLogin;
     @BindView(R.id.wei_login)
     ImageView mWeiLogin;
 
@@ -65,7 +64,7 @@ public class LoginActivity extends BaseActivity {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
         }
-
+        mBtnLogin.setEnabled(false);
     }
 
     @Override
@@ -76,6 +75,8 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void initListener() {
+        mEtPhone.addTextChangedListener(this);
+        mEtCode.addTextChangedListener(this);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,6 +163,27 @@ public class LoginActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        mPhoneNum = mEtPhone.getText().toString();
+        if (Utils.isMobileNO(mPhoneNum)){
+            mBtnLogin.setEnabled(true);
+        }else {
+            mBtnLogin.setEnabled(false);
+        }
+    }
+
     class TimeCount extends CountDownTimer {
 
         public TimeCount(long millisInFuture, long countDownInterval) {

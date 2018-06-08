@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/appbar"
             android:theme="@style/AppTheme.AppBarOverlay">
-    <include layout="@layout/include_toolbar"/>
+    <include layout="@layout/include_search_toolbar"/>
         </android.support.design.widget.AppBarLayout>
         <LinearLayout
             android:layout_width="match_parent"

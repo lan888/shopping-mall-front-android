@@ -1,0 +1,41 @@
+-- Merging decision tree log ---
+manifest
+ADDED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:1:1-10:12
+INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:1:1-10:12
+INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:1:1-10:12
+INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:1:1-10:12
+INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:1:1-10:12
+INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:1:1-10:12
+INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:1:1-10:12
+	package
+		ADDED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:2:5-36
+		INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml
+		INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml
+	android:versionName
+		ADDED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:4:5-30
+		INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml
+		INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml
+	xmlns:android
+		ADDED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:1:11-69
+	android:versionCode
+		ADDED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:3:5-28
+		INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml
+		INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml
+uses-sdk
+ADDED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:6:5-43
+INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:6:5-43
+INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:6:5-43
+INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:6:5-43
+INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:6:5-43
+	android:targetSdkVersion
+		INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml
+		ADDED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:6:5-43
+		INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:6:15-40
+		INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml
+		INJECTED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml
+application
+ADDED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:8:5-47
+	android:allowBackup
+		ADDED from E:\3400-shopping-mall-front-android\MaterialDesign\AndroidManifest.xml:8:18-44

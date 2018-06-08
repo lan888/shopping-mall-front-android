@@ -15,8 +15,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import net.qiujuer.genius.ui.widget.Button;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -36,8 +34,10 @@ import cn.guzzu.baselibrary.util.OkHttp3Utils;
 import cn.guzzu.baselibrary.util.Utils;
 import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
+import cn.guzzu.shoppingmall.ui.AddressManagerActivity;
 import cn.guzzu.shoppingmall.ui.LoginActivity;
 import cn.guzzu.shoppingmall.ui.MainActivity;
+import cn.guzzu.shoppingmall.ui.OrderActivity;
 import cn.guzzu.shoppingmall.ui.SettingActivity;
 import cn.guzzu.shoppingmall.ui.StartActivity;
 import okhttp3.Call;
@@ -121,7 +121,7 @@ public class MeFragment extends BaseFragment<MainActivity> {
                 return true;
             }
         });
-        String lang = Utils.getValue(activity,"lang");
+        String lang = Utils.getValue(activity,"lang").isEmpty()?BaseApp.getInstance().getCurLocale().getLanguage():Utils.getValue(activity,"lang");
         if (lang.contains("zh")) {
             mCbChinese.setChecked(true);
         } else {
@@ -177,6 +177,7 @@ public class MeFragment extends BaseFragment<MainActivity> {
                 break;
             case R.id.ll_orders:
                 if (BaseApp.getInstance().isLogin()) {
+                    Utils.start_Activity(activity, OrderActivity.class);
                 } else {
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     activity.startActivity(intent);
@@ -184,6 +185,7 @@ public class MeFragment extends BaseFragment<MainActivity> {
                 break;
             case R.id.ll_address:
                 if (BaseApp.getInstance().isLogin()) {
+                    Utils.start_Activity(activity, AddressManagerActivity.class);
                 } else {
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     activity.startActivity(intent);
@@ -198,13 +200,17 @@ public class MeFragment extends BaseFragment<MainActivity> {
                 break;
             case R.id.cb_english:
                 Utils.putValue(activity,"lang","en");
-                Intent intent = new Intent(activity,StartActivity.class);
+                LanguageUtil.set(activity);
+                mCbChinese.setChecked(false);
+                Intent intent = new Intent(activity,MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 activity.startActivity(intent);
                 break;
             case R.id.cb_chinese:
                 Utils.putValue(activity,"lang","zh");
-                Intent intent1 = new Intent(activity,StartActivity.class);
+                LanguageUtil.set(activity);
+                mCbEnglish.setChecked(false);
+                Intent intent1 = new Intent(activity,MainActivity.class);
                 intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 activity.startActivity(intent1);
                 break;
@@ -216,7 +222,7 @@ public class MeFragment extends BaseFragment<MainActivity> {
                             Utils.showShortToast(getContext(),"已退出登录");
                             mTvStatus.setText(getString(R.string.tv_unlogin));
                             mBtnLogout.setVisibility(View.GONE);
-                            Utils.putBoolean(getContext(),"isLogin",false);
+                            Utils.putBoolean(activity,"isLogin",false);
                         }
                     }
 

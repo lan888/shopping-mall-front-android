@@ -4,8 +4,22 @@
     <string name="btn_login">Login</string>
     <string name="toast_err_code">您好，验证码不正确，请重试！</string>
     <string name="tv_unlogin">Not Logged On</string>
+
+    <string name="title_order_detail">Order Detail</string>
+    <string name="txt_subtotal">Subtotal</string>
+    <string name="txt_shipping_cost">ShippingCost</string>
+    <string name="txt_total_cost">TotalCost</string>
+    <string name="txt_note">Order Note</string>
+    <string name="hint_note">Optional order request/message</string>
+
+
     <string name="nav_home">Home</string>
     <string name="nav_category">Category</string>
     <string name="nav_cart">Cart</string>
     <string name="nav_me">Me</string>
+    <string name="tv_discount">Discount:</string>
+    <string name="dialog_wait">请稍候</string>
+
+    <string name="all">全选</string>
+    <string name="order_total">合计 :</string>
 </resources>

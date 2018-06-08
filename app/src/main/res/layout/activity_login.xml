@@ -11,11 +11,12 @@
         android:layout_height="1px"
         android:alpha="0.4"
         android:background="#dddddd" />
-    <EditText
+    <android.support.v7.widget.AppCompatEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/et_phone"
         android:hint="请输入手机号"
+        android:inputType="number"
         android:background="@null"
         android:textCursorDrawable="@null"
         android:layout_marginLeft="@dimen/len_32"
@@ -32,10 +33,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <EditText
+        <android.support.v7.widget.AppCompatEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/et_code"
+            android:inputType="number"
             android:hint="请输入验证码"
             android:textCursorDrawable="@null"
             android:background="@null"
@@ -62,24 +64,15 @@
         android:background="#dddddd"
         android:layout_margin="20dp"/>
 
-    <net.qiujuer.genius.ui.widget.Button
+    <com.gc.materialdesign.views.ButtonRectangle
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:id="@+id/btn_login"
         android:layout_margin="@dimen/len_32"
         android:text="@string/btn_login"
         android:gravity="center"
+        android:background="@color/md_blue_grey_500"
         android:textColor="@color/white"
-        android:background="@drawable/g_button_background"
-        app:gFont="roboto.ttf"
-        app:gTouchColor="@color/black_alpha_16"
-        app:gTouchEffect="auto"
-        app:gTouchCornerRadius="@dimen/len_12"
-        app:gTouchCornerRadiusTL="@dimen/len_16"
-        app:gTouchCornerRadiusTR="@dimen/len_16"
-        app:gTouchCornerRadiusBL="@dimen/len_16"
-        app:gTouchCornerRadiusBR="@dimen/len_16"
-        app:gTouchDurationRate="0.7"
         />
     <ImageView
         android:layout_width="wrap_content"

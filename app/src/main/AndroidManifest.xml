@@ -34,7 +34,12 @@
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.Translucent"/>
         <activity android:name=".ui.SettingActivity" />
-        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".ui.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name=".ui.SettledActivity" />
+        <activity android:name=".ui.AddressAddActivity" />
+        <activity android:name=".ui.AddressManagerActivity" />
+        <activity android:name=".ui.OrderActivity" />
     </application>
 
 </manifest>

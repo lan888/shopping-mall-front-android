@@ -242,11 +242,11 @@ public class GoodsInfoFragment extends Fragment implements View.OnClickListener,
     }
     private void initInfoView() {
         tv_goods_title.setText(product.getName());
-        tv_new_price.setText(String.valueOf(product.getPrice() / 100));
+        tv_new_price.setText(String.valueOf((double)product.getPrice() / 100));
         if (!product.isDiscounted()){
             tv_old_price.setVisibility(View.GONE);
         }else {
-            tv_old_price.setText(String.valueOf(product.getOriginalPrice()/100));
+            tv_old_price.setText(String.valueOf((double) product.getOriginalPrice()/100));
         }
         activity.setListener(new ProductActivity.OnOptionClickListener() {
             @Override

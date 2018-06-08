@@ -12,6 +12,7 @@ import org.greenrobot.eventbus.EventBus;
 import butterknife.ButterKnife;
 import cn.guzzu.baselibrary.R;
 import cn.guzzu.baselibrary.util.LanguageUtil;
+import cn.guzzu.baselibrary.widget.LoadingDialog;
 
 
 /**
@@ -21,6 +22,7 @@ import cn.guzzu.baselibrary.util.LanguageUtil;
 public abstract class BaseActivity extends AppCompatActivity {
     protected Activity context;
     private ImmersionBar mImmersionBar;
+    private LoadingDialog mLoading;
     BaseApp myApp ;
 
     /***获取TAG的activity名称**/
@@ -32,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         myApp = (BaseApp) getApplication();
         //设置布局
         setContentView(initLayout());
-        LanguageUtil.set(this);
+
         ButterKnife.bind(this);
         mImmersionBar = ImmersionBar.with(this);
         mImmersionBar
@@ -71,7 +73,22 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public abstract void initListener();
 
+    protected void showLoading(String text) {
+        cancelLoading();
+        if (mLoading == null) {
+            mLoading = new LoadingDialog(context);
+            mLoading.setCancelable(false);
+            mLoading.setCanceledOnTouchOutside(false);
+        }
+        mLoading.setTitle(text);
+        mLoading.show();
+    }
 
+    protected void cancelLoading() {
+        if (mLoading != null && mLoading.isShowing()) {
+            mLoading.dismiss();
+        }
+    }
 
     @Override
     protected void onDestroy() {

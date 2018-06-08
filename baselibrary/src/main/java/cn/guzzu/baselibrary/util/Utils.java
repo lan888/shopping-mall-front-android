@@ -12,11 +12,14 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -286,7 +289,7 @@ public class Utils {
      */
     public static boolean isMobileNO(String mobiles) {
         Pattern p = Pattern
-                .compile("^((13[0-9])|(15[^4,\\D])|(17[^4,\\D])|(18[0-9]))\\d{8}$");
+                .compile("^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$");
         Matcher m = p.matcher(mobiles);
         return m.matches();
     }
@@ -306,6 +309,8 @@ public class Utils {
             return true;
         }
     }
+
+
     public static String getTimeFromUTC(String utc){
         try {
             SimpleDateFormat utcFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -347,5 +352,8 @@ public class Utils {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
-
+    public static void showKeyboard(Context context,View view){
+        InputMethodManager im= (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        im.showSoftInput(view,0);
+    }
 }

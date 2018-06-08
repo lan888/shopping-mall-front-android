@@ -29,13 +29,18 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.guzzu.baselibrary.base.BaseApp;
+import cn.guzzu.baselibrary.callback.GsonArrayCallback;
 import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
 import cn.guzzu.shoppingmall.adapter.ItemTitlePagerAdapter;
+import cn.guzzu.shoppingmall.bean.CartAll;
 import cn.guzzu.shoppingmall.bean.FragmentChangeEvent;
 import cn.guzzu.shoppingmall.bean.Product;
 import cn.guzzu.shoppingmall.fragment.GoodsDetailFragment;
@@ -50,6 +55,7 @@ import cn.guzzu.baselibrary.util.Utils;
 import cn.guzzu.baselibrary.widget.CircleImageView;
 import cn.guzzu.baselibrary.widget.LoadingDialog;
 import okhttp3.Call;
+import q.rorbin.badgeview.QBadgeView;
 
 public class ProductActivity extends BaseActivity {
 
@@ -61,6 +67,8 @@ public class ProductActivity extends BaseActivity {
     TextView mTvAddcart;
     @BindView(R.id.tv_buy)
     TextView mTvBuy;
+    @BindView(R.id.tv_cart)
+    TextView mTvCart;
     @BindView(R.id.iv_circle_back)
     CircleImageView mIvCircleBack;
     @BindView(R.id.vp_content)
@@ -68,9 +76,9 @@ public class ProductActivity extends BaseActivity {
 
     private String optionName;
     private int optionCount;
+    private Gson gson;
     private Product product;
     private int imgHeight;
-    private LoadingDialog mLoading;
     private Dialog bottomDialog;
     private TabLayout.OnTabSelectedListener mOnTabSelectedListener;
     private WebView mWebView;
@@ -79,6 +87,7 @@ public class ProductActivity extends BaseActivity {
     private boolean isHided = false;
     private boolean isShow = false;
     private int selected = 0;
+    private int mAmount = 1;
 
     @Override
     public int initLayout() {
@@ -152,6 +161,24 @@ public class ProductActivity extends BaseActivity {
 
             @Override
             public void onFailed(Call call, IOException exception) {
+
+            }
+        });
+        OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId, "zh", new GsonArrayCallback<CartAll>() {
+            @Override
+            public void onUiThread(int code, List<CartAll> list) {
+                if (code==200){
+                    int cartCount=0;
+                    for (int i = 0;i<list.size();i++){
+                        cartCount += list.get(i).getItems().size();
+                    }
+                    new QBadgeView(context).bindTarget(mTvCart).setBadgeNumber(cartCount);
+
+                }
+            }
+
+            @Override
+            public void onFailed(Call call, IOException e) {
 
             }
         });
@@ -244,27 +271,14 @@ public class ProductActivity extends BaseActivity {
     }
 
 
-    private void showLoading(String text) {
-        cancelLoading();
-        if (mLoading == null) {
-            mLoading = new LoadingDialog(context);
-            mLoading.setCancelable(false);
-            mLoading.setCanceledOnTouchOutside(false);
-        }
-        mLoading.setTitle(text);
-        mLoading.show();
-    }
 
-    private void cancelLoading() {
-        if (mLoading != null && mLoading.isShowing()) {
-            mLoading.dismiss();
-        }
-    }
 
     private void initBottom() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_product_option, null);
         final TextView tv_name = contentView.findViewById(R.id.name);
         final TextView tv_price = contentView.findViewById(R.id.price);
+        final TextView mBtnBuy = contentView.findViewById(R.id.btn_buy);
+        final TextView mBtnCart = contentView.findViewById(R.id.tv_addcart);
         final ImageView iv = contentView.findViewById(R.id.img);
         final ShoppingCartAmountView mAmountView = contentView.findViewById(R.id.amount_view);
         FlowRadioGroup frg = contentView.findViewById(R.id.option);
@@ -290,6 +304,7 @@ public class ProductActivity extends BaseActivity {
                         @Override
                         public void onAmountChange(View view, int amount) {
                             listener.process(product.getProductOptions().get(selected).getName(),amount);
+                            mAmount = amount;
                         }
                     });
                 }else {
@@ -298,6 +313,7 @@ public class ProductActivity extends BaseActivity {
                         @Override
                         public void onAmountChange(View view, int amount) {
                             listener.process(product.getProductOptions().get(selected).getName(),amount);
+                            mAmount = amount;
                         }
                     });
                 }
@@ -313,12 +329,80 @@ public class ProductActivity extends BaseActivity {
 
         tv_name.setText(product.getName());
         tv_price.setText("¥" + String.valueOf((double) product.getPrice() / 100));
+        //判断库存有无限制
         if (product.getProductOptions().size()>0){
             if (product.getProductOptions().get(0).getInventoryPolicy().equals("unlimited")){
                 mAmountView.setGoods_storage(99).setAmount(1);
             }else {
                 mAmountView.setGoods_storage(product.getProductOptions().get(0).getMaxQuantity()).setAmount(1);
             }
+            mBtnBuy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (BaseApp.getInstance().isLogin()){
+                        gson = new Gson();
+                        Map<String,Object> map = new HashMap<>();
+                        Map<String,String> productMap = new HashMap<>();
+                        List<Map<String,String>> list = new ArrayList<>();
+                        map.put("storeId",product.getStore());
+                        productMap.put("productId",product.get_id());
+                        productMap.put("quantity",String.valueOf(mAmount));
+                        productMap.put("productOptionId",product.getProductOptions().get(selected).get_id());
+                        list.add(productMap);
+                        map.put("items",list);
+                        String[] strings  =new String[2];
+                        strings[0] = gson.toJson(map);
+                        strings[1] = product.get_id();
+                        Utils.start_Activity(context,SettledActivity.class,"product",strings);
+                    }else {
+                        Utils.start_Activity(context,LoginActivity.class);
+                    }
+
+                }
+            });
+
+            mBtnCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Map<String,String> productMap = new HashMap<>();
+                    productMap.put("productId",product.get_id());
+                    productMap.put("quantity",String.valueOf(mAmount));
+                    productMap.put("productOptionId",product.getProductOptions().get(selected).get_id());
+                    productMap.put("storeId",product.getStore());
+                    OkHttp3Utils.doJsonPost(Api.GUZZU + Api.CART_ADD, productMap, BaseApp.Constant.userId, new JsonCallback() {
+                        @Override
+                        public void onUiThread(int code, String json) {
+                            if (code==200){
+                                bottomDialog.dismiss();
+                                OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId, "zh", new GsonArrayCallback<CartAll>() {
+                                    @Override
+                                    public void onUiThread(int code, List<CartAll> list) {
+                                        if (code==200){
+                                            int cartCount=0;
+                                            for (int i = 0;i<list.size();i++){
+                                                cartCount += list.get(i).getItems().size();
+                                            }
+                                            new QBadgeView(context).bindTarget(mTvCart).setBadgeNumber(cartCount);
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailed(Call call, IOException e) {
+
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(Call call, IOException exception) {
+
+                        }
+                    });
+
+                }
+            });
         }else {
             if (product.getInventoryPolicy().equals("unlimited")){
                 mAmountView.setGoods_storage(99).setAmount(1);
@@ -326,6 +410,7 @@ public class ProductActivity extends BaseActivity {
                     @Override
                     public void onAmountChange(View view, int amount) {
                         listener.process(product.getName(),amount);
+                        mAmount = amount;
                     }
                 });
             }else {
@@ -334,10 +419,77 @@ public class ProductActivity extends BaseActivity {
                     @Override
                     public void onAmountChange(View view, int amount) {
                         listener.process(product.getName(),amount);
+                        mAmount = amount;
                     }
                 });
             }
+            mBtnBuy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (BaseApp.getInstance().isLogin()){
+                        gson = new Gson();
+                        Map<String,Object> map = new HashMap<>();
+                        Map<String,String> productMap = new HashMap<>();
+                        List<Map<String,String>> list = new ArrayList<>();
+                        map.put("storeId",product.getStore());
+                        productMap.put("productId",product.get_id());
+                        productMap.put("quantity",String.valueOf(mAmount));
+                        list.add(productMap);
+                        map.put("items",list);
+                        Utils.start_Activity(context,SettledActivity.class,"product",gson.toJson(map));
+                    }else {
+                        Utils.start_Activity(context,LoginActivity.class);
+                    }
+
+
+
+                }
+            });
+
+            mBtnCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Map<String,String> productMap = new HashMap<>();
+                    productMap.put("productId",product.get_id());
+                    productMap.put("quantity",String.valueOf(mAmount));
+                    productMap.put("storeId",product.getStore());
+                    OkHttp3Utils.doJsonPost(Api.GUZZU + Api.CART_ADD, productMap, BaseApp.Constant.userId, new JsonCallback() {
+                        @Override
+                        public void onUiThread(int code, String json) {
+                            if (code==200){
+                                bottomDialog.dismiss();
+                                OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId, "zh", new GsonArrayCallback<CartAll>() {
+                                    @Override
+                                    public void onUiThread(int code, List<CartAll> list) {
+                                        if (code==200){
+                                            int cartCount=0;
+                                            for (int i = 0;i<list.size();i++){
+                                               cartCount += list.get(i).getItems().size();
+                                            }
+                                            new QBadgeView(context).bindTarget(mTvCart).setBadgeNumber(cartCount);
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailed(Call call, IOException e) {
+
+                                    }
+                                });
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(Call call, IOException exception) {
+
+                        }
+                    });
+
+                }
+            });
         }
+
         Glide.with(context).load(product.getImage().getThumb().getUrl()).apply(RequestOptions.fitCenterTransform()).into(iv);
         bottomDialog.setContentView(contentView);
         ViewGroup.LayoutParams layoutParams = contentView.getLayoutParams();
@@ -373,7 +525,7 @@ public class ProductActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.tv_buy, R.id.tv_addcart})
+    @OnClick({R.id.tv_buy, R.id.tv_addcart ,R.id.tv_cart})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_buy:
@@ -383,6 +535,9 @@ public class ProductActivity extends BaseActivity {
             case R.id.tv_addcart:
                 bottomDialog.dismiss();
                 bottomDialog.show();
+                break;
+            case R.id.tv_cart:
+                Utils.start_Activity(this,MainActivity.class,"shoppingCart","2");
                 break;
         }
     }

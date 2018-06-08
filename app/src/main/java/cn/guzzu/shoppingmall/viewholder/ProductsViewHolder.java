@@ -35,7 +35,7 @@ public class ProductsViewHolder extends RecyclerView.ViewHolder {
                     e.printStackTrace();
         }
         title.setText(products.getName());
-        price.setText("¥"+String.valueOf(products.getPrice()/100));
+        price.setText("¥"+String.valueOf((double) products.getPrice()/100));
         ViewGroup.LayoutParams lp = itemView.getLayoutParams();
         if (lp instanceof FlexboxLayoutManager.LayoutParams) {
             FlexboxLayoutManager.LayoutParams flexboxLp =
