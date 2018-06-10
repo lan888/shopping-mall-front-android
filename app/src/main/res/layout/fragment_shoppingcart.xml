@@ -175,6 +175,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:text="编辑"
+        android:visibility="gone"
         android:id="@+id/toolbar_edit"
         android:textSize="@dimen/font_large"
         android:textColor="@color/white"

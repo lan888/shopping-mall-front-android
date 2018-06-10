@@ -109,7 +109,49 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
         childs = new HashMap<>();
         refreshLayout.setRefreshHeader(new ClassicsHeader(activity).setSpinnerStyle(SpinnerStyle.Scale));
         refreshLayout.setEnableLoadMore(false);
+        OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId,"en", new GsonArrayCallback<CartAll>() {
+            @Override
+            public void onUiThread(int code, List<CartAll> list) {
+                if (code==200){
+                    if (list.size()==0){
+                        mMultiStateView.setState(MultiStateView.STATE_EMPTY)
+                                .setTitle("购物车还是空空如也").setButton("去逛逛", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                EventBus.getDefault().post(new GoHomeEvent());
+                            }
+                        });
+                    }else {
+                        groups.clear();
+                        childs.clear();
+                        for (int i = 0;i<list.size();i++){
+                            groups.add(list.get(i).getStore());
+                            childs.put(groups.get(i).get_id(),list.get(i).getItems());
+                        }
+                        initEvents();
+                        for (int i = 0; i < groups.size(); i++) {
+                            CartAll.Store group = groups.get(i);
+                            group.setActionBarEditor(false);
+                        }
+                        adapter.notifyDataSetChanged();
+                        mMultiStateView.setState(MultiStateView.STATE_CONTENT);
+                    }
 
+                }else {
+                    mMultiStateView.setState(MultiStateView.STATE_UNAUTH).setButton(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Utils.start_Activity(activity, LoginActivity.class);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailed(Call call, IOException e) {
+
+            }
+        });
     }
 
     @Override
@@ -136,16 +178,18 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                                     groups.add(list.get(i).getStore());
                                     childs.put(groups.get(i).get_id(),list.get(i).getItems());
                                 }
-                                initEvents();
+                                adapter.setItems(groups, childs);
                                 mMultiStateView.setState(MultiStateView.STATE_CONTENT);
                                 refreshLayout.finishRefresh();
                             }
 
                         }else {
+                            clearCart();
                             mMultiStateView.setState(MultiStateView.STATE_UNAUTH).setButton(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     Utils.start_Activity(activity, LoginActivity.class);
+
                                 }
                             });
                         }
@@ -183,15 +227,17 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                             groups.add(list.get(i).getStore());
                             childs.put(groups.get(i).get_id(),list.get(i).getItems());
                         }
-                        initEvents();
                         flag = false;
                         setVisiable();
                         setCartNum();
+                        mTotalPrice = 0;
+                        mTotalCount = 0;
+                        calulate();
                         for (int i = 0; i < groups.size(); i++) {
                             CartAll.Store group = groups.get(i);
                             group.setActionBarEditor(false);
                         }
-                        adapter.notifyDataSetChanged();
+                        initEvents();
                         mMultiStateView.setState(MultiStateView.STATE_CONTENT);
                     }
 
@@ -266,7 +312,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                     return;
                 }
                 dialog = new AlertDialog.Builder(mContext).create();
-                dialog.setMessage("总计:" + mTotalCount + "种商品，" + mTotalPrice + "元");
+                dialog.setMessage("总计:" + mTotalCount + "种商品，" + mTotalPrice/100 + "元");
                 dialog.setButton(DialogInterface.BUTTON_POSITIVE, "支付", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -278,19 +324,19 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                                 map.put("storeId",groups.get(i).get_id());
                                 itemsList=childs.get(groups.get(i).get_id());
                             }
-                            Map<String,String> productMap = new HashMap<>();
+                        }
                             List<Map<String,String>> list = new ArrayList<>();
                             for (int j = 0 ;j<itemsList.size();j++){
                                 if (itemsList.get(j).isChoosed()){
+                                    Map<String,String> productMap = new HashMap<>();
                                     productMap.put("productId",itemsList.get(j).getProductId());
                                     productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
+                                    UtilsLog.d(productMap.toString());
                                     list.add(productMap);
                                 }
                             }
                             map.put("items",list);
-                        }
 
-                        UtilsLog.d(map.toString()+"\n"+itemsList.toString());
                         Utils.start_Activity(activity,SettledActivity.class,"product",gson.toJson(map));
                         return;
                     }
@@ -364,13 +410,15 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
         if (count == 0) {
             clearCart();
         } else {
+            mToolbarEdit.setVisibility(View.VISIBLE);
+            llCart.setVisibility(View.VISIBLE);
             mToolbar.setTitle("购物车(" + count + ")");
         }
 
     }
 
     private void clearCart() {
-        mToolbar.setTitle("购物车(0)");
+        mToolbar.setTitle("购物车");
         mToolbarEdit.setVisibility(View.GONE);
         llCart.setVisibility(View.GONE);
 //        empty_shopcart.setVisibility(View.VISIBLE);//这里发生过错误

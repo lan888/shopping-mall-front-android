@@ -3,6 +3,7 @@ package cn.guzzu.shoppingmall.fragment;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -34,7 +35,7 @@ public class HomeFragment extends BaseFragment<MainActivity> {
     private ArrayList<Fragment> mFragments;
     private List<Pages> pagesList;
     private String mShoppingMallPageId;
-    private FragmentPagerAdapter mPagerAdapter;
+    private FragmentStatePagerAdapter mPagerAdapter;
 
     public HomeFragment() {
     }
@@ -59,7 +60,7 @@ public class HomeFragment extends BaseFragment<MainActivity> {
                     mShoppingMallPageId = pagesList.get(i).get_id();
                     mFragments.add(HomeTabFragment.newInstance(mShoppingMallPageId));
                 }
-                mPagerAdapter=new FragmentPagerAdapter(getChildFragmentManager()) {
+                mPagerAdapter=new FragmentStatePagerAdapter(getChildFragmentManager()) {
                     @Override
                     public Fragment getItem(int position) {
                         return mFragments.get(position);

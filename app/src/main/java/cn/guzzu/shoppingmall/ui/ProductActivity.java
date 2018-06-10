@@ -350,10 +350,7 @@ public class ProductActivity extends BaseActivity {
                         productMap.put("productOptionId",product.getProductOptions().get(selected).get_id());
                         list.add(productMap);
                         map.put("items",list);
-                        String[] strings  =new String[2];
-                        strings[0] = gson.toJson(map);
-                        strings[1] = product.get_id();
-                        Utils.start_Activity(context,SettledActivity.class,"product",strings);
+                        Utils.start_Activity(context,SettledActivity.class,"product",gson.toJson(map));
                     }else {
                         Utils.start_Activity(context,LoginActivity.class);
                     }

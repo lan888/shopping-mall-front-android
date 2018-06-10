@@ -54,10 +54,9 @@ public class ShoppingCartAdapter extends BaseExpandableListAdapter {
         this.mcontext = mcontext;
     }
 
-    public void setItems(List<CartAll.Store> groups, Map<String, List<CartAll.Items>> childrens, Context mcontext) {
+    public void setItems(List<CartAll.Store> groups, Map<String, List<CartAll.Items>> childrens) {
         this.groups = groups;
         this.childrens = childrens;
-        this.mcontext = mcontext;
         notifyDataSetChanged();
     }
     @Override
