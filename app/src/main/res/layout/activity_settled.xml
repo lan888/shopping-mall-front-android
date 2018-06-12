@@ -219,10 +219,12 @@
                 android:padding="@dimen/len_16"
                 />
             <EditText
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_note"
+                android:background="@null"
+                android:layout_marginLeft="@dimen/len_16"
+                android:layout_marginRight="@dimen/len_16"
                 android:inputType="text"
                 />
 

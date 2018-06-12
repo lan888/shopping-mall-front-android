@@ -1,5 +1,8 @@
 package cn.guzzu.shoppingmall.viewholder;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.TextView;
@@ -50,7 +53,7 @@ public class AddressManagerItemViewHolder extends BaseViewHolder<Addresses> {
     public void bind(final Addresses addresses){
        tvName.setText(addresses.getName());
        tvMobilephone.setText(addresses.getMobilePhone());
-       tvAddress.setText(addresses.getProvince()+addresses.getCity()+addresses.getDistrict()+addresses.getStreet());
+       tvAddress.setText(addresses.getProvince()+addresses.getCity()+addresses.getDistrict()+addresses.getStreet()+addresses.getAddress());
        btnEdit.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
@@ -60,21 +63,32 @@ public class AddressManagerItemViewHolder extends BaseViewHolder<Addresses> {
        btnDelete.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               map.clear();
-               map.put("userAddressId",addresses.get_id());
-               OkHttp3Utils.doJsonPost(Api.GUZZU + Api.ADDRESS_REMOVE, map, BaseApp.Constant.userId, new JsonCallback() {
-                   @Override
-                   public void onUiThread(int code, String json) {
-                       if (code==200){
-                           EventBus.getDefault().post(new GoHomeEvent());
-                       }
-                   }
+               new AlertDialog.Builder(itemView.getContext())
+                       .setMessage("确定要删除该地址吗")
+                       .setNegativeButton("取消",null)
+                       .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                           @Override
+                           public void onClick(DialogInterface dialog, int which) {
+                               map.clear();
+                               map.put("userAddressId",addresses.get_id());
+                               OkHttp3Utils.doJsonPost(Api.GUZZU + Api.ADDRESS_REMOVE, map, BaseApp.Constant.userId, new JsonCallback() {
+                                   @Override
+                                   public void onUiThread(int code, String json) {
+                                       if (code==200){
+                                           EventBus.getDefault().post(new GoHomeEvent());
+                                       }
+                                   }
 
-                   @Override
-                   public void onFailed(Call call, IOException exception) {
+                                   @Override
+                                   public void onFailed(Call call, IOException exception) {
 
-                   }
-               });
+                                   }
+                               });
+                           }
+                       })
+                       .create()
+                       .show();
+
            }
        });
        itemView.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +101,7 @@ public class AddressManagerItemViewHolder extends BaseViewHolder<Addresses> {
                    @Override
                    public void onUiThread(int code, String json) {
                        if (code==200){
-                           Utils.showShortToast(itemView.getContext(),"已设置为默认收货地址");
+                           ((Activity)itemView.getContext()).finish();
                        }
                    }
 

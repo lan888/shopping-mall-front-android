@@ -233,7 +233,7 @@ public class ShoppingCartAdapter extends BaseExpandableListAdapter {
                                 }
                             })
                             .create()
-                            .show();;
+                            .show();
                 }
             });
         }

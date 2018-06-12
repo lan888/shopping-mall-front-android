@@ -1,13 +1,18 @@
 package cn.guzzu.shoppingmall.fragment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +40,7 @@ import cn.guzzu.baselibrary.base.BaseFragment;
 import cn.guzzu.baselibrary.callback.GsonArrayCallback;
 import cn.guzzu.baselibrary.callback.JsonCallback;
 import cn.guzzu.baselibrary.util.ContentView;
+import cn.guzzu.baselibrary.util.DataBindingViewUtil;
 import cn.guzzu.baselibrary.util.OkHttp3Utils;
 import cn.guzzu.baselibrary.util.Utils;
 import cn.guzzu.baselibrary.widget.MultiStateView;
@@ -42,6 +48,7 @@ import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
 import cn.guzzu.shoppingmall.adapter.ShoppingCartAdapter;
 import cn.guzzu.shoppingmall.bean.CartAll;
+import cn.guzzu.shoppingmall.bean.CartStore;
 import cn.guzzu.shoppingmall.bean.GoHomeEvent;
 import cn.guzzu.shoppingmall.ui.LoginActivity;
 import cn.guzzu.shoppingmall.ui.MainActivity;
@@ -84,12 +91,15 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
     private double mTotalPrice = 0.00;
     private int mTotalCount = 0;
     private int count;
+    private int lastPosition = -1;
     //false就是编辑，ture就是完成
     private boolean flag = false;
     private ShoppingCartAdapter adapter;
     private List<CartAll.Store> groups; //组元素的列表
     private Map<String, List<CartAll.Items>> childs; //子元素的列表
     private Gson gson;
+    private String settledRequest;
+    private Dialog storeDialog;
 
     public ShoppingCartFragment() {
     }
@@ -100,6 +110,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
             mToolbar.setTitle("购物车");
             setSupportActionBar(mToolbar);
         }
+        storeDialog = new Dialog(activity,R.style.BottomDialog);
     }
 
     @Override
@@ -310,22 +321,53 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                 dialog.setButton(DialogInterface.BUTTON_POSITIVE, "支付", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Map<String,Object> map = new HashMap<>();
                         List<CartAll.Items> itemsList = new ArrayList<>();
+                        List<CartStore> cartStoreList = new ArrayList<>();
+                        int num = 0;
                         for (int i = 0 ; i<groups.size();i++){
                             if (groups.get(i).isChoosed()){
+                                CartStore cartStore = new CartStore();
+                                Map<String,Object> map = new HashMap<>();
                                 map.put("storeId",groups.get(i).get_id());
+                                cartStore.setStoreId(map);
+                                cartStore.setStoreName(groups.get(i).getName());
                                 itemsList=childs.get(groups.get(i).get_id());
-                            }else {
-                                for (int j = 0 ;j<childs.get(groups.get(i).get_id()).size();j++){
-                                    if (childs.get(groups.get(i).get_id()).get(j).isChoosed()){
-                                        map.put("storeId",childs.get(groups.get(i).get_id()).get(j).getProduct().getStore());
-                                        itemsList = childs.get(groups.get(i).get_id());
+                                num = 0;
+                                for (int a = 0 ;a<itemsList.size();a++){
+                                    if (itemsList.get(a).isChoosed()){
+                                        num++;
                                     }
                                 }
+                                cartStore.setGoodCount(num);
+                                cartStore.setItemsList(itemsList);
+                                cartStoreList.add(cartStore);
+                                UtilsLog.d(cartStoreList.toString()+1);
+                            }else {
+                                CartStore cartStore = new CartStore();
+                                for (int j = 0 ;j<childs.get(groups.get(i).get_id()).size();j++){
+                                    if (childs.get(groups.get(i).get_id()).get(j).isChoosed()){
+                                        Map<String,Object> map = new HashMap<>();
+                                        map.put("storeId",childs.get(groups.get(i).get_id()).get(j).getProduct().getStore());
+                                        cartStore.setStoreId(map);
+                                        itemsList = childs.get(groups.get(i).get_id());
+                                        cartStore.setStoreName(groups.get(i).getName());
+                                        num = 0;
+                                        for (int a = 0 ;a<itemsList.size();a++){
+                                            if (itemsList.get(a).isChoosed()){
+                                                num++;
+                                            }
+                                        }
+                                        cartStore.setGoodCount(num);
+                                        cartStore.setItemsList(itemsList);
 
+                                    }
+                                }
+                                cartStoreList.add(cartStore);
+                                UtilsLog.d(cartStoreList.toString()+2);
                             }
                         }
+                        if (cartStoreList.size()==1){
+                            Map<String,Object> map = cartStoreList.get(0).getStoreId();
                             List<Map<String,String>> list = new ArrayList<>();
                             for (int j = 0 ;j<itemsList.size();j++){
                                 if (itemsList.get(j).isChoosed()){
@@ -349,14 +391,21 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                             }
                             map.put("items",list);
                             UtilsLog.d(gson.toJson(map));
-                        Utils.start_Activity(activity,SettledActivity.class,"product",gson.toJson(map));
-                        return;
+                            Utils.start_Activity(activity,SettledActivity.class,"product",gson.toJson(map));
+                        }else {
+                            initDialog(cartStoreList);
+                            storeDialog.show();
+                        }
+
+
+
+
                     }
                 });
                 dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        return;
+
                     }
                 });
                 dialog.show();
@@ -721,7 +770,99 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
 
     }
 
+    private void initDialog(final List<CartStore> cartStoreList){
+        View contentView = LayoutInflater.from(activity).inflate(R.layout.dialog_store_option, null);
+        final LinearLayout mllStore = contentView.findViewById(R.id.ll_store);
+        TextView tvBack = contentView.findViewById(R.id.tv_back);
+        TextView tvGo = contentView.findViewById(R.id.tv_go);
+        tvBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                storeDialog.dismiss();
+            }
+        });
+        tvGo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (settledRequest.isEmpty()){
+                    storeDialog.dismiss();
+                }else {
+                    Utils.start_Activity(activity,SettledActivity.class,"product",settledRequest);
+                }
 
+            }
+        });
+        DataBindingViewUtil.bindDataToLayout(cartStoreList, mllStore, R.layout.layout_store_option_item, new DataBindingViewUtil.OnBindingDataListener<CartStore>() {
+            @Override
+            public void onBindData(@NonNull View v, final CartStore data, final int position) {
+                final CheckBox cb = v.findViewById(R.id.checkBox);
+                TextView name = v.findViewById(R.id.tv_name);
+                TextView num = v.findViewById(R.id.tv_num);
+                name.setText(data.getStoreName());
+                num.setText(data.getGoodCount()+"件");
+                cb.setTag(position);
+                cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        UtilsLog.d(isChecked+""+position+""+lastPosition);
+                        if (isChecked){
+                            if (lastPosition!= -1){
+                                CheckBox lastCheckBox = mllStore.getChildAt(lastPosition).findViewById(R.id.checkBox);
+                                if (lastCheckBox!=null){
+                                    lastCheckBox.setChecked(false);
+                                }
+                            }
+                            lastPosition = (int) buttonView.getTag();
+                            initSettledRequest(cartStoreList,lastPosition);
+                        }else {
+                            settledRequest="";
+                            lastPosition = -1;
+                        }
+                    }
+                });
+                if (position == lastPosition){
+                    cb.setChecked(true);
+                }else {
+                    cb.setChecked(false);
+                }
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cb.setChecked(true);
+                        initSettledRequest(cartStoreList,position);
+                    }
+                });
+            }
+        });
+        storeDialog.setContentView(contentView);
+    }
 
+    private void initSettledRequest(List<CartStore> cartStoreList,int position){
+        Map<String,Object> map = cartStoreList.get(position).getStoreId();
+        List<CartAll.Items> itemsList = cartStoreList.get(position).getItemsList();
+        List<Map<String,String>> list = new ArrayList<>();
+        for (int j = 0 ;j<itemsList.size();j++){
+            if (itemsList.get(j).isChoosed()){
+                UtilsLog.d("Ok,"+itemsList.get(j).getProductOptionId());
+                if (itemsList.get(j).getProductOptionId()!=null){
+                    Map<String,String> productMap = new HashMap<>();
+                    productMap.put("productId",itemsList.get(j).getProductId());
+                    productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
+                    productMap.put("productOptionId",itemsList.get(j).getProductOption().get_id());
+                    UtilsLog.d(productMap.toString());
+                    list.add(productMap);
+                }else {
+                    Map<String,String> productMap = new HashMap<>();
+                    productMap.put("productId",itemsList.get(j).getProductId());
+                    productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
+                    UtilsLog.d(productMap.toString());
+                    list.add(productMap);
+                }
+
+            }
+        }
+        map.put("items",list);
+        settledRequest = gson.toJson(map);
+    }
     
 }

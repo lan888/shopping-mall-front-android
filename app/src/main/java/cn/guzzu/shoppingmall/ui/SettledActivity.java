@@ -126,6 +126,7 @@ public class SettledActivity extends BaseActivity {
                 if (code == 200) {
                     if (list.size() == 0) {
                         mSpDiscount.setText("无可用");
+                        mllDiscount.setClickable(false);
                     }else {
                         mSpDiscount.setText(list.size()+"张可用");
                         initBottom(list);
