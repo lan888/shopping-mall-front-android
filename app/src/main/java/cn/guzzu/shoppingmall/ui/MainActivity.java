@@ -189,7 +189,9 @@ public class MainActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void reFresh(UnLoginEvent event){
         ShoppingCartFragment shoppingCartFragment = (ShoppingCartFragment) mFragments.get(2);
-        shoppingCartFragment.onResume();
+        if (shoppingCartFragment.isAdded()){
+            shoppingCartFragment.onResume();
+        }
         UtilsLog.d("refresh");
     }
 }

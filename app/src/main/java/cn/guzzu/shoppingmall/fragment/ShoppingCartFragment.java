@@ -430,11 +430,12 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
     }
 
     private void clearCart() {
-        if (mToolbar!=null){
+        if (mToolbar!=null&&mToolbarEdit!=null&&llCart!=null){
             mToolbar.setTitle("购物车");
+            mToolbarEdit.setVisibility(View.GONE);
+            llCart.setVisibility(View.GONE);
         }
-        mToolbarEdit.setVisibility(View.GONE);
-        llCart.setVisibility(View.GONE);
+
 //        empty_shopcart.setVisibility(View.VISIBLE);//这里发生过错误
     }
 
