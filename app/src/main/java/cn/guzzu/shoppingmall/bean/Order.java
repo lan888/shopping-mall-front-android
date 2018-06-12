@@ -932,6 +932,8 @@ public class Order {
         private String _id;
         private String productId;
         private Product product;
+        private Image image;
+        private String optionName;
         private int quantity;
         private int price;
 
@@ -983,6 +985,351 @@ public class Order {
             this.price = price;
         }
 
+        public Image getImage() {
+            return image;
+        }
+
+        public void setImage(Image image) {
+            this.image = image;
+        }
+
+        public String getOptionName() {
+            return optionName;
+        }
+
+        public void setOptionName(String optionName) {
+            this.optionName = optionName;
+        }
+
+        public static class Image {
+            /**
+             * url : https://s3.cn-north-1.amazonaws.com.cn/guzzu-cn-assets-1/images/a43f976c-e90d-4279-bdf1-b0e9c0faa5d9-medium.jpg
+             * large : {"format":"jpg","width":1040,"height":780,"maxWidth":1040,"maxHeight":1040,"url":"https://s3.cn-north-1.amazonaws.com.cn/guzzu-cn-assets-1/images/a43f976c-e90d-4279-bdf1-b0e9c0faa5d9-large.jpg"}
+             * medium : {"format":"jpg","width":780,"height":585,"maxWidth":780,"maxHeight":780,"url":"https://s3.cn-north-1.amazonaws.com.cn/guzzu-cn-assets-1/images/a43f976c-e90d-4279-bdf1-b0e9c0faa5d9-medium.jpg"}
+             * thumb : {"aspect":"1:1","format":"jpg","width":320,"height":320,"maxHeight":320,"url":"https://s3.cn-north-1.amazonaws.com.cn/guzzu-cn-assets-1/images/a43f976c-e90d-4279-bdf1-b0e9c0faa5d9-thumb.jpg"}
+             * original : {"width":600,"height":450,"url":"https://s3.cn-north-1.amazonaws.com.cn/guzzu-cn-assets-1/images/a43f976c-e90d-4279-bdf1-b0e9c0faa5d9.","size":73216,"format":"JPEG","colorspace":"RGB","orientation":""}
+             */
+
+            private String url;
+            private LargeX large;
+            private MediumX medium;
+            private ThumbX thumb;
+            private OriginalX original;
+
+            public String getUrl() {
+                return url;
+            }
+
+            public void setUrl(String url) {
+                this.url = url;
+            }
+
+            public LargeX getLarge() {
+                return large;
+            }
+
+            public void setLarge(LargeX large) {
+                this.large = large;
+            }
+
+            public MediumX getMedium() {
+                return medium;
+            }
+
+            public void setMedium(MediumX medium) {
+                this.medium = medium;
+            }
+
+            public ThumbX getThumb() {
+                return thumb;
+            }
+
+            public void setThumb(ThumbX thumb) {
+                this.thumb = thumb;
+            }
+
+            public OriginalX getOriginal() {
+                return original;
+            }
+
+            public void setOriginal(OriginalX original) {
+                this.original = original;
+            }
+
+            public static class LargeX {
+                /**
+                 * format : jpg
+                 * width : 1040
+                 * height : 780
+                 * maxWidth : 1040
+                 * maxHeight : 1040
+                 * url : https://s3.cn-north-1.amazonaws.com.cn/guzzu-cn-assets-1/images/a43f976c-e90d-4279-bdf1-b0e9c0faa5d9-large.jpg
+                 */
+
+                private String format;
+                private int width;
+                private int height;
+                private int maxWidth;
+                private int maxHeight;
+                private String url;
+
+                public String getFormat() {
+                    return format;
+                }
+
+                public void setFormat(String format) {
+                    this.format = format;
+                }
+
+                public int getWidth() {
+                    return width;
+                }
+
+                public void setWidth(int width) {
+                    this.width = width;
+                }
+
+                public int getHeight() {
+                    return height;
+                }
+
+                public void setHeight(int height) {
+                    this.height = height;
+                }
+
+                public int getMaxWidth() {
+                    return maxWidth;
+                }
+
+                public void setMaxWidth(int maxWidth) {
+                    this.maxWidth = maxWidth;
+                }
+
+                public int getMaxHeight() {
+                    return maxHeight;
+                }
+
+                public void setMaxHeight(int maxHeight) {
+                    this.maxHeight = maxHeight;
+                }
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
+            }
+
+            public static class MediumX {
+                /**
+                 * format : jpg
+                 * width : 780
+                 * height : 585
+                 * maxWidth : 780
+                 * maxHeight : 780
+                 * url : https://s3.cn-north-1.amazonaws.com.cn/guzzu-cn-assets-1/images/a43f976c-e90d-4279-bdf1-b0e9c0faa5d9-medium.jpg
+                 */
+
+                private String format;
+                private int width;
+                private int height;
+                private int maxWidth;
+                private int maxHeight;
+                private String url;
+
+                public String getFormat() {
+                    return format;
+                }
+
+                public void setFormat(String format) {
+                    this.format = format;
+                }
+
+                public int getWidth() {
+                    return width;
+                }
+
+                public void setWidth(int width) {
+                    this.width = width;
+                }
+
+                public int getHeight() {
+                    return height;
+                }
+
+                public void setHeight(int height) {
+                    this.height = height;
+                }
+
+                public int getMaxWidth() {
+                    return maxWidth;
+                }
+
+                public void setMaxWidth(int maxWidth) {
+                    this.maxWidth = maxWidth;
+                }
+
+                public int getMaxHeight() {
+                    return maxHeight;
+                }
+
+                public void setMaxHeight(int maxHeight) {
+                    this.maxHeight = maxHeight;
+                }
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
+            }
+
+            public static class ThumbX {
+                /**
+                 * aspect : 1:1
+                 * format : jpg
+                 * width : 320
+                 * height : 320
+                 * maxHeight : 320
+                 * url : https://s3.cn-north-1.amazonaws.com.cn/guzzu-cn-assets-1/images/a43f976c-e90d-4279-bdf1-b0e9c0faa5d9-thumb.jpg
+                 */
+
+                private String aspect;
+                private String format;
+                private int width;
+                private int height;
+                private int maxHeight;
+                private String url;
+
+                public String getAspect() {
+                    return aspect;
+                }
+
+                public void setAspect(String aspect) {
+                    this.aspect = aspect;
+                }
+
+                public String getFormat() {
+                    return format;
+                }
+
+                public void setFormat(String format) {
+                    this.format = format;
+                }
+
+                public int getWidth() {
+                    return width;
+                }
+
+                public void setWidth(int width) {
+                    this.width = width;
+                }
+
+                public int getHeight() {
+                    return height;
+                }
+
+                public void setHeight(int height) {
+                    this.height = height;
+                }
+
+                public int getMaxHeight() {
+                    return maxHeight;
+                }
+
+                public void setMaxHeight(int maxHeight) {
+                    this.maxHeight = maxHeight;
+                }
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
+            }
+
+            public static class OriginalX {
+                /**
+                 * width : 600
+                 * height : 450
+                 * url : https://s3.cn-north-1.amazonaws.com.cn/guzzu-cn-assets-1/images/a43f976c-e90d-4279-bdf1-b0e9c0faa5d9.
+                 * size : 73216
+                 * format : JPEG
+                 * colorspace : RGB
+                 * orientation :
+                 */
+
+                private int width;
+                private int height;
+                private String url;
+                private int size;
+                private String format;
+                private String colorspace;
+                private String orientation;
+
+                public int getWidth() {
+                    return width;
+                }
+
+                public void setWidth(int width) {
+                    this.width = width;
+                }
+
+                public int getHeight() {
+                    return height;
+                }
+
+                public void setHeight(int height) {
+                    this.height = height;
+                }
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
+
+                public int getSize() {
+                    return size;
+                }
+
+                public void setSize(int size) {
+                    this.size = size;
+                }
+
+                public String getFormat() {
+                    return format;
+                }
+
+                public void setFormat(String format) {
+                    this.format = format;
+                }
+
+                public String getColorspace() {
+                    return colorspace;
+                }
+
+                public void setColorspace(String colorspace) {
+                    this.colorspace = colorspace;
+                }
+
+                public String getOrientation() {
+                    return orientation;
+                }
+
+                public void setOrientation(String orientation) {
+                    this.orientation = orientation;
+                }
+            }
+        }
         public static class Product {
             /**
              * name : Evolution 【Games Warehouse】

@@ -17,6 +17,8 @@ public class ProductOrderItemViewHolder extends BaseViewHolder<ProductItem> {
     AppCompatImageView productImg;
     @BindView(R.id.product_name)
     TextView productName;
+    @BindView(R.id.option_name)
+    TextView optionName;
     @BindView(R.id.product_price)
     TextView productPrice;
     @BindView(R.id.product_quantity)
@@ -28,12 +30,13 @@ public class ProductOrderItemViewHolder extends BaseViewHolder<ProductItem> {
 
     public void bind(ProductItem cartList){
         try {
-            Glide.with(productImg).load(cartList.getProduct().getImage().getUrl()).into(productImg);
+            Glide.with(productImg).load(cartList.getImage().getUrl()).into(productImg);
         }catch (Exception e){
             e.printStackTrace();
         }
         productName.setText(cartList.getName());
-        productPrice.setText(String.valueOf((double)cartList.getPrice()/100));
+        optionName.setText(cartList.getOptionName());
+        productPrice.setText("¥"+(double)cartList.getPrice()/100);
         productQuantity.setText(String.valueOf(cartList.getQuantity()));
 
     }

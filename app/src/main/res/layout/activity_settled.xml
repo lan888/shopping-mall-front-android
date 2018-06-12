@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-android:fitsSystemWindows="true">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
     <include layout="@layout/include_toolbar"/>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -65,7 +66,7 @@ android:fitsSystemWindows="true">
                 android:layout_gravity="center"
                 android:background="@color/orange_600"
                 android:textColor="@color/white"
-                />
+                app:animate ="false"/>
 
             <View
                 android:layout_width="match_parent"
@@ -153,7 +154,8 @@ android:fitsSystemWindows="true">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/len_6">
                 <TextView
                     android:layout_weight="3"
                     android:layout_width="0dp"
@@ -174,6 +176,11 @@ android:fitsSystemWindows="true">
                     />
 
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:alpha="0.4"
+                android:background="#dddddd" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -183,19 +190,24 @@ android:fitsSystemWindows="true">
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="可选折扣"
+                    android:text="优惠券"
                     android:gravity="center"/>
-                <android.support.v7.widget.AppCompatSpinner
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/sp_discount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
+                    android:padding="@dimen/len_6"
+                    android:gravity="right"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:drawableRight="@drawable/right_arrow"
                     />
 
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1px"
+                android:layout_height="6dp"
                 android:alpha="0.4"
                 android:background="#dddddd" />
             <TextView

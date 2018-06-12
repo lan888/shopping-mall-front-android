@@ -13,6 +13,8 @@
             android:layout_width="84dp"
             android:layout_height="84dp"
             android:id="@+id/product_img"
+            android:scaleType="centerCrop"
+            android:layout_margin="@dimen/len_6"
             />
         <LinearLayout
             android:layout_width="wrap_content"
@@ -22,10 +24,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/product_name"
-                android:layout_margin="15dp"
+                android:layout_marginLeft="15dp"
                 android:text="PT Bourgogne Pinot Noir"
+                android:textColor="@color/black"
                 android:layout_marginTop="15dp"
                 android:textSize="@dimen/font_normal"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/option_name"
+                android:layout_marginLeft="15dp"
+                android:text="PT Bourgogne Pinot Noir"
+                android:textSize="@dimen/font_small"
                 />
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -65,7 +76,6 @@
     <View
         android:layout_below="@id/LL"
         android:id="@+id/line"
-        android:layout_marginTop="10dp"
         android:layout_height="1dp"
         android:layout_width="match_parent"
         android:background="@color/md_grey_300"

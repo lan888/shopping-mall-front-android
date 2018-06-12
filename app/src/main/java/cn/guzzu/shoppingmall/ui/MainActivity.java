@@ -20,8 +20,10 @@ import cn.guzzu.baselibrary.base.BaseApp;
 import cn.guzzu.baselibrary.callback.JsonCallback;
 import cn.guzzu.baselibrary.util.OkHttp3Utils;
 import cn.guzzu.baselibrary.util.Utils;
+import cn.guzzu.baselibrary.util.UtilsLog;
 import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.bean.GoHomeEvent;
+import cn.guzzu.shoppingmall.bean.UnLoginEvent;
 import cn.guzzu.shoppingmall.fragment.MeFragment;
 import cn.guzzu.shoppingmall.fragment.ShoppingCartFragment;
 import cn.guzzu.baselibrary.base.BaseActivity;
@@ -182,5 +184,12 @@ public class MainActivity extends BaseActivity {
         switchFragment(mContext,mFragments.get(0));
         mBottom.getMenu().getItem(0).setChecked(true);
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void reFresh(UnLoginEvent event){
+        ShoppingCartFragment shoppingCartFragment = (ShoppingCartFragment) mFragments.get(2);
+        shoppingCartFragment.onResume();
+        UtilsLog.d("refresh");
     }
 }

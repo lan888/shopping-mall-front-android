@@ -43,8 +43,7 @@ public class OrderActivity extends BaseActivity {
 
     private OrderRvAdapter mOrderRvAdapter;
     private String mStatusJson;
-    private Gson gson;
-    private Order order;
+
 
     @Override
     public int initLayout() {
@@ -64,56 +63,6 @@ public class OrderActivity extends BaseActivity {
         mOrderRvAdapter = new OrderRvAdapter();
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mOrderRvAdapter);
-
-    }
-
-    @Override
-    public void initData() {
-        gson = new Gson();
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("paymentStatus",new JSONObject().put("$ne","expired"));
-            mStatusJson = obj.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        OkHttp3Utils.doJsonPost(Api.GUZZU + Api.ORDER_FIND, mStatusJson, BaseApp.Constant.userId, new GsonArrayCallback<Order>() {
-            @Override
-            public void onUiThread(int code, List<Order> list) {
-                if (code==200){
-                    if (list.size()==0){
-                        mMultiStateView.setState(MultiStateView.STATE_EMPTY).setButton(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                getOrdersData(mStatusJson);
-                            }
-                        });
-                    }else {
-                        mOrderRvAdapter.setItems(list);
-                        mMultiStateView.setState(MultiStateView.STATE_CONTENT);
-                    }
-
-                }
-
-            }
-
-            @Override
-            public void onFailed(Call call, IOException e) {
-
-            }
-        });
-
-    }
-
-    @Override
-    public void initListener() {
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.finish(context);
-            }
-        });
-
         mTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -187,6 +136,71 @@ public class OrderActivity extends BaseActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
+            }
+        });
+    }
+
+    @Override
+    public void initData() {
+        String intent = getIntent().getStringExtra("status");
+        if (intent!=null){
+            switch (intent){
+                case "Pending":
+                    mTab.getTabAt(1).select();
+                    break;
+                case "Paid":
+                    mTab.getTabAt(2).select();
+                    break;
+                case "Shipped":
+                    mTab.getTabAt(3).select();
+                    break;
+                case "Received":
+                    mTab.getTabAt(4).select();
+                    break;
+            }
+        }else {
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("paymentStatus",new JSONObject().put("$ne","expired"));
+                mStatusJson = obj.toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            OkHttp3Utils.doJsonPost(Api.GUZZU + Api.ORDER_FIND, mStatusJson, BaseApp.Constant.userId, new GsonArrayCallback<Order>() {
+                @Override
+                public void onUiThread(int code, List<Order> list) {
+                    if (code==200){
+                        if (list.size()==0){
+                            mMultiStateView.setState(MultiStateView.STATE_EMPTY).setButton(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    getOrdersData(mStatusJson);
+                                }
+                            });
+                        }else {
+                            mOrderRvAdapter.setItems(list);
+                            mMultiStateView.setState(MultiStateView.STATE_CONTENT);
+                        }
+
+                    }
+
+                }
+
+                @Override
+                public void onFailed(Call call, IOException e) {
+
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public void initListener() {
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.finish(context);
             }
         });
 

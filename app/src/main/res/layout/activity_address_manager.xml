@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:fitsSystemWindows="true"
     android:layout_height="match_parent">
     <include layout="@layout/include_toolbar"/>
@@ -20,6 +22,7 @@
         android:background="@color/orange_600"
         android:layout_margin="@dimen/len_8"
         android:id="@+id/btn_add"
-        android:text="新增收货地址"/>
+        android:text="新增收货地址"
+        app:animate ="false"/>
 
 </LinearLayout>

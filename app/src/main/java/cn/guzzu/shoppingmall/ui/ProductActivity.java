@@ -37,6 +37,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.guzzu.baselibrary.base.BaseApp;
 import cn.guzzu.baselibrary.callback.GsonArrayCallback;
+import cn.guzzu.baselibrary.util.UtilsLog;
 import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
 import cn.guzzu.shoppingmall.adapter.ItemTitlePagerAdapter;
@@ -333,8 +334,24 @@ public class ProductActivity extends BaseActivity {
         if (product.getProductOptions().size()>0){
             if (product.getProductOptions().get(0).getInventoryPolicy().equals("unlimited")){
                 mAmountView.setGoods_storage(99).setAmount(1);
+                mAmountView.setOnAmountChangeListener(new ShoppingCartAmountView.OnAmountChangeListener() {
+                    @Override
+                    public void onAmountChange(View view, int amount) {
+                        listener.process(product.getName(),amount);
+                        mAmount = amount;
+
+                    }
+                });
             }else {
                 mAmountView.setGoods_storage(product.getProductOptions().get(0).getMaxQuantity()).setAmount(1);
+                mAmountView.setOnAmountChangeListener(new ShoppingCartAmountView.OnAmountChangeListener() {
+                    @Override
+                    public void onAmountChange(View view, int amount) {
+                        listener.process(product.getName(),amount);
+                        mAmount = amount;
+
+                    }
+                });
             }
             mBtnBuy.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -408,6 +425,7 @@ public class ProductActivity extends BaseActivity {
                     public void onAmountChange(View view, int amount) {
                         listener.process(product.getName(),amount);
                         mAmount = amount;
+
                     }
                 });
             }else {

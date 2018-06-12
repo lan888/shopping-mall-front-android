@@ -16,6 +16,7 @@ public class OrderPreviewRequest {
 
     private ShippingAddress shippingAddress;
     private String storeId;
+    private String discountId;
     private String shippingType;
     private String nonce;
     private String type;
@@ -28,6 +29,14 @@ public class OrderPreviewRequest {
 
     public void setShippingAddress(ShippingAddress shippingAddress) {
         this.shippingAddress = shippingAddress;
+    }
+
+    public String getDiscountId() {
+        return discountId;
+    }
+
+    public void setDiscountId(String discountId) {
+        this.discountId = discountId;
     }
 
     public String getStoreId() {
@@ -281,6 +290,7 @@ public class OrderPreviewRequest {
          */
 
         private String productId;
+        private String productOptionId;
         private String quantity;
 
         public String getProductId() {
@@ -291,6 +301,13 @@ public class OrderPreviewRequest {
             this.productId = productId;
         }
 
+        public String getProductOptionId() {
+            return productOptionId;
+        }
+
+        public void setProductOptionId(String productOptionId) {
+            this.productOptionId = productOptionId;
+        }
 
         public String getQuantity() {
             return quantity;

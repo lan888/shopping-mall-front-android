@@ -34,6 +34,7 @@ import cn.guzzu.baselibrary.util.OkHttp3Utils;
 import cn.guzzu.baselibrary.util.Utils;
 import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
+import cn.guzzu.shoppingmall.bean.UnLoginEvent;
 import cn.guzzu.shoppingmall.ui.AddressManagerActivity;
 import cn.guzzu.shoppingmall.ui.LoginActivity;
 import cn.guzzu.shoppingmall.ui.MainActivity;
@@ -66,11 +67,11 @@ public class MeFragment extends BaseFragment<MainActivity> {
     @BindView(R.id.ll_discount)
     LinearLayout llDiscount;
     @BindView(R.id.cb_english)
-    AppCompatCheckBox mCbEnglish;
+    CheckBox mCbEnglish;
     @BindView(R.id.ll_language_english)
     LinearLayout llLanguageEnglish;
     @BindView(R.id.cb_chinese)
-    AppCompatCheckBox mCbChinese;
+    CheckBox mCbChinese;
     @BindView(R.id.ll_language_chinese)
     LinearLayout llLanguageChinese;
     @BindView(R.id.btn_logout)
@@ -149,6 +150,7 @@ public class MeFragment extends BaseFragment<MainActivity> {
                 break;
             case R.id.tv_unpaid:
                 if (BaseApp.getInstance().isLogin()) {
+                    Utils.start_Activity(activity, OrderActivity.class,"status","Pending");
                 } else {
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     activity.startActivity(intent);
@@ -156,6 +158,7 @@ public class MeFragment extends BaseFragment<MainActivity> {
                 break;
             case R.id.tv_unshipped:
                 if (BaseApp.getInstance().isLogin()) {
+                    Utils.start_Activity(activity, OrderActivity.class,"status","Paid");
                 } else {
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     activity.startActivity(intent);
@@ -163,6 +166,7 @@ public class MeFragment extends BaseFragment<MainActivity> {
                 break;
             case R.id.tv_shipped:
                 if (BaseApp.getInstance().isLogin()) {
+                    Utils.start_Activity(activity, OrderActivity.class,"status","Shipped");
                 } else {
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     activity.startActivity(intent);
@@ -170,6 +174,7 @@ public class MeFragment extends BaseFragment<MainActivity> {
                 break;
             case R.id.tv_recevied:
                 if (BaseApp.getInstance().isLogin()) {
+                    Utils.start_Activity(activity, OrderActivity.class,"status","Received");
                 } else {
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     activity.startActivity(intent);
@@ -223,6 +228,7 @@ public class MeFragment extends BaseFragment<MainActivity> {
                             mTvStatus.setText(getString(R.string.tv_unlogin));
                             mBtnLogout.setVisibility(View.GONE);
                             Utils.putBoolean(activity,"isLogin",false);
+                            EventBus.getDefault().post(new UnLoginEvent());
                         }
                     }
 

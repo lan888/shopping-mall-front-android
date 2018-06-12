@@ -1,11 +1,18 @@
 package cn.guzzu.shoppingmall.ui;
 
+import android.app.Dialog;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,13 +40,16 @@ import cn.guzzu.baselibrary.base.BaseApp;
 import cn.guzzu.baselibrary.callback.GsonArrayCallback;
 import cn.guzzu.baselibrary.callback.GsonObjectCallback;
 import cn.guzzu.baselibrary.callback.JsonCallback;
+import cn.guzzu.baselibrary.util.DataBindingViewUtil;
 import cn.guzzu.baselibrary.util.OkHttp3Utils;
 import cn.guzzu.baselibrary.util.Utils;
+import cn.guzzu.baselibrary.util.UtilsLog;
 import cn.guzzu.baselibrary.widget.LoadingDialog;
 import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
 import cn.guzzu.shoppingmall.adapter.ProductOrderListAdapter;
 import cn.guzzu.shoppingmall.bean.Discount;
+import cn.guzzu.shoppingmall.bean.Order;
 import cn.guzzu.shoppingmall.bean.OrderPreviewRequest;
 import cn.guzzu.shoppingmall.bean.OrderPreviewResponse;
 import cn.guzzu.shoppingmall.bean.Product;
@@ -66,7 +76,7 @@ public class SettledActivity extends BaseActivity {
     @BindView(R.id.tv_total_cost)
     TextView mTvTotalCost;
     @BindView(R.id.sp_discount)
-    AppCompatSpinner mSpDiscount;
+    TextView mSpDiscount;
     @BindView(R.id.tv_total_paid)
     TextView mTvTotalPaid;
     @BindView(R.id.tv_buy)
@@ -79,10 +89,13 @@ public class SettledActivity extends BaseActivity {
     private Gson gson;
     private String mProduct;
     private String mPreviewJson;
+    private Dialog bottomDialog;
     private ProductItem productItem;
     private OrderPreviewRequest.ShippingAddress addressLastUsed;
     private ProductOrderListAdapter mProductOrderListAdapter;
     private boolean isAddressNull;
+    private int lastPosition = -1;
+
     @Override
     public int initLayout() {
         return R.layout.activity_settled;
@@ -101,6 +114,7 @@ public class SettledActivity extends BaseActivity {
         mProductOrderListAdapter = new ProductOrderListAdapter();
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mProductOrderListAdapter);
+        bottomDialog = new Dialog(this, R.style.BottomDialog);
     }
 
     @Override
@@ -111,7 +125,10 @@ public class SettledActivity extends BaseActivity {
             public void onUiThread(int code, List<Discount> list) {
                 if (code == 200) {
                     if (list.size() == 0) {
-                        mllDiscount.setVisibility(View.GONE);
+                        mSpDiscount.setText("无可用");
+                    }else {
+                        mSpDiscount.setText(list.size()+"张可用");
+                        initBottom(list);
                     }
                 }
             }
@@ -149,6 +166,7 @@ public class SettledActivity extends BaseActivity {
                         mTvName.setVisibility(View.GONE);
                         mAddress.setVisibility(View.GONE);
                         mMobilePhone.setVisibility(View.GONE);
+                        mTvBuy.setBackgroundColor(getResources().getColor(R.color.gray_light));
                         isAddressNull = true;
                         JSONObject obj = new JSONObject();
                         try {
@@ -165,6 +183,7 @@ public class SettledActivity extends BaseActivity {
                             e.printStackTrace();
                         }
                     }else {
+                        mTvBuy.setBackgroundColor(getResources().getColor(R.color.md_red_500));
                         isAddressNull = false;
                         mBtnSelect.setText("选择收货地址");
                         addressLastUsed = gson.fromJson(json, OrderPreviewRequest.ShippingAddress.class);
@@ -200,27 +219,51 @@ public class SettledActivity extends BaseActivity {
                             public void onUiThread(int code, String json) {
                                 if (code==200){
                                     OrderPreviewResponse orderPreviewResponse = gson.fromJson(json,OrderPreviewResponse.class);
+                                    List<ProductItem> productItemList = new ArrayList<>();
                                     for (int i = 0 ; i<orderPreviewResponse.getOrder().getItems().size();i++){
                                         productItem = new ProductItem();
                                         productItem.setName(orderPreviewResponse.getOrder().getItems().get(i).getName());
                                         productItem.setPrice(orderPreviewResponse.getOrder().getItems().get(i).getPrice());
-                                        ProductItem.product product1 = new ProductItem.product();
-                                        ProductItem.product.image image = new ProductItem.product.image();
+                                        ProductItem.Image image = new ProductItem.Image();
                                         image.setUrl(orderPreviewResponse.getOrder().getItems().get(i).getProduct().getImage().getThumb().getUrl());
-                                        product1.setImage(image);
-                                        productItem.setProduct(product1);
+                                        productItem.setImage(image);
                                         productItem.setQuantity(orderPreviewResponse.getOrder().getItems().get(i).getQuantity());
+                                        productItemList.add(productItem);
 
                                     }
-                                    List<ProductItem> productItemList = new ArrayList<>();
-                                    productItemList.add(productItem);
+
                                     mProductOrderListAdapter.setItems(productItemList);
                                     Log.d(TAG, "onUiThread: "+orderPreviewResponse.getOrder().getTotalCost());
                                     mTvDiscount.setText(getString(R.string.label_discount_price,(double)orderPreviewResponse.getOrder().getDiscount()/100));
                                     mTvShippingCost.setText(getString(R.string.label_price,(double)orderPreviewResponse.getOrder().getShippingCost()/100));
                                     mTvSubtotal.setText(getString(R.string.label_price,(double)orderPreviewResponse.getOrder().getSubtotal()/100));
                                     mTvTotalCost.setText(getString(R.string.label_price,(double)orderPreviewResponse.getOrder().getTotalCost()/100));
-                                    mTvTotalPaid.setText("合计：¥"+(double)orderPreviewResponse.getOrder().getSubtotal()/100);
+                                    mTvTotalPaid.setText("合计：¥"+(double)orderPreviewResponse.getOrder().getTotalCost()/100);
+                                }else {
+                                    try {
+                                        JSONObject object = new JSONObject(json);
+                                        String err = object.optString("error");
+                                        showLoading(err);
+                                        new Thread() {
+                                            @Override
+                                            public void run() {
+                                                super.run();
+                                                try {
+                                                    Thread.sleep(1000);//休眠1秒
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                cancelLoading();
+                                                finish();
+                                                /**
+                                                 * 要执行的操作
+                                                 */
+                                            }
+                                        }.start();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
                                 }
 
                             }
@@ -238,7 +281,7 @@ public class SettledActivity extends BaseActivity {
                         public void run() {
                             super.run();
                             try {
-                                Thread.sleep(1000);//休眠2秒
+                                Thread.sleep(1000);//休眠1秒
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -259,7 +302,144 @@ public class SettledActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.btn_select, R.id.tv_buy})
+    private void initBottom(final List<Discount> list){
+        View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_layout_discount, null);
+        final LinearLayout mllDiscounts = contentView.findViewById(R.id.ll_items);
+        ButtonRectangle mBtnNoDiscount = contentView.findViewById(R.id.btn_no_discount);
+        DataBindingViewUtil.bindDataToLayout(list, mllDiscounts, R.layout.layout_discount_item, new DataBindingViewUtil.OnBindingDataListener<Discount>() {
+            @Override
+            public void onBindData(@NonNull View v, final Discount data, final int position) {
+                TextView tvDiscountPercent = v.findViewById(R.id.tv_percent);
+                TextView tvDiscountMin = v.findViewById(R.id.tv_min);
+                TextView tvDiscountName = v.findViewById(R.id.tv_name);
+                TextView tvDiscountDate = v.findViewById(R.id.tv_date);
+                final CheckBox cb_select = v.findViewById(R.id.checkBox);
+                cb_select.setTag(position);
+                cb_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        UtilsLog.d(isChecked+""+position+""+lastPosition);
+                        if (isChecked){
+                            if (lastPosition!= -1){
+                                CheckBox lastCheckBox = mllDiscounts.getChildAt(lastPosition).findViewById(R.id.checkBox);
+                                if (lastCheckBox!=null){
+                                    lastCheckBox.setChecked(false);
+                                }
+                            }
+                            lastPosition = (int) buttonView.getTag();
+                            addDiscount(list,lastPosition);
+                        }else {
+                            removeDiscount(list);
+                            lastPosition = -1;
+                        }
+                    }
+                });
+                if (position == lastPosition){
+                    cb_select.setChecked(true);
+                }else {
+                    cb_select.setChecked(false);
+                }
+                tvDiscountPercent.setText((100-data.getCondition().getPercentage())/10+"折");
+                tvDiscountName.setText(data.getName());
+                if (data.getCondition().getMinPurchase()==0){
+                    tvDiscountMin.setText("无使用门槛");
+                }else {
+                    tvDiscountMin.setText("满"+(double)data.getCondition().getMinPurchase()/100+"元可用");
+                }
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cb_select.setChecked(true);
+                        addDiscount(list,position);
+                    }
+                });
+            }
+        });
+        mBtnNoDiscount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lastPosition != -1){
+                    CheckBox cb = mllDiscounts.getChildAt(lastPosition).findViewById(R.id.checkBox);
+                    if (cb!=null){
+                        cb.setChecked(false);
+                        removeDiscount(list);
+                    }
+                }else {
+                    bottomDialog.dismiss();
+                }
+
+
+            }
+        });
+        bottomDialog.setContentView(contentView);
+        ViewGroup.LayoutParams layoutParams = contentView.getLayoutParams();
+        layoutParams.width = getResources().getDisplayMetrics().widthPixels;
+        contentView.setLayoutParams(layoutParams);
+        bottomDialog.getWindow().setGravity(Gravity.BOTTOM);
+        bottomDialog.getWindow().setWindowAnimations(R.style.BottomDialog_Animation);
+    }
+
+    private void addDiscount(List<Discount> list, int position){
+        try {
+            JSONObject obj = new JSONObject(mPreviewJson);
+            obj.put("discountId",list.get(position).getDiscountId());
+            mPreviewJson = obj.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        OkHttp3Utils.doJsonPost(Api.GUZZU + Api.ORDER_PREVIEW, mPreviewJson, BaseApp.Constant.userId, new JsonCallback() {
+            @Override
+            public void onUiThread(int code, String json) {
+                if (code ==200){
+                    OrderPreviewResponse orderPreviewResponse = gson.fromJson(json, OrderPreviewResponse.class);
+                    mTvDiscount.setText(getString(R.string.label_discount_price,(double)orderPreviewResponse.getOrder().getDiscount()/100));
+                    mTvShippingCost.setText(getString(R.string.label_price,(double)orderPreviewResponse.getOrder().getShippingCost()/100));
+                    mTvSubtotal.setText(getString(R.string.label_price,(double)orderPreviewResponse.getOrder().getSubtotal()/100));
+                    mTvTotalCost.setText(getString(R.string.label_price,(double)orderPreviewResponse.getOrder().getTotalCost()/100));
+                    mTvTotalPaid.setText("合计：¥"+(double)orderPreviewResponse.getOrder().getTotalCost()/100);
+                    mSpDiscount.setText("优惠"+(double)orderPreviewResponse.getOrder().getDiscount()/100);
+                    bottomDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailed(Call call, IOException exception) {
+
+            }
+        });
+    }
+
+    private void removeDiscount(final List<Discount> list){
+        try {
+            JSONObject obj = new JSONObject(mPreviewJson);
+            obj.remove("discountId");
+            mPreviewJson = obj.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        OkHttp3Utils.doJsonPost(Api.GUZZU + Api.ORDER_PREVIEW, mPreviewJson, BaseApp.Constant.userId, new JsonCallback() {
+            @Override
+            public void onUiThread(int code, String json) {
+                if (code ==200){
+                    OrderPreviewResponse orderPreviewResponse = gson.fromJson(json, OrderPreviewResponse.class);
+                    mTvDiscount.setText(getString(R.string.label_discount_price,(double)orderPreviewResponse.getOrder().getDiscount()/100));
+                    mTvShippingCost.setText(getString(R.string.label_price,(double)orderPreviewResponse.getOrder().getShippingCost()/100));
+                    mTvSubtotal.setText(getString(R.string.label_price,(double)orderPreviewResponse.getOrder().getSubtotal()/100));
+                    mTvTotalCost.setText(getString(R.string.label_price,(double)orderPreviewResponse.getOrder().getTotalCost()/100));
+                    mTvTotalPaid.setText("合计：¥"+(double)orderPreviewResponse.getOrder().getTotalCost()/100);
+                    mSpDiscount.setText(list.size()+"张可用");
+                }
+                bottomDialog.dismiss();
+            }
+
+            @Override
+            public void onFailed(Call call, IOException exception) {
+
+            }
+        });
+    }
+
+    @OnClick({R.id.btn_select, R.id.tv_buy,R.id.ll_discount})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_select:
@@ -291,6 +471,9 @@ public class SettledActivity extends BaseActivity {
 
                     }
                 });
+                break;
+            case R.id.ll_discount:
+                bottomDialog.show();
                 break;
         }
     }

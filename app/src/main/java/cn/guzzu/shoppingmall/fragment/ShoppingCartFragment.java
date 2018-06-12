@@ -33,6 +33,7 @@ import butterknife.OnClick;
 import cn.guzzu.baselibrary.base.BaseApp;
 import cn.guzzu.baselibrary.base.BaseFragment;
 import cn.guzzu.baselibrary.callback.GsonArrayCallback;
+import cn.guzzu.baselibrary.callback.JsonCallback;
 import cn.guzzu.baselibrary.util.ContentView;
 import cn.guzzu.baselibrary.util.OkHttp3Utils;
 import cn.guzzu.baselibrary.util.Utils;
@@ -79,10 +80,10 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
     @BindView(R.id.toolbar_edit)
     TextView mToolbarEdit;
 
-    private TextView shoppingCartNum;
     private Context mContext;
     private double mTotalPrice = 0.00;
     private int mTotalCount = 0;
+    private int count;
     //false就是编辑，ture就是完成
     private boolean flag = false;
     private ShoppingCartAdapter adapter;
@@ -178,6 +179,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                                     groups.add(list.get(i).getStore());
                                     childs.put(groups.get(i).get_id(),list.get(i).getItems());
                                 }
+                                refreshStoreCart();
                                 adapter.setItems(groups, childs);
                                 mMultiStateView.setState(MultiStateView.STATE_CONTENT);
                                 refreshLayout.finishRefresh();
@@ -227,21 +229,13 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                             groups.add(list.get(i).getStore());
                             childs.put(groups.get(i).get_id(),list.get(i).getItems());
                         }
-                        flag = false;
-                        setVisiable();
-                        setCartNum();
-                        mTotalPrice = 0;
-                        mTotalCount = 0;
-                        calulate();
-                        for (int i = 0; i < groups.size(); i++) {
-                            CartAll.Store group = groups.get(i);
-                            group.setActionBarEditor(false);
-                        }
+                        refreshStoreCart();
                         initEvents();
                         mMultiStateView.setState(MultiStateView.STATE_CONTENT);
                     }
 
                 }else {
+                    clearCart();
                     mMultiStateView.setState(MultiStateView.STATE_UNAUTH).setButton(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -320,23 +314,41 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                         List<CartAll.Items> itemsList = new ArrayList<>();
                         for (int i = 0 ; i<groups.size();i++){
                             if (groups.get(i).isChoosed()){
-                                gson = new Gson();
                                 map.put("storeId",groups.get(i).get_id());
                                 itemsList=childs.get(groups.get(i).get_id());
+                            }else {
+                                for (int j = 0 ;j<childs.get(groups.get(i).get_id()).size();j++){
+                                    if (childs.get(groups.get(i).get_id()).get(j).isChoosed()){
+                                        map.put("storeId",childs.get(groups.get(i).get_id()).get(j).getProduct().getStore());
+                                        itemsList = childs.get(groups.get(i).get_id());
+                                    }
+                                }
+
                             }
                         }
                             List<Map<String,String>> list = new ArrayList<>();
                             for (int j = 0 ;j<itemsList.size();j++){
                                 if (itemsList.get(j).isChoosed()){
-                                    Map<String,String> productMap = new HashMap<>();
-                                    productMap.put("productId",itemsList.get(j).getProductId());
-                                    productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
-                                    UtilsLog.d(productMap.toString());
-                                    list.add(productMap);
+                                    UtilsLog.d("Ok,"+itemsList.get(j).getProductOptionId());
+                                    if (itemsList.get(j).getProductOptionId()!=null){
+                                        Map<String,String> productMap = new HashMap<>();
+                                        productMap.put("productId",itemsList.get(j).getProductId());
+                                        productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
+                                        productMap.put("productOptionId",itemsList.get(j).getProductOption().get_id());
+                                        UtilsLog.d(productMap.toString());
+                                        list.add(productMap);
+                                    }else {
+                                        Map<String,String> productMap = new HashMap<>();
+                                        productMap.put("productId",itemsList.get(j).getProductId());
+                                        productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
+                                        UtilsLog.d(productMap.toString());
+                                        list.add(productMap);
+                                    }
+
                                 }
                             }
                             map.put("items",list);
-
+                            UtilsLog.d(gson.toJson(map));
                         Utils.start_Activity(activity,SettledActivity.class,"product",gson.toJson(map));
                         return;
                     }
@@ -418,7 +430,9 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
     }
 
     private void clearCart() {
-        mToolbar.setTitle("购物车");
+        if (mToolbar!=null){
+            mToolbar.setTitle("购物车");
+        }
         mToolbarEdit.setVisibility(View.GONE);
         llCart.setVisibility(View.GONE);
 //        empty_shopcart.setVisibility(View.VISIBLE);//这里发生过错误
@@ -510,28 +524,69 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
     }
 
     @Override
-    public void doIncrease(int groupPosition, int childPosition, View showCountView, boolean isChecked) {
-        CartAll.Items good = (CartAll.Items) adapter.getChild(groupPosition, childPosition);
-        int count = good.getQuantity();
+    public void doIncrease(int groupPosition, int childPosition, final View showCountView, boolean isChecked) {
+        final CartAll.Items good = (CartAll.Items) adapter.getChild(groupPosition, childPosition);
+        count = good.getQuantity();
         count++;
-        good.setQuantity(count);
-        ((TextView) showCountView).setText(String.valueOf(count));
-        adapter.notifyDataSetChanged();
-        calulate();
+        CartAll.Store group = groups.get(groupPosition);
+        final List<CartAll.Items> child = childs.get(group.get_id());
+        Map<String,String> map = new HashMap<>();
+        map.put("quantity",String.valueOf(count));
+        map.put("itemId",child.get(childPosition).get_id());
+        map.put("storeId",child.get(childPosition).getProduct().getStore());
+        OkHttp3Utils.doJsonPost(Api.GUZZU + Api.CART_UPDATE, map, BaseApp.Constant.userId, new JsonCallback() {
+            @Override
+            public void onUiThread(int code, String json) {
+                if (code==200){
+                    good.setQuantity(count);
+                    ((TextView) showCountView).setText(String.valueOf(count));
+                    adapter.notifyDataSetChanged();
+                    calulate();
+                }else {
+                    Utils.showShortToast(activity,"添加失败");
+                }
+            }
+
+            @Override
+            public void onFailed(Call call, IOException exception) {
+
+            }
+        });
+
     }
 
     @Override
-    public void doDecrease(int groupPosition, int childPosition, View showCountView, boolean isChecked) {
-        CartAll.Items good = (CartAll.Items) adapter.getChild(groupPosition, childPosition);
-        int count = good.getQuantity();
+    public void doDecrease(int groupPosition, int childPosition,final View showCountView, boolean isChecked) {
+        final CartAll.Items good = (CartAll.Items) adapter.getChild(groupPosition, childPosition);
+        count = good.getQuantity();
         if (count == 1) {
             return;
         }
         count--;
-        good.setQuantity(count);
-        ((TextView) showCountView).setText("" + count);
-        adapter.notifyDataSetChanged();
-        calulate();
+        CartAll.Store group = groups.get(groupPosition);
+        final List<CartAll.Items> child = childs.get(group.get_id());
+        Map<String,String> map = new HashMap<>();
+        map.put("quantity",String.valueOf(count));
+        map.put("itemId",child.get(childPosition).get_id());
+        map.put("storeId",child.get(childPosition).getProduct().getStore());
+        OkHttp3Utils.doJsonPost(Api.GUZZU + Api.CART_UPDATE, map, BaseApp.Constant.userId, new JsonCallback() {
+            @Override
+            public void onUiThread(int code, String json) {
+                if (code==200){
+                    good.setQuantity(count);
+                    ((TextView) showCountView).setText(String.valueOf(count));
+                    adapter.notifyDataSetChanged();
+                    calulate();
+                }else {
+                    Utils.showShortToast(activity,"减少失败");
+                }
+            }
+
+            @Override
+            public void onFailed(Call call, IOException exception) {
+
+            }
+        });
     }
 
     @Override
@@ -545,15 +600,31 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
     }
 
     @Override
-    public void childDelete(int groupPosition, int childPosition) {
+    public void childDelete(final int groupPosition, final int childPosition) {
         CartAll.Store group = groups.get(groupPosition);
-        List<CartAll.Items> child = childs.get(group.get_id());
-        child.remove(childPosition);
-        if (child.size() == 0) {
-            groups.remove(groupPosition);
-        }
-        adapter.notifyDataSetChanged();
-        calulate();
+        final List<CartAll.Items> child = childs.get(group.get_id());
+        Map<String,String> map = new HashMap<>();
+        map.put("itemId",child.get(childPosition).get_id());
+        map.put("storeId",child.get(childPosition).getProduct().getStore());
+        OkHttp3Utils.doJsonPost(Api.GUZZU + Api.CART_REMOVE, map, BaseApp.Constant.userId, new JsonCallback() {
+            @Override
+            public void onUiThread(int code, String json) {
+                if (code==200){
+                    child.remove(childPosition);
+                    if (child.size() == 0) {
+                        groups.remove(groupPosition);
+                    }
+                    adapter.notifyDataSetChanged();
+                    calulate();
+                }
+            }
+
+            @Override
+            public void onFailed(Call call, IOException exception) {
+
+            }
+        });
+
     }
 
     /**
@@ -630,10 +701,26 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
             mToolbarEdit.setText("编辑");
         }
     }
+
+    private void refreshStoreCart(){
+        flag = false;
+        setVisiable();
+        setCartNum();
+        mTotalPrice = 0;
+        mTotalCount = 0;
+        allCheckBox.setChecked(false);
+        calulate();
+        for (int i = 0; i < groups.size(); i++) {
+            CartAll.Store group = groups.get(i);
+            group.setActionBarEditor(false);
+        }
+    }
     @Override
     public void groupEditor(int groupPosition) {
 
     }
+
+
 
     
 }

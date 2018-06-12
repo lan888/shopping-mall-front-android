@@ -189,8 +189,8 @@ public class ShoppingCartAdapter extends BaseExpandableListAdapter {
             childViewHolder.goodsName.setText(child.getName());
             childViewHolder.goodsPrice.setText("¥" + (double)child.getPrice()/100 + "");
             childViewHolder.goodsNum.setText(String.valueOf(child.getQuantity()));
-            Glide.with(convertView).load(child.getProduct().getImage().getThumb().getUrl()).into(childViewHolder.goodsImage);
-            childViewHolder.goods_size.setText(child.getProduct().getMetaDescription());
+            Glide.with(convertView).load(child.getImage().getThumb().getUrl()).into(childViewHolder.goodsImage);
+            childViewHolder.goods_size.setText(child.getOptionName());
             childViewHolder.goodsSize.setText(child.getProduct().getMetaDescription());
             childViewHolder.goodsBuyNum.setText("x" + child.getQuantity() + "");
             childViewHolder.singleCheckBox.setChecked(child.isChoosed());
