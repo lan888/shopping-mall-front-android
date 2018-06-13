@@ -81,17 +81,7 @@ public class MeFragment extends BaseFragment<MainActivity> {
     public MeFragment() {
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (BaseApp.getInstance().isLogin()){
-            mTvStatus.setText("");
-            mBtnLogout.setVisibility(View.VISIBLE);
-        }else {
-            mTvStatus.setText(getString(R.string.tv_unlogin));
-            mBtnLogout.setVisibility(View.GONE);
-        }
-    }
+
 
     @Override
     protected void initialToolbar() {
@@ -130,6 +120,17 @@ public class MeFragment extends BaseFragment<MainActivity> {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (BaseApp.getInstance().isLogin()){
+            mTvStatus.setText("");
+            mBtnLogout.setVisibility(View.VISIBLE);
+        }else {
+            mTvStatus.setText(getString(R.string.tv_unlogin));
+            mBtnLogout.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onDestroyView() {

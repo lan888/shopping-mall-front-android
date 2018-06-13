@@ -24,6 +24,7 @@ import java.util.List;
 
 import cn.guzzu.baselibrary.callback.JsonCallback;
 import cn.guzzu.baselibrary.util.OkHttp3Utils;
+import cn.guzzu.baselibrary.util.UtilsLog;
 import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
 import cn.guzzu.shoppingmall.adapter.HomeRvAdapter;
@@ -150,13 +151,31 @@ public class HomeTabFragment extends Fragment{
                             mRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
                                 @Override
                                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                                    FlexboxLayoutManager manager = (FlexboxLayoutManager) recyclerView.getLayoutManager();
-                                    if (manager.findFirstVisibleItemPosition()==0){
+
+                                }
+
+                                @Override
+                                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                                    super.onScrollStateChanged(recyclerView, newState);
+                                    int childCount = recyclerView.getChildCount();
+                                    View firstChild = recyclerView.getChildAt(0);
+                                    View lastChild = recyclerView.getChildAt(childCount - 1);
+                                    int top = firstChild.getTop();
+                                    int bottom = lastChild.getBottom();
+                                    //recycleView显示itemView的有效区域的top坐标Y
+                                    int topEdge = recyclerView.getPaddingTop();
+                                    //recycleView显示itemView的有效区域的bottom坐标Y
+                                    int bottomEdge = recyclerView.getHeight() - recyclerView.getPaddingBottom();
+                                    //第一个view的顶部大于top边界值,说明第一个view已经完全显示在顶部
+                                    //同时最后一个view的底部应该小于bottom边界值,说明最后一个view的底部已经超出显示范围,部分或者完全移出了界面
+                                    if (top >= topEdge && bottom > bottomEdge){
                                         fab_up_slide.hide();
-                                    }else {
+                                    } else {
                                         fab_up_slide.show();
                                     }
-                                }
+                                    UtilsLog.d(top+","+topEdge+","+bottom+","+bottomEdge);
+
+                                    }
                             });
 
                             fab_up_slide.setOnClickListener(new View.OnClickListener() {

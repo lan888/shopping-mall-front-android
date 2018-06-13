@@ -2,7 +2,6 @@ package cn.guzzu.shoppingmall.ui;
 
 import android.app.Dialog;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,12 +17,10 @@ import android.widget.TextView;
 
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,22 +35,19 @@ import butterknife.OnClick;
 import cn.guzzu.baselibrary.base.BaseActivity;
 import cn.guzzu.baselibrary.base.BaseApp;
 import cn.guzzu.baselibrary.callback.GsonArrayCallback;
-import cn.guzzu.baselibrary.callback.GsonObjectCallback;
 import cn.guzzu.baselibrary.callback.JsonCallback;
 import cn.guzzu.baselibrary.util.DataBindingViewUtil;
 import cn.guzzu.baselibrary.util.OkHttp3Utils;
 import cn.guzzu.baselibrary.util.Utils;
 import cn.guzzu.baselibrary.util.UtilsLog;
-import cn.guzzu.baselibrary.widget.LoadingDialog;
 import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
 import cn.guzzu.shoppingmall.adapter.ProductOrderListAdapter;
 import cn.guzzu.shoppingmall.bean.Discount;
-import cn.guzzu.shoppingmall.bean.Order;
 import cn.guzzu.shoppingmall.bean.OrderPreviewRequest;
 import cn.guzzu.shoppingmall.bean.OrderPreviewResponse;
-import cn.guzzu.shoppingmall.bean.Product;
 import cn.guzzu.shoppingmall.bean.ProductItem;
+import cn.guzzu.shoppingmall.util.LoginUtil;
 import okhttp3.Call;
 
 public class SettledActivity extends BaseActivity {
@@ -168,6 +162,7 @@ public class SettledActivity extends BaseActivity {
                         mAddress.setVisibility(View.GONE);
                         mMobilePhone.setVisibility(View.GONE);
                         mTvBuy.setBackgroundColor(getResources().getColor(R.color.gray_light));
+                        mTvBuy.setClickable(false);
                         isAddressNull = true;
                         JSONObject obj = new JSONObject();
                         try {
@@ -185,6 +180,7 @@ public class SettledActivity extends BaseActivity {
                         }
                     }else {
                         mTvBuy.setBackgroundColor(getResources().getColor(R.color.md_red_500));
+                        mTvBuy.setClickable(true);
                         isAddressNull = false;
                         mBtnSelect.setText("选择收货地址");
                         addressLastUsed = gson.fromJson(json, OrderPreviewRequest.ShippingAddress.class);
@@ -276,23 +272,25 @@ public class SettledActivity extends BaseActivity {
                         });
 
                 }else {
-                    showLoading("The product is not available\n找不到该订单");
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            super.run();
-                            try {
-                                Thread.sleep(1000);//休眠1秒
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                    if (LoginUtil.isLogin(context,json)){
+                        showLoading("The product is not available\n找不到该订单");
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                super.run();
+                                try {
+                                    Thread.sleep(1000);//休眠1秒
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                cancelLoading();
+                                finish();
+                                /**
+                                 * 要执行的操作
+                                 */
                             }
-                            cancelLoading();
-                            finish();
-                            /**
-                             * 要执行的操作
-                             */
-                        }
-                    }.start();
+                        }.start();
+                    }
                 }
             }
 

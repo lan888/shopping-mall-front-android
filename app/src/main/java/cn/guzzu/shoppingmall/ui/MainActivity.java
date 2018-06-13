@@ -192,6 +192,10 @@ public class MainActivity extends BaseActivity {
         if (shoppingCartFragment.isAdded()){
             shoppingCartFragment.onResume();
         }
+        MeFragment meFragment = (MeFragment) mFragments.get(3);
+        if (meFragment.isAdded()){
+            meFragment.onResume();
+        }
         UtilsLog.d("refresh");
     }
 }

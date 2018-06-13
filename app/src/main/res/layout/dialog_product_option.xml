@@ -40,20 +40,25 @@
         android:textColor="@color/md_black_1000"
         android:paddingLeft="@dimen/font_normal"
         android:layout_below="@id/img"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/len_172"
+        android:id="@+id/sv"
+        android:layout_below="@id/tv_opt">
         <cn.guzzu.shoppingmall.widget.FlowRadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/option"
-            android:layout_below="@id/tv_opt"
-            android:layout_marginTop="@dimen/font_normal"
             />
+    </ScrollView>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv1"
         android:text="数量:"
         android:textColor="@color/md_black_1000"
-        android:layout_below="@id/option"
+        android:layout_below="@id/sv"
         android:paddingTop="@dimen/font_small"
         android:paddingLeft="@dimen/font_normal"
         />
@@ -69,10 +74,11 @@
         android:id="@+id/amount_view"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
-        android:layout_below="@id/option"
-        android:layout_alignParentRight="true"
+        android:layout_below="@id/sv"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="@dimen/font_normal"
+        android:layout_marginRight="@dimen/len_12"
+        android:layout_marginLeft="@dimen/len_6"
+        android:layout_marginTop="@dimen/len_6"
         app:btnTextSize="@dimen/font_large"
         app:btnWidth="36dp"
         app:tvWidth="48dp"/>

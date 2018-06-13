@@ -19,7 +19,7 @@ public class BaseApp extends Application {
         public static String userId = "";
         public static String token = "";
         /*获取当前系统的android版本号*/
-        public static final String CLIENT_TYPE = "Android";
+        public static final String CLIENT_TYPE = "cn.guzzu.shoppingmall";
         public static String versionCode = "1.0";
         public static final String TAG = getAppContext().getClass().getSimpleName();
         public static String APP_ID_WX = "wxa9f71b5b7ace6214";

@@ -4,13 +4,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
@@ -21,7 +19,6 @@ import com.google.gson.Gson;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
@@ -29,7 +26,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +46,7 @@ import cn.guzzu.shoppingmall.adapter.ShoppingCartAdapter;
 import cn.guzzu.shoppingmall.bean.CartAll;
 import cn.guzzu.shoppingmall.bean.CartStore;
 import cn.guzzu.shoppingmall.bean.GoHomeEvent;
+import cn.guzzu.shoppingmall.bean.UnLoginEvent;
 import cn.guzzu.shoppingmall.ui.LoginActivity;
 import cn.guzzu.shoppingmall.ui.MainActivity;
 import cn.guzzu.baselibrary.util.UtilsLog;
@@ -118,7 +115,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
         gson = new Gson();
         mContext = activity;
         groups = new ArrayList<>();
-        childs = new HashMap<>();
+        childs = new ArrayMap<>();
         refreshLayout.setRefreshHeader(new ClassicsHeader(activity).setSpinnerStyle(SpinnerStyle.Scale));
         refreshLayout.setEnableLoadMore(false);
         OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId,"en", new GsonArrayCallback<CartAll>() {
@@ -197,6 +194,8 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                             }
 
                         }else {
+                            Utils.putBoolean(activity,"isLogin",false);
+                            EventBus.getDefault().post(new UnLoginEvent());
                             clearCart();
                             mMultiStateView.setState(MultiStateView.STATE_UNAUTH).setButton(new View.OnClickListener() {
                                 @Override
@@ -210,7 +209,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
 
                     @Override
                     public void onFailed(Call call, IOException e) {
-
+                        mMultiStateView.setState(MultiStateView.STATE_ERROR);
                     }
                 });
             }
@@ -246,6 +245,8 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                     }
 
                 }else {
+                    Utils.putBoolean(activity,"isLogin",false);
+                    EventBus.getDefault().post(new UnLoginEvent());
                     clearCart();
                     mMultiStateView.setState(MultiStateView.STATE_UNAUTH).setButton(new View.OnClickListener() {
                         @Override
@@ -258,6 +259,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
 
             @Override
             public void onFailed(Call call, IOException e) {
+                mMultiStateView.setState(MultiStateView.STATE_ERROR);
 
             }
         });
@@ -327,7 +329,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                         for (int i = 0 ; i<groups.size();i++){
                             if (groups.get(i).isChoosed()){
                                 CartStore cartStore = new CartStore();
-                                Map<String,Object> map = new HashMap<>();
+                                Map<String,Object> map = new ArrayMap<>();
                                 map.put("storeId",groups.get(i).get_id());
                                 cartStore.setStoreId(map);
                                 cartStore.setStoreName(groups.get(i).getName());
@@ -346,7 +348,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                                 CartStore cartStore = new CartStore();
                                 for (int j = 0 ;j<childs.get(groups.get(i).get_id()).size();j++){
                                     if (childs.get(groups.get(i).get_id()).get(j).isChoosed()){
-                                        Map<String,Object> map = new HashMap<>();
+                                        Map<String,Object> map = new ArrayMap<>();
                                         map.put("storeId",childs.get(groups.get(i).get_id()).get(j).getProduct().getStore());
                                         cartStore.setStoreId(map);
                                         itemsList = childs.get(groups.get(i).get_id());
@@ -373,14 +375,14 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                                 if (itemsList.get(j).isChoosed()){
                                     UtilsLog.d("Ok,"+itemsList.get(j).getProductOptionId());
                                     if (itemsList.get(j).getProductOptionId()!=null){
-                                        Map<String,String> productMap = new HashMap<>();
+                                        Map<String,String> productMap = new ArrayMap<>();
                                         productMap.put("productId",itemsList.get(j).getProductId());
                                         productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
                                         productMap.put("productOptionId",itemsList.get(j).getProductOption().get_id());
                                         UtilsLog.d(productMap.toString());
                                         list.add(productMap);
                                     }else {
-                                        Map<String,String> productMap = new HashMap<>();
+                                        Map<String,String> productMap = new ArrayMap<>();
                                         productMap.put("productId",itemsList.get(j).getProductId());
                                         productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
                                         UtilsLog.d(productMap.toString());
@@ -580,7 +582,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
         count++;
         CartAll.Store group = groups.get(groupPosition);
         final List<CartAll.Items> child = childs.get(group.get_id());
-        Map<String,String> map = new HashMap<>();
+        Map<String,String> map = new ArrayMap<>();
         map.put("quantity",String.valueOf(count));
         map.put("itemId",child.get(childPosition).get_id());
         map.put("storeId",child.get(childPosition).getProduct().getStore());
@@ -615,7 +617,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
         count--;
         CartAll.Store group = groups.get(groupPosition);
         final List<CartAll.Items> child = childs.get(group.get_id());
-        Map<String,String> map = new HashMap<>();
+        Map<String,String> map = new ArrayMap<>();
         map.put("quantity",String.valueOf(count));
         map.put("itemId",child.get(childPosition).get_id());
         map.put("storeId",child.get(childPosition).getProduct().getStore());
@@ -653,7 +655,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
     public void childDelete(final int groupPosition, final int childPosition) {
         CartAll.Store group = groups.get(groupPosition);
         final List<CartAll.Items> child = childs.get(group.get_id());
-        Map<String,String> map = new HashMap<>();
+        Map<String,String> map = new ArrayMap<>();
         map.put("itemId",child.get(childPosition).get_id());
         map.put("storeId",child.get(childPosition).getProduct().getStore());
         OkHttp3Utils.doJsonPost(Api.GUZZU + Api.CART_REMOVE, map, BaseApp.Constant.userId, new JsonCallback() {
@@ -845,14 +847,14 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
             if (itemsList.get(j).isChoosed()){
                 UtilsLog.d("Ok,"+itemsList.get(j).getProductOptionId());
                 if (itemsList.get(j).getProductOptionId()!=null){
-                    Map<String,String> productMap = new HashMap<>();
+                    Map<String,String> productMap = new ArrayMap<>();
                     productMap.put("productId",itemsList.get(j).getProductId());
                     productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
                     productMap.put("productOptionId",itemsList.get(j).getProductOption().get_id());
                     UtilsLog.d(productMap.toString());
                     list.add(productMap);
                 }else {
-                    Map<String,String> productMap = new HashMap<>();
+                    Map<String,String> productMap = new ArrayMap<>();
                     productMap.put("productId",itemsList.get(j).getProductId());
                     productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
                     UtilsLog.d(productMap.toString());

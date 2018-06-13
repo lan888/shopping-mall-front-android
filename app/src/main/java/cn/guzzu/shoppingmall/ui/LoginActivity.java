@@ -2,6 +2,7 @@ package cn.guzzu.shoppingmall.ui;
 
 import android.content.Context;
 import android.os.CountDownTimer;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +19,6 @@ import com.tencent.mm.opensdk.modelmsg.SendAuth;
 
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -94,7 +94,7 @@ public class LoginActivity extends BaseActivity implements TextWatcher {
                 mPhoneNum = mEtPhone.getText().toString();
                 if (Utils.isMobileNO(mPhoneNum)){
                     time.start();
-                    Map<String,String> key = new HashMap<>();
+                    Map<String,String> key = new ArrayMap<>();
                     key.put("mobilePhone", mPhoneNum);
                     String url = Api.GUZZU + Api.REQ_SMS;
                     OkHttp3Utils.doJsonPost(url, key, new JsonCallback() {
@@ -118,7 +118,7 @@ public class LoginActivity extends BaseActivity implements TextWatcher {
             case R.id.btn_login:
                 mPhoneNum = mEtPhone.getText().toString();
                 String smsCode = mEtCode.getText().toString();
-                Map<String,String> key = new HashMap<>();
+                Map<String,String> key = new ArrayMap<>();
                 key.put("mobilePhone", mPhoneNum);
                 key.put("verifyCode", smsCode);
                 key.put("clientType",BaseApp.Constant.CLIENT_TYPE);
@@ -147,7 +147,7 @@ public class LoginActivity extends BaseActivity implements TextWatcher {
 
                     @Override
                     public void onFailed(Call call, IOException exception) {
-
+                        Utils.showShortToast(context,exception.getMessage());
                     }
                 });
                 break;

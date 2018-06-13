@@ -2,6 +2,7 @@ package cn.guzzu.shoppingmall.viewholder;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
@@ -13,7 +14,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -44,7 +44,7 @@ public class AddressManagerItemViewHolder extends BaseViewHolder<Addresses> {
     @BindView(R.id.btn_delete)
     TextView btnDelete;
 
-    private Map<String,String> map = new HashMap<>();
+    private Map<String,String> map = new ArrayMap<>();
 
     public AddressManagerItemViewHolder(View view) {
         super(view);

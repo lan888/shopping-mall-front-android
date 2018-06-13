@@ -2,6 +2,7 @@ package cn.guzzu.shoppingmall.ui;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -103,7 +104,7 @@ public class AddressAddActivity extends BaseActivity implements TextWatcher {
         addressId = getIntent().getStringExtra("userAddressId");
         if (addressId!=null){
             Log.d(TAG, "initData1: "+addressId);
-            map = new HashMap<>();
+            map = new ArrayMap<>();
             map.put("userAddressId",addressId);
             OkHttp3Utils.doJsonPost(Api.GUZZU + Api.ADDRESS_GET, map, BaseApp.Constant.userId, "zh", new JsonCallback() {
                 @Override
@@ -125,7 +126,7 @@ public class AddressAddActivity extends BaseActivity implements TextWatcher {
             });
         }
         gson = new Gson();
-        address = new HashMap<>();
+        address = new ArrayMap<>();
         addressInfo = new Address();
         OkHttp3Utils.doPost(Api.GUZZU + Api.PROVINCE_FIND, BaseApp.Constant.userId, "zh", new JsonCallback() {
             @Override
@@ -151,7 +152,7 @@ public class AddressAddActivity extends BaseActivity implements TextWatcher {
                                     addressInfo.setProvince(cityInterface.getCityName());
                                     addressInfo.setProvinceId(provinceId);
                                     address.put("province", cityInterface.getCityName());
-                                    mIdMap = new HashMap<>();
+                                    mIdMap = new ArrayMap<>();
                                     mIdMap.put("provinceId", provinceId);
                                     showLoading(getString(R.string.dialog_wait));
                                     OkHttp3Utils.doJsonPost(Api.GUZZU + Api.CITY_FIND, mIdMap, BaseApp.Constant.userId, "zh", new JsonCallback() {
