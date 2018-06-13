@@ -158,7 +158,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="20dp"
                             android:layout_weight="1"
-                            android:text="选择, 颜色分类"
+                            android:text="请选择, 分类"
                             android:textColor="#222222"
                             android:textSize="14sp" />
 

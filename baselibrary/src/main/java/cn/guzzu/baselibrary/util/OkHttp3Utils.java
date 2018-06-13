@@ -99,7 +99,7 @@ public class OkHttp3Utils {
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
             //实现链接方式
-            mOkHttpClient=new OkHttpClient.Builder().connectTimeout(8, TimeUnit.SECONDS)
+            mOkHttpClient=new OkHttpClient.Builder().connectTimeout(20, TimeUnit.SECONDS)
                     .addInterceptor(httpLoggingInterceptor) //添加日志拦截器
                     .addNetworkInterceptor(new CacheInterceptor())
                     .writeTimeout(20, TimeUnit.SECONDS)  //写入超时时间

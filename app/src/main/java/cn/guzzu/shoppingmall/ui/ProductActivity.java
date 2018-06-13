@@ -335,12 +335,12 @@ public class ProductActivity extends BaseActivity {
         if (product.getProductOptions().size()>0){
             tv_opt.setVisibility(View.VISIBLE);
             sv.setVisibility(View.VISIBLE);
-            if (product.getProductOptions().get(0).getInventoryPolicy().equals("unlimited")){
+            if (product.getProductOptions().get(selected).getInventoryPolicy().equals("unlimited")){
                 mAmountView.setGoods_storage(99).setAmount(1);
                 mAmountView.setOnAmountChangeListener(new ShoppingCartAmountView.OnAmountChangeListener() {
                     @Override
                     public void onAmountChange(View view, int amount) {
-                        listener.process(product.getName(),amount);
+                        listener.process(product.getProductOptions().get(selected).getName(),amount);
                         mAmount = amount;
 
                     }
@@ -350,7 +350,7 @@ public class ProductActivity extends BaseActivity {
                 mAmountView.setOnAmountChangeListener(new ShoppingCartAmountView.OnAmountChangeListener() {
                     @Override
                     public void onAmountChange(View view, int amount) {
-                        listener.process(product.getName(),amount);
+                        listener.process(product.getProductOptions().get(selected).getName(),amount);
                         mAmount = amount;
 
                     }
@@ -530,9 +530,6 @@ public class ProductActivity extends BaseActivity {
     private void setRdBtnAttribute(final RadioButton rdBtn, int pos) {
         if (null == rdBtn) {
             return;
-        }
-        if (selected == pos) {
-            rdBtn.setChecked(true);
         }
         rdBtn.setBackgroundResource(R.drawable.selector_rdbtn);
         rdBtn.setTextColor(getResources().getColorStateList(R.color.color_radiobutton));

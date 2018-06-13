@@ -248,6 +248,11 @@ public class GoodsInfoFragment extends Fragment implements View.OnClickListener,
         }else {
             tv_old_price.setText(String.valueOf((double) product.getOriginalPrice()/100));
         }
+        if (product.getProductOptions().size()>0){
+            tv_current_goods.setText("请选择, 分类");
+        }else {
+            tv_current_goods.setText("已选，"+product.getName());
+        }
         activity.setListener(new ProductActivity.OnOptionClickListener() {
             @Override
             public void process(String str, int count) {
