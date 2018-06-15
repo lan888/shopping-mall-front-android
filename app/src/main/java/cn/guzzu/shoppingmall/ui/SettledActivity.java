@@ -1,11 +1,15 @@
 package cn.guzzu.shoppingmall.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,7 +20,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alipay.sdk.app.AuthTask;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.gc.materialdesign.views.LayoutRipple;
 import com.google.gson.Gson;
@@ -55,6 +61,7 @@ import cn.guzzu.shoppingmall.bean.Discount;
 import cn.guzzu.shoppingmall.bean.GoHomeEvent;
 import cn.guzzu.shoppingmall.bean.OrderPreviewRequest;
 import cn.guzzu.shoppingmall.bean.OrderPreviewResponse;
+import cn.guzzu.shoppingmall.bean.PayResult;
 import cn.guzzu.shoppingmall.bean.ProductItem;
 import cn.guzzu.shoppingmall.bean.WXPay;
 import cn.guzzu.shoppingmall.bean.WxPayEvent;
@@ -108,7 +115,35 @@ public class SettledActivity extends BaseActivity {
     private int lastPosition = -1;
     private int payType = 1;//1-微信支付，2-支付宝
     private boolean isPaid = false;
-
+    private String data = null;
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @SuppressWarnings("unused")
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1: {
+                    @SuppressWarnings("unchecked")
+                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                    /**
+                     对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+                     */
+                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+                    String resultStatus = payResult.getResultStatus();
+                    // 判断resultStatus 为9000则代表支付成功
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                        Toast.makeText(SettledActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                        Toast.makeText(SettledActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+        };
+    };
     @Override
     public int initLayout() {
         return R.layout.activity_settled;
@@ -494,33 +529,76 @@ public class SettledActivity extends BaseActivity {
                             Utils.showShortToast(context, "生成订单成功");
                             Map<String, String> map = new ArrayMap<>();
                             map.put("orderId", orderId);
-                            OkHttp3Utils.doJsonPost(Api.GUZZU+Api.WX_PAY, map, BaseApp.Constant.userId, new JsonCallback() {
-                                @Override
-                                public void onUiThread(int code, String json) {
-                                    if (code==200){
-                                        WXPay wxPay = gson.fromJson(json, WXPay.class);
-                                        if (BaseApp.mWxApi != null && BaseApp.mWxApi.isWXAppInstalled()){
-                                            WXPayUtil.WXPayBuilder builder = new WXPayUtil.WXPayBuilder();
-                                            builder.setAppId(BaseApp.Constant.APP_ID_WX);
-                                            builder.setPartnerId(wxPay.getPartnerId());
-                                            builder.setPrepayId(wxPay.getPrepayId());
-                                            builder.setNonceStr(wxPay.getNonceStr());
-                                            builder.setTimeStamp(wxPay.getTimeStamp());
-                                            builder.setPackageValue(wxPay.getPackageX());
-                                            builder.setSign(wxPay.getSign()).build().toWXPayNotSign();
-                                        }else {
-                                            Utils.showShortToast(context, "用户未安装微信");
+                            switch (payType){
+                                case 1:
+                                    OkHttp3Utils.doJsonPost(Api.GUZZU+Api.WX_PAY, map, BaseApp.Constant.userId, new JsonCallback() {
+                                        @Override
+                                        public void onUiThread(int code, String json) {
+                                            if (code==200){
+                                                WXPay wxPay = gson.fromJson(json, WXPay.class);
+                                                if (BaseApp.mWxApi != null && BaseApp.mWxApi.isWXAppInstalled()){
+                                                    WXPayUtil.WXPayBuilder builder = new WXPayUtil.WXPayBuilder();
+                                                    builder.setAppId(BaseApp.Constant.APP_ID_WX);
+                                                    builder.setPartnerId(wxPay.getPartnerId());
+                                                    builder.setPrepayId(wxPay.getPrepayId());
+                                                    builder.setNonceStr(wxPay.getNonceStr());
+                                                    builder.setTimeStamp(wxPay.getTimeStamp());
+                                                    builder.setPackageValue(wxPay.getPackageX());
+                                                    builder.setSign(wxPay.getSign()).build().toWXPayNotSign();
+                                                }else {
+                                                    Utils.showShortToast(context, "用户未安装微信");
+                                                }
+
+                                            }
+
                                         }
 
-                                    }
+                                        @Override
+                                        public void onFailed(Call call, IOException exception) {
 
-                                }
+                                        }
+                                    });
+                                    break;
+                                case 2:
+                                    OkHttp3Utils.doJsonPost(Api.GUZZU + Api.ALI_PAY, map, BaseApp.Constant.userId, new JsonCallback() {
+                                        @Override
+                                        public void onUiThread(int code, String json) {
+                                            if (code == 200){
+                                                try {
+                                                    JSONObject obj = new JSONObject(json);
+                                                    data = obj.optString("data");
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                Runnable authRunnable = new Runnable() {
 
-                                @Override
-                                public void onFailed(Call call, IOException exception) {
+                                                    @Override
+                                                    public void run() {
+                                                        // 构造AuthTask 对象
+                                                        AuthTask authTask = new AuthTask(SettledActivity.this);
+                                                        // 调用授权接口，获取授权结果
+                                                        Map<String, String> result = authTask.authV2(data, true);
 
-                                }
-                            });
+                                                        Message msg = new Message();
+                                                        msg.what = 1;
+                                                        msg.obj = result;
+                                                        mHandler.sendMessage(msg);
+                                                    }
+                                                };
+                                                // 必须异步调用
+                                                Thread authThread = new Thread(authRunnable);
+                                                authThread.start();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailed(Call call, IOException exception) {
+
+                                        }
+                                    });
+                                    break;
+                            }
+
                         }
                     }
 

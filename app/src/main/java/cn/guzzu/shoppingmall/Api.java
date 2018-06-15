@@ -40,4 +40,5 @@ public class Api {
     public static final String BIND_PHONE ="/api/2/Auth.bindMobilePhone";
     public static final String WX_LOGIN = "/api/2/WxApp.signin";
     public static final String WX_PAY = "/api/2/Order.generateWxpayOrderForApp";
+    public static final String ALI_PAY ="/api/2/Order.generateAlipayOrderForApp";
 }

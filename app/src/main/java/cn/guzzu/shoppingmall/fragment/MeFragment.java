@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gc.materialdesign.views.ButtonRectangle;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -36,6 +37,7 @@ import cn.guzzu.baselibrary.util.OkHttp3Utils;
 import cn.guzzu.baselibrary.util.Utils;
 import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
+import cn.guzzu.shoppingmall.bean.Session;
 import cn.guzzu.shoppingmall.bean.UnLoginEvent;
 import cn.guzzu.shoppingmall.ui.AddressManagerActivity;
 import cn.guzzu.shoppingmall.ui.LoginActivity;
@@ -123,6 +125,26 @@ public class MeFragment extends BaseFragment<MainActivity> {
     @Override
     public void onResume() {
         super.onResume();
+        OkHttp3Utils.doPost(Api.GUZZU + Api.SESSION, BaseApp.Constant.userId, "zh", new JsonCallback() {
+            @Override
+            public void onUiThread(int code, String json) {
+                if (code==200){
+                    if (json.contains("no session")){
+                        Utils.putBoolean(activity,"isLogin",false);
+                    } else {
+                        Gson gson = new Gson();
+                        Session session = gson.fromJson(json, Session.class);
+                        mTvStatus.setText(session.getUser().getName());
+                        Utils.putBoolean(activity,"isLogin",true);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailed(Call call, IOException exception) {
+
+            }
+        });
         if (BaseApp.getInstance().isLogin()){
             mTvStatus.setText("");
             mBtnLogout.setVisibility(View.VISIBLE);
