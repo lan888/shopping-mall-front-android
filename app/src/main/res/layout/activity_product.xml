@@ -68,7 +68,7 @@
         android:id="@+id/bottom"
         >
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:text="客服"
                 android:drawableTop="@drawable/ic_person_24dp"
@@ -76,6 +76,7 @@
                 android:paddingLeft="12dp"
                 android:background="@color/white"
                 android:gravity="center"
+                android:textSize="@dimen/font_10"
                 android:layout_weight="1"
                 />
             <View
@@ -85,14 +86,14 @@
                 android:background="@color/md_grey_300"
                 />
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:text="收藏"
                 android:paddingRight="12dp"
                 android:paddingLeft="12dp"
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_favorite_24dp"
-                android:textSize="10dp"
+                android:textSize="@dimen/font_10"
                 android:background="@color/white"
                 android:layout_weight="1"
                 />
@@ -103,40 +104,48 @@
                 android:background="@color/md_grey_300"
                 />
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/tv_cart"
                 android:text="购物车"
                 android:drawableTop="@drawable/ic_shopping_cart_24dp"
                 android:background="@color/white"
-                android:textSize="10dp"
+                android:textSize="@dimen/font_10"
                 android:gravity="center"
-                android:paddingRight="12dp"
-                android:paddingLeft="12dp"
                 android:layout_weight="1"
                 />
+        <com.gc.materialdesign.views.LayoutRipple
+            android:id="@+id/tv_buy"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:background="@color/md_red_500"
+            app:rippleColor="@color/red_600">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/tv_buy"
                 android:text="立即购买"
                 android:gravity="center"
                 android:padding="12dp"
-                android:background="@color/md_red_500"
                 android:textColor="@color/white"
-                android:layout_toLeftOf="@id/tv_addcart"
-                android:layout_weight="3"
+
                 />
+        </com.gc.materialdesign.views.LayoutRipple>
+        <com.gc.materialdesign.views.LayoutRipple
+            android:id="@+id/tv_addcart"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:background="@color/md_red_300"
+            app:rippleColor="@color/red_400">
             <TextView
-                android:id="@+id/tv_addcart"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="12dp"
-                android:background="@color/md_red_300"
                 android:textColor="@color/white"
                 android:text="加入购物车"
-                android:layout_weight="3"
                 />
+        </com.gc.materialdesign.views.LayoutRipple>
     </LinearLayout>
 </RelativeLayout>

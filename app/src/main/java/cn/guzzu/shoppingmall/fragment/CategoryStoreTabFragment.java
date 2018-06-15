@@ -69,7 +69,7 @@ public class CategoryStoreTabFragment extends Fragment {
         mRv.setLayoutManager(flexboxLayoutManager);
         OkHttp3Utils.doGet(Api.STORES, new GsonArrayCallback<Store>() {
             @Override
-            public void onUiThread(int code,List<Store> list) {
+            public void onUiThread(int code,String json,List<Store> list) {
                 if (code==200){
                     StoresAdapter storesAdapter = new StoresAdapter(mContext);
                     storesAdapter.setItems(list);

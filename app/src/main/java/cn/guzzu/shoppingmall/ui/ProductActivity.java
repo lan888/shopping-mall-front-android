@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.gc.materialdesign.views.LayoutRipple;
 import com.google.gson.Gson;
 import com.gyf.barlibrary.ImmersionBar;
 
@@ -68,9 +69,9 @@ public class ProductActivity extends BaseActivity {
     @BindView(R.id.tab)
     TabLayout mTab;
     @BindView(R.id.tv_addcart)
-    TextView mTvAddcart;
+    LayoutRipple mTvAddcart;
     @BindView(R.id.tv_buy)
-    TextView mTvBuy;
+    LayoutRipple mTvBuy;
     @BindView(R.id.tv_cart)
     TextView mTvCart;
     @BindView(R.id.iv_circle_back)
@@ -78,20 +79,17 @@ public class ProductActivity extends BaseActivity {
     @BindView(R.id.vp_content)
     NoScrollViewPager mVpContent;
 
-    private String optionName;
-    private int optionCount;
     private Gson gson;
     private Product product;
-    private int imgHeight;
     private Dialog bottomDialog;
     private TabLayout.OnTabSelectedListener mOnTabSelectedListener;
-    private WebView mWebView;
     private List<Fragment> fragmentList = new ArrayList<>();
     private GoodsInfoFragment goodsInfoFragment;
     private boolean isHided = false;
     private boolean isShow = false;
-    private int selected = 0;
+    private int selected = -1;
     private int mAmount = 1;
+    private QBadgeView badgeView;
 
     @Override
     public int initLayout() {
@@ -169,13 +167,14 @@ public class ProductActivity extends BaseActivity {
         });
         OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId, "zh", new GsonArrayCallback<CartAll>() {
             @Override
-            public void onUiThread(int code, List<CartAll> list) {
+            public void onUiThread(int code,String json, List<CartAll> list) {
                 if (code==200){
                     int cartCount=0;
                     for (int i = 0;i<list.size();i++){
                         cartCount += list.get(i).getItems().size();
                     }
-                    new QBadgeView(context).bindTarget(mTvCart).setBadgeNumber(cartCount);
+                    badgeView = new QBadgeView(context);
+                    badgeView.bindTarget(mTvCart).setBadgeNumber(cartCount).setGravityOffset(-2f,true);
 
                 }
             }
@@ -280,8 +279,8 @@ public class ProductActivity extends BaseActivity {
         View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_product_option, null);
         final TextView tv_name = contentView.findViewById(R.id.name);
         final TextView tv_price = contentView.findViewById(R.id.price);
-        final TextView mBtnBuy = contentView.findViewById(R.id.btn_buy);
-        final TextView mBtnCart = contentView.findViewById(R.id.tv_addcart);
+        final LayoutRipple mBtnBuy = contentView.findViewById(R.id.btn_buy);
+        final LayoutRipple mBtnCart = contentView.findViewById(R.id.tv_addcart);
         TextView tv_opt = contentView.findViewById(R.id.tv_opt);
         ScrollView sv = contentView.findViewById(R.id.sv);
         final ImageView iv = contentView.findViewById(R.id.img);
@@ -335,12 +334,12 @@ public class ProductActivity extends BaseActivity {
         if (product.getProductOptions().size()>0){
             tv_opt.setVisibility(View.VISIBLE);
             sv.setVisibility(View.VISIBLE);
-            if (product.getProductOptions().get(selected).getInventoryPolicy().equals("unlimited")){
+            if (product.getProductOptions().get(0).getInventoryPolicy().equals("unlimited")){
                 mAmountView.setGoods_storage(99).setAmount(1);
                 mAmountView.setOnAmountChangeListener(new ShoppingCartAmountView.OnAmountChangeListener() {
                     @Override
                     public void onAmountChange(View view, int amount) {
-                        listener.process(product.getProductOptions().get(selected).getName(),amount);
+                        listener.process(product.getProductOptions().get(0).getName(),amount);
                         mAmount = amount;
 
                     }
@@ -360,17 +359,21 @@ public class ProductActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     if (BaseApp.getInstance().isLogin()){
-                        gson = new Gson();
-                        Map<String,Object> map = new ArrayMap<>();
-                        Map<String,String> productMap = new ArrayMap<>();
-                        List<Map<String,String>> list = new ArrayList<>();
-                        map.put("storeId",product.getStore());
-                        productMap.put("productId",product.get_id());
-                        productMap.put("quantity",String.valueOf(mAmount));
-                        productMap.put("productOptionId",product.getProductOptions().get(selected).get_id());
-                        list.add(productMap);
-                        map.put("items",list);
-                        Utils.start_Activity(context,SettledActivity.class,"product",gson.toJson(map));
+                        if (selected==-1){
+                            Utils.showShortToast(context,"请选择商品");
+                        }else {
+                            gson = new Gson();
+                            Map<String,Object> map = new ArrayMap<>();
+                            Map<String,String> productMap = new ArrayMap<>();
+                            List<Map<String,String>> list = new ArrayList<>();
+                            map.put("storeId",product.getStore());
+                            productMap.put("productId",product.get_id());
+                            productMap.put("quantity",String.valueOf(mAmount));
+                            productMap.put("productOptionId",product.getProductOptions().get(selected).get_id());
+                            list.add(productMap);
+                            map.put("items",list);
+                            Utils.start_Activity(context,SettledActivity.class,"product",gson.toJson(map));
+                        }
                     }else {
                         Utils.start_Activity(context,LoginActivity.class);
                     }
@@ -382,43 +385,46 @@ public class ProductActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     if (BaseApp.getInstance().isLogin()) {
-                        Map<String, String> productMap = new ArrayMap<>();
-                        productMap.put("productId", product.get_id());
-                        productMap.put("quantity", String.valueOf(mAmount));
-                        productMap.put("productOptionId", product.getProductOptions().get(selected).get_id());
-                        productMap.put("storeId", product.getStore());
-                        OkHttp3Utils.doJsonPost(Api.GUZZU + Api.CART_ADD, productMap, BaseApp.Constant.userId, new JsonCallback() {
-                            @Override
-                            public void onUiThread(int code, String json) {
-                                if (code == 200) {
-                                    bottomDialog.dismiss();
-                                    OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId, "zh", new GsonArrayCallback<CartAll>() {
-                                        @Override
-                                        public void onUiThread(int code, List<CartAll> list) {
-                                            if (code == 200) {
-                                                int cartCount = 0;
-                                                for (int i = 0; i < list.size(); i++) {
-                                                    cartCount += list.get(i).getItems().size();
+                        if (selected==-1){
+                            Utils.showShortToast(context,"请选择商品");
+                        }else {
+                            Map<String, String> productMap = new ArrayMap<>();
+                            productMap.put("productId", product.get_id());
+                            productMap.put("quantity", String.valueOf(mAmount));
+                            productMap.put("productOptionId", product.getProductOptions().get(selected).get_id());
+                            productMap.put("storeId", product.getStore());
+                            OkHttp3Utils.doJsonPost(Api.GUZZU + Api.CART_ADD, productMap, BaseApp.Constant.userId, new JsonCallback() {
+                                @Override
+                                public void onUiThread(int code, String json) {
+                                    if (code == 200) {
+                                        bottomDialog.dismiss();
+                                        OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId, "zh", new GsonArrayCallback<CartAll>() {
+                                            @Override
+                                            public void onUiThread(int code,String json, List<CartAll> list) {
+                                                if (code == 200) {
+                                                    int cartCount = 0;
+                                                    for (int i = 0; i < list.size(); i++) {
+                                                        cartCount += list.get(i).getItems().size();
+                                                    }
+                                                    badgeView.setBadgeNumber(cartCount);
+
                                                 }
-                                                new QBadgeView(context).bindTarget(mTvCart).setBadgeNumber(cartCount);
+                                            }
+
+                                            @Override
+                                            public void onFailed(Call call, IOException e) {
 
                                             }
-                                        }
-
-                                        @Override
-                                        public void onFailed(Call call, IOException e) {
-
-                                        }
-                                    });
+                                        });
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onFailed(Call call, IOException exception) {
+                                @Override
+                                public void onFailed(Call call, IOException exception) {
 
-                            }
-                        });
-
+                                }
+                            });
+                        }
                     }else {
                         Utils.start_Activity(context,LoginActivity.class);
                     }
@@ -485,13 +491,13 @@ public class ProductActivity extends BaseActivity {
                                     bottomDialog.dismiss();
                                     OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId, "zh", new GsonArrayCallback<CartAll>() {
                                         @Override
-                                        public void onUiThread(int code, List<CartAll> list) {
+                                        public void onUiThread(int code,String json, List<CartAll> list) {
                                             if (code == 200) {
                                                 int cartCount = 0;
                                                 for (int i = 0; i < list.size(); i++) {
                                                     cartCount += list.get(i).getItems().size();
                                                 }
-                                                new QBadgeView(context).bindTarget(mTvCart).setBadgeNumber(cartCount);
+                                                badgeView.setBadgeNumber(cartCount);
 
                                             }
                                         }
@@ -535,19 +541,12 @@ public class ProductActivity extends BaseActivity {
         rdBtn.setTextColor(getResources().getColorStateList(R.color.color_radiobutton));
         //codeBtn.setTextSize( ( textSize > 16 )?textSize:24 );
         rdBtn.setId(pos);
-        rdBtn.setTextSize(16f);
+        rdBtn.setTextSize(13f);
         rdBtn.setEllipsize(TextUtils.TruncateAt.END);
         rdBtn.setButtonDrawable(new ColorDrawable(Color.TRANSPARENT));
         rdBtn.setText(product.getProductOptions().get(pos).getName());
         rdBtn.setPadding(Utils.dp2px(this, 12), Utils.dp2px(this, 6), Utils.dp2px(this, 12), Utils.dp2px(this, 12));
         rdBtn.setGravity(Gravity.CENTER);
-        rdBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
     }
 
 

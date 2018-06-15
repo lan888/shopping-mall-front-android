@@ -89,29 +89,39 @@
         android:orientation="horizontal"
         android:layout_below="@id/max"
         >
-        <TextView
+        <com.gc.materialdesign.views.LayoutRipple
             android:id="@+id/btn_buy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="立即购买"
-            android:gravity="center"
-            android:padding="12dp"
-            android:background="@color/md_red_500"
-            android:textColor="@color/white"
-            android:layout_toLeftOf="@id/tv_addcart"
+            android:layout_width="0dp"
             android:layout_weight="1"
-            />
-        <TextView
+            android:layout_height="wrap_content"
+            android:background="@color/md_red_500"
+            app:rippleColor="@color/red_600">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="立即购买"
+                android:gravity="center"
+                android:padding="12dp"
+                android:textColor="@color/white"
+                />
+        </com.gc.materialdesign.views.LayoutRipple>
+        <com.gc.materialdesign.views.LayoutRipple
             android:id="@+id/tv_addcart"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@color/md_red_300"
+            app:rippleColor="@color/red_400">
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="12dp"
-            android:background="@color/md_red_300"
             android:textColor="@color/white"
             android:text="加入购物车"
             android:layout_weight="1"
             />
+        </com.gc.materialdesign.views.LayoutRipple>
     </LinearLayout>
 
 </RelativeLayout>

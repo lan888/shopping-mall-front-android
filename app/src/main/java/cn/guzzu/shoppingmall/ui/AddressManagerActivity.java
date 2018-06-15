@@ -84,7 +84,7 @@ public class AddressManagerActivity extends BaseActivity {
     public void updateAddress(GoHomeEvent event){
         OkHttp3Utils.doPost(Api.GUZZU + Api.ADDRESS_FIND, BaseApp.Constant.userId, "zh", new GsonArrayCallback<Addresses>() {
             @Override
-            public void onUiThread(int code, List<Addresses> list) {
+            public void onUiThread(int code,String json, List<Addresses> list) {
                 addressManagerListAdapter.setItems(list);
             }
 
@@ -100,7 +100,7 @@ public class AddressManagerActivity extends BaseActivity {
         super.onResume();
         OkHttp3Utils.doPost(Api.GUZZU + Api.ADDRESS_FIND, BaseApp.Constant.userId, "zh", new GsonArrayCallback<Addresses>() {
             @Override
-            public void onUiThread(int code, List<Addresses> list) {
+            public void onUiThread(int code,String json, List<Addresses> list) {
                 addressManagerListAdapter.setItems(list);
             }
 

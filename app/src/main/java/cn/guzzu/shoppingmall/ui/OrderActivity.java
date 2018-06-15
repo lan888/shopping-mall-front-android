@@ -168,7 +168,7 @@ public class OrderActivity extends BaseActivity {
             }
             OkHttp3Utils.doJsonPost(Api.GUZZU + Api.ORDER_FIND, mStatusJson, BaseApp.Constant.userId, new GsonArrayCallback<Order>() {
                 @Override
-                public void onUiThread(int code, List<Order> list) {
+                public void onUiThread(int code,String json, List<Order> list) {
                     if (code==200){
                         if (list.size()==0){
                             mMultiStateView.setState(MultiStateView.STATE_EMPTY).setButton(new View.OnClickListener() {
@@ -209,7 +209,7 @@ public class OrderActivity extends BaseActivity {
     public void getOrdersData(String json){
         OkHttp3Utils.doJsonPost(Api.GUZZU + Api.ORDER_FIND, json, BaseApp.Constant.userId, new GsonArrayCallback<Order>() {
             @Override
-            public void onUiThread(int code, List<Order> list) {
+            public void onUiThread(int code,String json, List<Order> list) {
                 if (code==200){
                     if (list.size()==0){
                         mMultiStateView.setState(MultiStateView.STATE_EMPTY).setButton(new View.OnClickListener() {

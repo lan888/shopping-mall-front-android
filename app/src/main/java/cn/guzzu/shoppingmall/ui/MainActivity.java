@@ -3,10 +3,15 @@ package cn.guzzu.shoppingmall.ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.ArrayMap;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -14,14 +19,19 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import cn.guzzu.baselibrary.base.BaseApp;
+import cn.guzzu.baselibrary.callback.GsonArrayCallback;
 import cn.guzzu.baselibrary.callback.JsonCallback;
 import cn.guzzu.baselibrary.util.OkHttp3Utils;
 import cn.guzzu.baselibrary.util.Utils;
 import cn.guzzu.baselibrary.util.UtilsLog;
 import cn.guzzu.shoppingmall.Api;
+import cn.guzzu.shoppingmall.bean.CartAll;
+import cn.guzzu.shoppingmall.bean.CartChangeEvent;
 import cn.guzzu.shoppingmall.bean.GoHomeEvent;
 import cn.guzzu.shoppingmall.bean.UnLoginEvent;
 import cn.guzzu.shoppingmall.fragment.MeFragment;
@@ -33,6 +43,7 @@ import cn.guzzu.shoppingmall.fragment.CategoryFragment;
 import cn.guzzu.shoppingmall.fragment.HomeFragment;
 import cn.guzzu.shoppingmall.util.BottomNavigationViewHelper;
 import okhttp3.Call;
+import q.rorbin.badgeview.QBadgeView;
 
 public class MainActivity extends BaseActivity {
 
@@ -43,6 +54,7 @@ public class MainActivity extends BaseActivity {
     private String categoryId;
     private String cartAt;
     private int curPosition = 0;
+    private QBadgeView badgeView;
 
     @Override
     public int initLayout() {
@@ -58,6 +70,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initData() {
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) mBottom.getChildAt(0);
+        final BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(2);
         getSession();
         categoryId = getIntent().getStringExtra("categoryId");
         cartAt = getIntent().getStringExtra("shoppingCart");
@@ -67,6 +81,39 @@ public class MainActivity extends BaseActivity {
         mFragments.add(new ShoppingCartFragment());
         mFragments.add(new MeFragment());
 
+        OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId,"en", new GsonArrayCallback<CartAll>() {
+            @Override
+            public void onUiThread(int code,String json, List<CartAll> list) {
+                if (code==200){
+                    int count = 0;
+                    List<CartAll.Store> groups = new ArrayList<>();
+                    Map<String, List<CartAll.Items>> child =new ArrayMap<>();
+                    groups.clear();
+                    child.clear();
+                    for (int i = 0;i<list.size();i++){
+                        groups.add(list.get(i).getStore());
+                        child.put(groups.get(i).get_id(),list.get(i).getItems());
+                    }
+                    for (int i = 0; i < groups.size(); i++) {
+                        CartAll.Store group = groups.get(i);
+                        List<CartAll.Items> Childs = child.get(group.get_id());
+                        for (CartAll.Items childs : Childs) {
+                            count++;
+                        }
+                    }
+                    if (count>0){
+                       badgeView = new QBadgeView(context);
+                       badgeView.bindTarget(itemView).setBadgeNumber(count).setBadgeGravity(Gravity.END|Gravity.TOP).setGravityOffset(12f,2f,true);
+                    }
+                    UtilsLog.d(count+","+itemView.toString());
+                }
+            }
+
+            @Override
+            public void onFailed(Call call, IOException e) {
+
+            }
+        });
     }
 
     @Override
@@ -196,6 +243,12 @@ public class MainActivity extends BaseActivity {
         if (meFragment.isAdded()){
             meFragment.onResume();
         }
+        badgeView.setBadgeNumber(0);
         UtilsLog.d("refresh");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void reFreshBadge(CartChangeEvent event){
+        badgeView.setBadgeNumber(event.getCount());
     }
 }

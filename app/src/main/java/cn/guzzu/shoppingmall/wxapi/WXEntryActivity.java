@@ -4,16 +4,27 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import cn.guzzu.baselibrary.base.BaseActivity;
 import cn.guzzu.baselibrary.base.BaseApp;
+import cn.guzzu.baselibrary.callback.JsonCallback;
+import cn.guzzu.baselibrary.util.OkHttp3Utils;
+import cn.guzzu.baselibrary.util.Utils;
+import cn.guzzu.shoppingmall.Api;
+import okhttp3.Call;
 
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Map;
 
 
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
@@ -67,7 +78,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 result = "发送成功";
                 Log.d("weixin", result);
                 String code = ((SendAuth.Resp) baseResp).code;
-                finish();
+                getAccessSession(code);
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
                 result = "发送取消";
@@ -84,5 +95,29 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 finish();
                 break;
         }
+    }
+
+    private void getAccessSession(String code){
+        Map<String,String>params = new ArrayMap<>();
+        params.put("code",code);
+        OkHttp3Utils.doJsonPost(Api.GUZZU+Api.WX_LOGIN, params, new JsonCallback() {
+            @Override
+            public void onUiThread(int code, String json) {
+                if (code==200){
+                    try {
+                        JSONObject obj = new JSONObject(json);
+                        BaseApp.Constant.userId =obj.optString("sessionId");
+                        finish();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailed(Call call, IOException exception) {
+
+            }
+        });
     }
 }

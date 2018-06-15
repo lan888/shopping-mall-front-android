@@ -147,7 +147,7 @@ public class StoreActivity extends BaseActivity {
                             i++;
                             OkHttp3Utils.doGet(Api.STORE + storeId + "/products", pair, new GsonArrayCallback<Products>() {
                                 @Override
-                                public void onUiThread(int code,List<Products> list) {
+                                public void onUiThread(int code,String json,List<Products> list) {
                                     products.addAll(list);
                                     storeAdapter.setItems(products);
                                     mHeaderAndFooterWrapper.notifyDataSetChanged();

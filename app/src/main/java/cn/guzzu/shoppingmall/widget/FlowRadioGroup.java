@@ -5,6 +5,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RadioGroup;
 
+import cn.guzzu.baselibrary.base.BaseApp;
+
 public class FlowRadioGroup extends RadioGroup {
     public FlowRadioGroup(Context context) {
         super(context);
@@ -71,7 +73,7 @@ public class FlowRadioGroup extends RadioGroup {
                     row++;
                     y = row * height + height;
                 }
-                child.layout(x - width+marginLeft, y - height+marginTop, x-marginRight, y-marginBottom);
+                child.layout(x - width+marginLeft, y - height+marginTop, x-marginRight> BaseApp.width?BaseApp.width-marginRight:x-marginRight, y-marginBottom);
 
 
             }

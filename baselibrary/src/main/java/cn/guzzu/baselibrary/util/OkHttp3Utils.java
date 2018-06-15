@@ -163,6 +163,27 @@ public class OkHttp3Utils {
 
     }
 
+    public static void doGet(String url, Map<String,String>params, Callback callback) {
+
+        //创建OkHttpClient请求对象
+        OkHttpClient okHttpClient = getOkHttpClient();
+        //构造get查询的url
+        HttpUrl.Builder builder = HttpUrl.parse(url).newBuilder();
+        for (String key : params.keySet()) {
+            builder.addQueryParameter(key,params.get(key));
+        }
+
+        String queryUrl = builder.build().toString();
+        //创建Request
+        Request request = new Request.Builder().url(queryUrl).build();
+        //得到Call对象
+        Call call = okHttpClient.newCall(request);
+        //执行异步请求
+        call.enqueue(callback);
+
+
+    }
+
     /**
      * post请求
      * 参数1 url

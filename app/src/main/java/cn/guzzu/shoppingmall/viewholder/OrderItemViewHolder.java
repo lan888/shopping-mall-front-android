@@ -19,6 +19,7 @@ import cn.guzzu.baselibrary.util.DataBindingViewUtil;
 import cn.guzzu.baselibrary.util.Utils;
 import cn.guzzu.shoppingmall.R;
 import cn.guzzu.shoppingmall.bean.Order;
+import cn.guzzu.shoppingmall.ui.OrderDetailActivity;
 import cn.guzzu.shoppingmall.ui.StoreActivity;
 
 
@@ -60,7 +61,14 @@ public class OrderItemViewHolder extends BaseViewHolder<Order> {
                 Glide.with(itemView.getContext()).load(data.getProduct().getImage().getThumb().getUrl()).into(ivImage);
                 tvName.setText(data.getName());
                 tvPrice.setText("¥"+(double)data.getPrice()/100);
+                tvOption.setText(data.getOptionName());
                 tvQuantity.setText("x"+data.getQuantity());
+            }
+        });
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.start_Activity(itemView.getContext(), OrderDetailActivity.class,"orderId",order.get_id());
             }
         });
 

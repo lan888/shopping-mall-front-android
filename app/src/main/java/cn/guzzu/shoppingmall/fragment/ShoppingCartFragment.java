@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -15,6 +16,7 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gc.materialdesign.views.LayoutRipple;
 import com.google.gson.Gson;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -44,6 +46,7 @@ import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
 import cn.guzzu.shoppingmall.adapter.ShoppingCartAdapter;
 import cn.guzzu.shoppingmall.bean.CartAll;
+import cn.guzzu.shoppingmall.bean.CartChangeEvent;
 import cn.guzzu.shoppingmall.bean.CartStore;
 import cn.guzzu.shoppingmall.bean.GoHomeEvent;
 import cn.guzzu.shoppingmall.bean.UnLoginEvent;
@@ -65,7 +68,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
     CheckBox allCheckBox;
     @BindView(R.id.total_price)
     TextView totalPrice;
-    @BindView(R.id.go_pay)
+    @BindView(R.id.tv_pay)
     TextView goPay;
     @BindView(R.id.order_info)
     LinearLayout orderInfo;
@@ -97,6 +100,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
     private Gson gson;
     private String settledRequest;
     private Dialog storeDialog;
+    private String cartJson;
 
     public ShoppingCartFragment() {
     }
@@ -120,8 +124,9 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
         refreshLayout.setEnableLoadMore(false);
         OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId,"en", new GsonArrayCallback<CartAll>() {
             @Override
-            public void onUiThread(int code, List<CartAll> list) {
+            public void onUiThread(int code,String json, List<CartAll> list) {
                 if (code==200){
+                    cartJson = json;
                     if (list.size()==0){
                         mMultiStateView.setState(MultiStateView.STATE_EMPTY)
                                 .setTitle("购物车还是空空如也").setButton("去逛逛", new View.OnClickListener() {
@@ -138,6 +143,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                             childs.put(groups.get(i).get_id(),list.get(i).getItems());
                         }
                         initEvents();
+                        //初始化
                         for (int i = 0; i < groups.size(); i++) {
                             CartAll.Store group = groups.get(i);
                             group.setActionBarEditor(false);
@@ -170,29 +176,33 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
             public void onRefresh(@NonNull final RefreshLayout refreshLayout) {
                 OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId,"en", new GsonArrayCallback<CartAll>() {
                     @Override
-                    public void onUiThread(int code, List<CartAll> list) {
+                    public void onUiThread(int code,String json, List<CartAll> list) {
                         if (code==200){
-                            if (list.size()==0){
-                                mMultiStateView.setState(MultiStateView.STATE_EMPTY)
-                                        .setTitle("购物车还是空空如也").setButton("去逛逛", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        EventBus.getDefault().post(new GoHomeEvent());
+                            if (!TextUtils.equals(json,cartJson)){
+                                cartJson = json;
+                                if (list.size()==0){
+                                    mMultiStateView.setState(MultiStateView.STATE_EMPTY)
+                                            .setTitle("购物车还是空空如也").setButton("去逛逛", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            EventBus.getDefault().post(new GoHomeEvent());
+                                        }
+                                    });
+                                }else {
+                                    groups.clear();
+                                    childs.clear();
+                                    for (int i = 0;i<list.size();i++){
+                                        groups.add(list.get(i).getStore());
+                                        childs.put(groups.get(i).get_id(),list.get(i).getItems());
                                     }
-                                });
-                            }else {
-                                groups.clear();
-                                childs.clear();
-                                for (int i = 0;i<list.size();i++){
-                                    groups.add(list.get(i).getStore());
-                                    childs.put(groups.get(i).get_id(),list.get(i).getItems());
+                                    refreshStoreCart();
+                                    adapter.setItems(groups, childs);
+                                    mMultiStateView.setState(MultiStateView.STATE_CONTENT);
+                                    refreshLayout.finishRefresh();
                                 }
-                                refreshStoreCart();
-                                adapter.setItems(groups, childs);
-                                mMultiStateView.setState(MultiStateView.STATE_CONTENT);
+                            }else {
                                 refreshLayout.finishRefresh();
                             }
-
                         }else {
                             Utils.putBoolean(activity,"isLogin",false);
                             EventBus.getDefault().post(new UnLoginEvent());
@@ -222,28 +232,33 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
         super.onResume();
         OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId,"en", new GsonArrayCallback<CartAll>() {
             @Override
-            public void onUiThread(int code, List<CartAll> list) {
+            public void onUiThread(int code,String json, List<CartAll> list) {
                 if (code==200){
-                    if (list.size()==0){
-                        mMultiStateView.setState(MultiStateView.STATE_EMPTY)
-                                .setTitle("购物车还是空空如也").setButton("去逛逛", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                EventBus.getDefault().post(new GoHomeEvent());
+                    if (!TextUtils.equals(json,cartJson)){
+                        cartJson = json;
+                        if (list.size()==0){
+                            mMultiStateView.setState(MultiStateView.STATE_EMPTY)
+                                    .setTitle("购物车还是空空如也").setButton("去逛逛", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    EventBus.getDefault().post(new GoHomeEvent());
+                                }
+                            });
+                        }else {
+                            groups.clear();
+                            childs.clear();
+                            for (int i = 0;i<list.size();i++){
+                                groups.add(list.get(i).getStore());
+                                childs.put(groups.get(i).get_id(),list.get(i).getItems());
                             }
-                        });
-                    }else {
-                        groups.clear();
-                        childs.clear();
-                        for (int i = 0;i<list.size();i++){
-                            groups.add(list.get(i).getStore());
-                            childs.put(groups.get(i).get_id(),list.get(i).getItems());
+                            refreshStoreCart();
+                            initEvents();
+                            mMultiStateView.setState(MultiStateView.STATE_CONTENT);
                         }
-                        refreshStoreCart();
-                        initEvents();
+                    }else {
+                        setCartNum();
                         mMultiStateView.setState(MultiStateView.STATE_CONTENT);
                     }
-
                 }else {
                     Utils.putBoolean(activity,"isLogin",false);
                     EventBus.getDefault().post(new UnLoginEvent());
@@ -364,7 +379,10 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
 
                                     }
                                 }
-                                cartStoreList.add(cartStore);
+                                if (cartStore.getGoodCount()!=0){
+                                    cartStoreList.add(cartStore);
+                                }
+
                                 UtilsLog.d(cartStoreList.toString()+2);
                             }
                         }
@@ -477,11 +495,12 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
             llCart.setVisibility(View.VISIBLE);
             mToolbar.setTitle("购物车(" + count + ")");
         }
+        EventBus.getDefault().post(new CartChangeEvent(count));
 
     }
 
     private void clearCart() {
-        if (mToolbar!=null&&mToolbarEdit!=null&&llCart!=null){
+        if (mToolbar!=null&&mToolbarEdit!=null){
             mToolbar.setTitle("购物车");
             mToolbarEdit.setVisibility(View.GONE);
             llCart.setVisibility(View.GONE);
@@ -775,8 +794,8 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
     private void initDialog(final List<CartStore> cartStoreList){
         View contentView = LayoutInflater.from(activity).inflate(R.layout.dialog_store_option, null);
         final LinearLayout mllStore = contentView.findViewById(R.id.ll_store);
-        TextView tvBack = contentView.findViewById(R.id.tv_back);
-        TextView tvGo = contentView.findViewById(R.id.tv_go);
+        LayoutRipple tvBack = contentView.findViewById(R.id.tv_back);
+        LayoutRipple tvGo = contentView.findViewById(R.id.tv_go);
         tvBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -786,7 +805,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
         tvGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (settledRequest.isEmpty()){
+                if (null==settledRequest||settledRequest.isEmpty()){
                     storeDialog.dismiss();
                 }else {
                     Utils.start_Activity(activity,SettledActivity.class,"product",settledRequest);

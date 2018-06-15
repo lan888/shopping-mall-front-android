@@ -10,14 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.google.gson.Gson;
-import com.tencent.mm.opensdk.modelmsg.SendAuth;
 
 import java.io.IOException;
 import java.util.Map;
@@ -32,11 +30,10 @@ import cn.guzzu.baselibrary.util.OkHttp3Utils;
 import cn.guzzu.baselibrary.util.Utils;
 import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
-import cn.guzzu.shoppingmall.bean.Session;
 import cn.guzzu.shoppingmall.bean.User;
 import okhttp3.Call;
 
-public class LoginActivity extends BaseActivity implements TextWatcher {
+public class BindPhoneActivity extends BaseActivity implements TextWatcher {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.et_phone)
@@ -47,23 +44,18 @@ public class LoginActivity extends BaseActivity implements TextWatcher {
     AppCompatButton mBtnCode;
     @BindView(R.id.btn_login)
     ButtonRectangle mBtnLogin;
-    @BindView(R.id.wei_login)
-    ImageView mWeiLogin;
-    @BindView(R.id.tv_wx)
-    TextView tvWx;
 
     private TimeCount time;
     private String mPhoneNum;
-
     @Override
     public int initLayout() {
-        return R.layout.activity_login;
+        return R.layout.activity_bind_phone;
     }
 
     @Override
     public void initView() {
         if (mToolbar != null) {
-            mToolbar.setTitle("手机登录");
+            mToolbar.setTitle("微信登录");
             setSupportActionBar(mToolbar);
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -74,7 +66,6 @@ public class LoginActivity extends BaseActivity implements TextWatcher {
 
     @Override
     public void initData() {
-        Log.d(TAG, "initData: " + BaseApp.Constant.userId);
         time = new TimeCount(60000, 1000);
     }
 
@@ -85,14 +76,13 @@ public class LoginActivity extends BaseActivity implements TextWatcher {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                BaseApp.Constant.userId="";
                 finish();
             }
         });
-
     }
 
-
-    @OnClick({R.id.btn_code, R.id.btn_login, R.id.wei_login})
+    @OnClick({R.id.btn_code, R.id.btn_login})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_code:
@@ -126,10 +116,9 @@ public class LoginActivity extends BaseActivity implements TextWatcher {
                 Map<String, String> key = new ArrayMap<>();
                 key.put("mobilePhone", mPhoneNum);
                 key.put("verifyCode", smsCode);
-                key.put("clientType", BaseApp.Constant.CLIENT_TYPE);
                 mBtnLogin.setText(getResources().getString(R.string.btn_logining));
                 mBtnLogin.setEnabled(false);
-                OkHttp3Utils.doJsonPost(Api.GUZZU + Api.SIGN_IN, key, new JsonCallback() {
+                OkHttp3Utils.doJsonPost(Api.GUZZU + Api.BIND_PHONE, key, BaseApp.Constant.userId, new JsonCallback() {
                     @Override
                     public void onUiThread(int code, String json) {
                         if (code == 200) {
@@ -155,17 +144,6 @@ public class LoginActivity extends BaseActivity implements TextWatcher {
                     }
                 });
                 break;
-            case R.id.wei_login:
-                if (BaseApp.mWxApi != null && BaseApp.mWxApi.isWXAppInstalled()) {
-                    SendAuth.Req req = new SendAuth.Req();
-                    req.scope = "snsapi_userinfo";
-                    req.state = "wechat_sdk_微信登录";
-                    BaseApp.mWxApi.sendReq(req);
-                    showLoading("登录中");
-                } else {
-                    Utils.showShortToast(this, "用户未安装微信");
-                }
-                break;
         }
     }
 
@@ -189,37 +167,23 @@ public class LoginActivity extends BaseActivity implements TextWatcher {
         }
     }
 
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive() && getCurrentFocus() != null) {
+            if (getCurrentFocus().getWindowToken() != null) {
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+    }
+
     @Override
-    protected void onResume() {
-        super.onResume();
-        OkHttp3Utils.doPost(Api.GUZZU+Api.SESSION, BaseApp.Constant.userId,"zh", new JsonCallback() {
-            @Override
-            public void onUiThread(int code, String json) {
-                if (code==200){
-                    if (json.contains("no session")){
-                        Utils.putBoolean(context,"isLogin",false);
-                    }else {
-                        Gson gson = new Gson();
-                        Session session = gson.fromJson(json,Session.class);
-                        if (session.getUser().getMobilePhone()!=null){
-                            Utils.putBoolean(context,"isLogin",true);
-                            cancelLoading();
-                            finish();
-                        }else {
-                            cancelLoading();
-                            Utils.start_Activity(context,BindPhoneActivity.class);
-                            finish();
-                        }
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailed(Call call, IOException exception) {
-
-            }
-        });
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            finish();
+            BaseApp.Constant.userId="";
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     class TimeCount extends CountDownTimer {
@@ -239,15 +203,6 @@ public class LoginActivity extends BaseActivity implements TextWatcher {
             mBtnCode.setText("重新获取验证码");
             mBtnCode.setClickable(true);
 
-        }
-    }
-
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm.isActive() && getCurrentFocus() != null) {
-            if (getCurrentFocus().getWindowToken() != null) {
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            }
         }
     }
 }

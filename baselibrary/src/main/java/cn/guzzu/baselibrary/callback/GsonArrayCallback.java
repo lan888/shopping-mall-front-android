@@ -29,7 +29,7 @@ public abstract class GsonArrayCallback <T>implements Callback {
     private Handler handler = OkHttp3Utils.getInstance().getHandler();
 
     //主线程处理
-    public abstract void onUiThread(int code,List<T> list);
+    public abstract void onUiThread(int code,String json,List<T> list);
 
     //主线程处理
     public abstract void onFailed(Call call, IOException e);
@@ -50,7 +50,7 @@ public abstract class GsonArrayCallback <T>implements Callback {
     public void onResponse(Call call, Response response) throws IOException {
         final List<T> mList = new ArrayList<T>();
 
-        String json = response.body().string();
+        final String json = response.body().string();
         final int code = response.code();
 
         if (code==200){
@@ -73,7 +73,7 @@ public abstract class GsonArrayCallback <T>implements Callback {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                onUiThread(code,mList);
+                onUiThread(code,json,mList);
             }
         });
 

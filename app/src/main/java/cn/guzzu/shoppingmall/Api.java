@@ -6,6 +6,7 @@ public class Api {
     public static final String STORES = "https://mp-dev.guzzu.cn/v3/frontapi/shopping-malls/5adedc43de3c90022eb25d3b/stores";
     public static final String PRODUCT = "https://mp-dev.guzzu.cn/v3/frontapi/products/";
     public static final String STORE = "https://mp-dev.guzzu.cn/v3/frontapi/stores/";
+    public static final String SEARCH_PRODUCT = "https://api-dev.guzzu.cn/v3/searchapi/shopping-malls/5adedc43de3c90022eb25d3b/products";
     public static final String GUZZU = "https://mp-dev.guzzu.cn";
     public static final String SIGN_IN = "/api/2/Auth.signinWithPhone";
     public static final String REQ_SMS = "/api/2/Auth.requestSmsCode";
@@ -21,6 +22,7 @@ public class Api {
     public static final String ORDER_PREVIEW= "/api/2/Order.preview";
     public static final String ORDER_CREATE= "/api/2/Order.create";
     public static final String ORDER_FIND= "/api/2/Order.findAllByStatus";
+    public static final String ORDER_GET = "/api/2/Order.get";
     public static final String PLACE_PICKUP= "/api/2/PickUpPlace.find";
     public static final String ADDRESS_LASTUSED = "/api/2/UserAddress.getLastUsed";
     public static final String ADDRESS_CREATE = "/api/2/UserAddress.create";
@@ -35,4 +37,7 @@ public class Api {
     public static final String DISCOUNT_FIND = "/api/2/Discount.findAvailable";
     public static final String SESSION ="/api/2/Auth.getCurrentSession";
     public static final String REMOVE_SESSION ="/api/2/Auth.removeSession";
+    public static final String BIND_PHONE ="/api/2/Auth.bindMobilePhone";
+    public static final String WX_LOGIN = "/api/2/WxApp.signin";
+    public static final String WX_PAY = "/api/2/Order.generateWxpayOrderForApp";
 }

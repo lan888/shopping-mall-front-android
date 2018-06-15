@@ -22,6 +22,7 @@ public class LayoutRipple extends CustomView {
 	Integer rippleColor;
 	Float xRippleOrigin;
 	Float yRippleOrigin;
+	boolean clickAfterRipple = false;
 
 	public LayoutRipple(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -104,6 +105,9 @@ public class LayoutRipple extends CustomView {
 				if ((event.getX() <= getWidth() && event.getX() >= 0)
 						&& (event.getY() <= getHeight() && event.getY() >= 0)) {
 					radius++;
+					if (!clickAfterRipple&&onClickListener != null){
+						onClickListener.onClick(this);
+					}
 				} else {
 					isLastTouch = false;
 					x = -1;
@@ -121,6 +125,7 @@ public class LayoutRipple extends CustomView {
 	@Override
 	protected void onFocusChanged(boolean gainFocus, int direction,
 			Rect previouslyFocusedRect) {
+        super.onFocusChanged(gainFocus,direction,previouslyFocusedRect);
 		if (!gainFocus) {
 			x = -1;
 			y = -1;
@@ -152,7 +157,7 @@ public class LayoutRipple extends CustomView {
 			x = -1;
 			y = -1;
 			radius = getHeight() / rippleSize;
-			if (onClickListener != null)
+			if (onClickListener != null&& clickAfterRipple)
 				onClickListener.onClick(this);
 		}
 		return output;

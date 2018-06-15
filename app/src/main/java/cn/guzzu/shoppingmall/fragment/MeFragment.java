@@ -15,6 +15,8 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gc.materialdesign.views.ButtonRectangle;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -64,8 +66,6 @@ public class MeFragment extends BaseFragment<MainActivity> {
     LinearLayout llOrders;
     @BindView(R.id.ll_address)
     LinearLayout llAddress;
-    @BindView(R.id.ll_discount)
-    LinearLayout llDiscount;
     @BindView(R.id.cb_english)
     CheckBox mCbEnglish;
     @BindView(R.id.ll_language_english)
@@ -75,7 +75,7 @@ public class MeFragment extends BaseFragment<MainActivity> {
     @BindView(R.id.ll_language_chinese)
     LinearLayout llLanguageChinese;
     @BindView(R.id.btn_logout)
-    AppCompatButton mBtnLogout;
+    ButtonRectangle mBtnLogout;
 
 
     public MeFragment() {
@@ -139,7 +139,7 @@ public class MeFragment extends BaseFragment<MainActivity> {
     }
 
 
-    @OnClick({R.id.ll_login, R.id.tv_unpaid, R.id.tv_unshipped, R.id.tv_shipped, R.id.tv_recevied, R.id.ll_orders, R.id.ll_address, R.id.ll_discount, R.id.cb_english, R.id.cb_chinese,R.id.btn_logout})
+    @OnClick({R.id.ll_login, R.id.tv_unpaid, R.id.tv_unshipped, R.id.tv_shipped, R.id.tv_recevied, R.id.ll_orders, R.id.ll_address, R.id.cb_english, R.id.cb_chinese,R.id.btn_logout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_login:
@@ -192,13 +192,6 @@ public class MeFragment extends BaseFragment<MainActivity> {
             case R.id.ll_address:
                 if (BaseApp.getInstance().isLogin()) {
                     Utils.start_Activity(activity, AddressManagerActivity.class);
-                } else {
-                    Intent intent = new Intent(getContext(), LoginActivity.class);
-                    activity.startActivity(intent);
-                }
-                break;
-            case R.id.ll_discount:
-                if (BaseApp.getInstance().isLogin()) {
                 } else {
                     Intent intent = new Intent(getContext(), LoginActivity.class);
                     activity.startActivity(intent);

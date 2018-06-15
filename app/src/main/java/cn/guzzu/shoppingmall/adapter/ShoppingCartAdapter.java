@@ -29,6 +29,8 @@ import butterknife.ButterKnife;
 import cn.guzzu.baselibrary.util.Utils;
 import cn.guzzu.shoppingmall.R;
 import cn.guzzu.shoppingmall.bean.CartAll;
+import cn.guzzu.shoppingmall.ui.ProductActivity;
+import cn.guzzu.shoppingmall.ui.StoreActivity;
 import cn.guzzu.shoppingmall.widget.ShoppingCartAmountView;
 
 /**
@@ -116,6 +118,12 @@ public class ShoppingCartAdapter extends BaseExpandableListAdapter {
             }
         });
         groupViewHolder.storeCheckBox.setChecked(group.isChoosed());
+        groupViewHolder.storeName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.start_Activity(mcontext, StoreActivity.class,"storeId",group.get_id());
+            }
+        });
 
         /**【文字指的是组的按钮的文字】
          * 当我们按下ActionBar的 "编辑"按钮， 应该把所有组的文字显示"编辑",并且设置按钮为不可见
@@ -200,6 +208,12 @@ public class ShoppingCartAdapter extends BaseExpandableListAdapter {
                     child.setChoosed(((CheckBox) v).isChecked());
                     childViewHolder.singleCheckBox.setChecked(((CheckBox) v).isChecked());
                     checkInterface.checkChild(groupPosition, childPosition, ((CheckBox) v).isChecked());
+                }
+            });
+            childViewHolder.goodsData.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.start_Activity(mcontext, ProductActivity.class,"productId",child.getProductId());
                 }
             });
             childViewHolder.increaseGoodsNum.setOnClickListener(new View.OnClickListener() {

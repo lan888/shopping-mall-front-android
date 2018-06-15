@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
     <TextView
@@ -25,27 +27,39 @@
         android:background="#dddddd" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/len_52"
         android:orientation="horizontal">
-        <TextView
+        <com.gc.materialdesign.views.LayoutRipple
             android:id="@+id/tv_back"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            app:rippleColor="@color/light_white">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:text="返回购物车"
             android:textColor="@color/black"
             android:gravity="center"
             android:padding="@dimen/len_12"/>
-        <TextView
+        </com.gc.materialdesign.views.LayoutRipple>
+        <com.gc.materialdesign.views.LayoutRipple
             android:id="@+id/tv_go"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/md_red_500"
+            app:rippleColor="@color/red_600">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:text="去结算"
             android:textColor="@color/white"
             android:gravity="center"
             android:padding="@dimen/len_12"
-            android:background="@color/red"/>
+            />
+        </com.gc.materialdesign.views.LayoutRipple>
     </LinearLayout>
 
 

@@ -112,16 +112,22 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content" />
                                 </LinearLayout>
-                                <TextView
+                                <com.gc.materialdesign.views.LayoutRipple
                                     android:id="@+id/go_pay"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="0.5"
+                                    android:layout_height="50dp"
+                                    android:background="@color/orange"
+                                    app:rippleColor="@color/orange_700">
+                                <TextView
+                                    android:id="@+id/tv_pay"
                                     android:textSize="16sp"
                                     android:textColor="@android:color/white"
-                                    android:background="@color/orange"
                                     android:gravity="center"
                                     android:text="结算(0)"
-                                    android:layout_weight="0.5"
-                                    android:layout_width="0dp"
-                                    android:layout_height="60dp" />
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent" />
+                                </com.gc.materialdesign.views.LayoutRipple>
                             </LinearLayout>
 
                             <LinearLayout
