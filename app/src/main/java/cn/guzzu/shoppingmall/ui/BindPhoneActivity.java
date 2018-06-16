@@ -127,6 +127,7 @@ public class BindPhoneActivity extends BaseActivity implements TextWatcher {
                             if (user != null) {
                                 BaseApp.Constant.userId = user.getSessionId();
                                 Log.d(TAG, "initData: " + BaseApp.Constant.userId);
+                                Utils.putValue(context,"userId",user.getSessionId());
                                 Utils.putBoolean(context, "isLogin", true);
                                 hideKeyboard();
                                 finish();

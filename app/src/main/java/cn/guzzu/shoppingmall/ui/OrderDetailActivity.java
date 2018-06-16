@@ -86,9 +86,11 @@ public class OrderDetailActivity extends BaseActivity {
                     Gson gson = new Gson();
                     order = gson.fromJson(json, Order.class);
                     mOrderProductListAdapter.setItems(order.getItems());
-                    mTvName.setText(order.getShippingAddress().getName());
-                    mTvAddress.setText(order.getShippingAddress().getProvince() + order.getShippingAddress().getCity() + order.getShippingAddress().getDistrict() + order.getShippingAddress().getStreet() + order.getShippingAddress().getAddress());
-                    mTvmobilePhone.setText(order.getShippingAddress().getMobilePhone());
+                    if (order.getShippingAddress()!=null){
+                        mTvName.setText(order.getShippingAddress().getName());
+                        mTvAddress.setText(order.getShippingAddress().getProvince() + order.getShippingAddress().getCity() + order.getShippingAddress().getDistrict() + order.getShippingAddress().getStreet() + order.getShippingAddress().getAddress());
+                        mTvmobilePhone.setText(order.getShippingAddress().getMobilePhone());
+                    }
                     mTvStore.setText(order.getStore().getName());
                     mTvStatus.setText(order.getPaymentStatus());
                     mTvDiscount.setText(getString(R.string.label_discount_price, (double) order.getDiscount() / 100));

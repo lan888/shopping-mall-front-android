@@ -138,6 +138,7 @@ public class LoginActivity extends BaseActivity implements TextWatcher {
                             if (user != null) {
                                 BaseApp.Constant.userId = user.getSessionId();
                                 Log.d(TAG, "initData: " + BaseApp.Constant.userId);
+                                Utils.putValue(context,"userId",user.getSessionId());
                                 Utils.putBoolean(context, "isLogin", true);
                                 hideKeyboard();
                                 finish();
@@ -203,6 +204,7 @@ public class LoginActivity extends BaseActivity implements TextWatcher {
                         Session session = gson.fromJson(json,Session.class);
                         if (session.getUser().getMobilePhone()!=null){
                             Utils.putBoolean(context,"isLogin",true);
+                            Utils.putValue(context,"userId",session.get_id());
                             cancelLoading();
                             finish();
                         }else {

@@ -70,8 +70,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        BottomNavigationMenuView menuView = (BottomNavigationMenuView) mBottom.getChildAt(0);
-        final BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(2);
         getSession();
         categoryId = getIntent().getStringExtra("categoryId");
         cartAt = getIntent().getStringExtra("shoppingCart");
@@ -80,40 +78,6 @@ public class MainActivity extends BaseActivity {
         mFragments.add(new CategoryFragment());
         mFragments.add(new ShoppingCartFragment());
         mFragments.add(new MeFragment());
-
-        OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId,"en", new GsonArrayCallback<CartAll>() {
-            @Override
-            public void onUiThread(int code,String json, List<CartAll> list) {
-                if (code==200){
-                    int count = 0;
-                    List<CartAll.Store> groups = new ArrayList<>();
-                    Map<String, List<CartAll.Items>> child =new ArrayMap<>();
-                    groups.clear();
-                    child.clear();
-                    for (int i = 0;i<list.size();i++){
-                        groups.add(list.get(i).getStore());
-                        child.put(groups.get(i).get_id(),list.get(i).getItems());
-                    }
-                    for (int i = 0; i < groups.size(); i++) {
-                        CartAll.Store group = groups.get(i);
-                        List<CartAll.Items> Childs = child.get(group.get_id());
-                        for (CartAll.Items childs : Childs) {
-                            count++;
-                        }
-                    }
-                    if (count>0){
-                       badgeView = new QBadgeView(context);
-                       badgeView.bindTarget(itemView).setBadgeNumber(count).setBadgeGravity(Gravity.END|Gravity.TOP).setGravityOffset(12f,2f,true);
-                    }
-                    UtilsLog.d(count+","+itemView.toString());
-                }
-            }
-
-            @Override
-            public void onFailed(Call call, IOException e) {
-
-            }
-        });
     }
 
     @Override
@@ -218,6 +182,41 @@ public class MainActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) mBottom.getChildAt(0);
+        final BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(2);
+        OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId,"en", new GsonArrayCallback<CartAll>() {
+            @Override
+            public void onUiThread(int code,String json, List<CartAll> list) {
+                if (code==200){
+                    int count = 0;
+                    List<CartAll.Store> groups = new ArrayList<>();
+                    Map<String, List<CartAll.Items>> child =new ArrayMap<>();
+                    groups.clear();
+                    child.clear();
+                    for (int i = 0;i<list.size();i++){
+                        groups.add(list.get(i).getStore());
+                        child.put(groups.get(i).get_id(),list.get(i).getItems());
+                    }
+                    for (int i = 0; i < groups.size(); i++) {
+                        CartAll.Store group = groups.get(i);
+                        List<CartAll.Items> Childs = child.get(group.get_id());
+                        for (CartAll.Items childs : Childs) {
+                            count++;
+                        }
+                    }
+                    if (count>0){
+                        badgeView = new QBadgeView(context);
+                        badgeView.bindTarget(itemView).setBadgeNumber(count).setBadgeGravity(Gravity.END|Gravity.TOP).setGravityOffset(12f,2f,true);
+                    }
+                    UtilsLog.d(count+","+itemView.toString());
+                }
+            }
+
+            @Override
+            public void onFailed(Call call, IOException e) {
+
+            }
+        });
     }
 
     @Override
