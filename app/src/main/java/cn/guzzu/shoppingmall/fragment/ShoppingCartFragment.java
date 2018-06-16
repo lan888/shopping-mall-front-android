@@ -54,6 +54,7 @@ import cn.guzzu.shoppingmall.ui.LoginActivity;
 import cn.guzzu.shoppingmall.ui.MainActivity;
 import cn.guzzu.baselibrary.util.UtilsLog;
 import cn.guzzu.shoppingmall.ui.SettledActivity;
+import cn.guzzu.shoppingmall.util.ErrorUtil;
 import okhttp3.Call;
 
 @ContentView(R.layout.fragment_shoppingcart)
@@ -499,7 +500,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
 
     }
 
-    private void clearCart() {
+    public void clearCart() {
         if (mToolbar!=null&&mToolbarEdit!=null){
             mToolbar.setTitle("购物车");
             mToolbarEdit.setVisibility(View.GONE);
@@ -613,9 +614,10 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                     ((TextView) showCountView).setText(String.valueOf(count));
                     adapter.notifyDataSetChanged();
                     calulate();
-                }else {
-                    Utils.showShortToast(activity,"添加失败");
+                    return;
                 }
+                Utils.showShortToast(activity,ErrorUtil.loginError(activity,gson,json));
+
             }
 
             @Override
@@ -648,9 +650,9 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                     ((TextView) showCountView).setText(String.valueOf(count));
                     adapter.notifyDataSetChanged();
                     calulate();
-                }else {
-                    Utils.showShortToast(activity,"减少失败");
+                    return;
                 }
+                Utils.showShortToast(activity,ErrorUtil.loginError(activity,gson,json));
             }
 
             @Override
@@ -687,7 +689,9 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                     }
                     adapter.notifyDataSetChanged();
                     calulate();
+                    return;
                 }
+                Utils.showShortToast(activity,ErrorUtil.loginError(activity,gson,json));
             }
 
             @Override

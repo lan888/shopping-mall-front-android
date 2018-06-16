@@ -23,7 +23,6 @@ public class BaseApp extends Application {
         public static String versionCode = "1.0";
         public static final String TAG = getAppContext().getClass().getSimpleName();
         public static String APP_ID_WX = "wxa9f71b5b7ace6214";
-
     }
     public static int width;
     public static int height;

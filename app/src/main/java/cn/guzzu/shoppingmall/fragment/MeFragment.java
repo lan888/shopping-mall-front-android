@@ -239,13 +239,11 @@ public class MeFragment extends BaseFragment<MainActivity> {
                 OkHttp3Utils.doPost(Api.GUZZU + Api.REMOVE_SESSION, BaseApp.Constant.userId, "zh", new JsonCallback() {
                     @Override
                     public void onUiThread(int code, String json) {
-                        if (code==200){
-                            Utils.showShortToast(getContext(),"已退出登录");
-                            mTvStatus.setText(getString(R.string.tv_unlogin));
-                            mBtnLogout.setVisibility(View.GONE);
-                            Utils.putBoolean(activity,"isLogin",false);
-                            EventBus.getDefault().post(new UnLoginEvent());
-                        }
+                        Utils.showShortToast(getContext(),"已退出登录");
+                        mTvStatus.setText(getString(R.string.tv_unlogin));
+                        mBtnLogout.setVisibility(View.GONE);
+                        Utils.putBoolean(activity,"isLogin",false);
+                        EventBus.getDefault().post(new UnLoginEvent());
                     }
 
                     @Override

@@ -236,7 +236,7 @@ public class MainActivity extends BaseActivity {
     public void reFresh(UnLoginEvent event){
         ShoppingCartFragment shoppingCartFragment = (ShoppingCartFragment) mFragments.get(2);
         if (shoppingCartFragment.isAdded()){
-            shoppingCartFragment.onResume();
+            shoppingCartFragment.clearCart();
         }
         MeFragment meFragment = (MeFragment) mFragments.get(3);
         if (meFragment.isAdded()){

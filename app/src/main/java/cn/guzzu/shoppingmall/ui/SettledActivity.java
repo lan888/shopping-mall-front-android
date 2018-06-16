@@ -2,7 +2,6 @@ package cn.guzzu.shoppingmall.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -44,7 +43,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.guzzu.baselibrary.base.BaseActivity;
 import cn.guzzu.baselibrary.base.BaseApp;
@@ -58,14 +56,13 @@ import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
 import cn.guzzu.shoppingmall.adapter.ProductOrderListAdapter;
 import cn.guzzu.shoppingmall.bean.Discount;
-import cn.guzzu.shoppingmall.bean.GoHomeEvent;
 import cn.guzzu.shoppingmall.bean.OrderPreviewRequest;
 import cn.guzzu.shoppingmall.bean.OrderPreviewResponse;
 import cn.guzzu.shoppingmall.bean.PayResult;
 import cn.guzzu.shoppingmall.bean.ProductItem;
 import cn.guzzu.shoppingmall.bean.WXPay;
 import cn.guzzu.shoppingmall.bean.WxPayEvent;
-import cn.guzzu.shoppingmall.util.LoginUtil;
+import cn.guzzu.shoppingmall.util.ErrorUtil;
 import cn.guzzu.shoppingmall.util.WXPayUtil;
 import okhttp3.Call;
 
@@ -332,25 +329,24 @@ public class SettledActivity extends BaseActivity {
                     });
 
                 } else {
-                    if (LoginUtil.isLogin(context, json)) {
-                        showLoading("The product is not available\n找不到该订单");
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                super.run();
-                                try {
-                                    Thread.sleep(1000);//休眠1秒
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                cancelLoading();
-                                finish();
-                                /**
-                                 * 要执行的操作
-                                 */
+                    showLoading(ErrorUtil.loginError(context,gson,json));
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+                            try {
+                                Thread.sleep(1000);//休眠1秒
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
-                        }.start();
-                    }
+                            cancelLoading();
+                            finish();
+                            /**
+                             * 要执行的操作
+                             */
+                        }
+                    }.start();
+
                 }
             }
 
