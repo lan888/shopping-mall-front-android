@@ -4,7 +4,6 @@ package cn.guzzu.shoppingmall.ui;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
-import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -49,12 +48,14 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.mBottom)
     BottomNavigationView mBottom;
+
     private ArrayList<BaseFragment> mFragments;
     private BaseFragment mContext;
     private String categoryId;
     private String cartAt;
     private int curPosition = 0;
     private QBadgeView badgeView;
+    private BottomNavigationItemView itemView;
 
     @Override
     public int initLayout() {
@@ -65,6 +66,7 @@ public class MainActivity extends BaseActivity {
     public void initView() {
         BottomNavigationViewHelper.disableShiftMode(mBottom);
         badgeView = new QBadgeView(context);
+        itemView = mBottom.findViewById(R.id.shoppingcart_item);
     }
 
 
@@ -182,7 +184,6 @@ public class MainActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        final BottomNavigationItemView itemView = mBottom.findViewById(R.id.shoppingcart_item);
         OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId,"en", new GsonArrayCallback<CartAll>() {
             @Override
             public void onUiThread(int code,String json, List<CartAll> list) {
