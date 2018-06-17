@@ -492,7 +492,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
         if (count == 0) {
             clearCart();
         } else {
-            mToolbarEdit.setVisibility(View.VISIBLE);
+//            mToolbarEdit.setVisibility(View.VISIBLE);
             llCart.setVisibility(View.VISIBLE);
             mToolbar.setTitle("购物车(" + count + ")");
         }
@@ -793,6 +793,15 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
     @Override
     public void groupEditor(int groupPosition) {
 
+    }
+
+    public void doUnLogin(){
+        mMultiStateView.setState(MultiStateView.STATE_UNAUTH).setButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.start_Activity(activity, LoginActivity.class);
+            }
+        });
     }
 
     private void initDialog(final List<CartStore> cartStoreList){

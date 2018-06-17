@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initView() {
         BottomNavigationViewHelper.disableShiftMode(mBottom);
-
+        badgeView = new QBadgeView(context);
     }
 
 
@@ -182,8 +182,7 @@ public class MainActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        BottomNavigationMenuView menuView = (BottomNavigationMenuView) mBottom.getChildAt(0);
-        final BottomNavigationItemView itemView = (BottomNavigationItemView) menuView.getChildAt(2);
+        final BottomNavigationItemView itemView = mBottom.findViewById(R.id.shoppingcart_item);
         OkHttp3Utils.doPost(Api.GUZZU + Api.CART_ALL, BaseApp.Constant.userId,"en", new GsonArrayCallback<CartAll>() {
             @Override
             public void onUiThread(int code,String json, List<CartAll> list) {
@@ -205,7 +204,6 @@ public class MainActivity extends BaseActivity {
                         }
                     }
                     if (count>0){
-                        badgeView = new QBadgeView(context);
                         badgeView.bindTarget(itemView).setBadgeNumber(count).setBadgeGravity(Gravity.END|Gravity.TOP).setGravityOffset(12f,2f,true);
                     }
                     UtilsLog.d(count+","+itemView.toString());
@@ -236,6 +234,7 @@ public class MainActivity extends BaseActivity {
     public void reFresh(UnLoginEvent event){
         ShoppingCartFragment shoppingCartFragment = (ShoppingCartFragment) mFragments.get(2);
         if (shoppingCartFragment.isAdded()){
+            shoppingCartFragment.doUnLogin();
             shoppingCartFragment.clearCart();
         }
         MeFragment meFragment = (MeFragment) mFragments.get(3);
