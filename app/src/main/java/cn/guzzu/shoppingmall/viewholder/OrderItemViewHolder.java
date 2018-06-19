@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import cn.guzzu.baselibrary.base.BaseViewHolder;
 import cn.guzzu.baselibrary.util.DataBindingViewUtil;
 import cn.guzzu.baselibrary.util.Utils;
+import cn.guzzu.baselibrary.util.UtilsLog;
 import cn.guzzu.shoppingmall.R;
 import cn.guzzu.shoppingmall.bean.Order;
 import cn.guzzu.shoppingmall.ui.OrderDetailActivity;
@@ -51,21 +52,26 @@ public class OrderItemViewHolder extends BaseViewHolder<Order> {
                 Utils.start_Activity(itemView.getContext(), StoreActivity.class,"storeId",order.getStore().get_id());
             }
         });
-        DataBindingViewUtil.bindDataToLayout(order.getItems(), llProduct, R.layout.layout_order_item_one, new DataBindingViewUtil.OnBindingDataListener<Order.Items>() {
-            @Override
-            public void onBindData(@NonNull View v, Order.Items data, int position) {
-                ImageView ivImage = v.findViewById(R.id.iv_image);
-                TextView tvName = v.findViewById(R.id.tv_name);
-                TextView tvOption = v.findViewById(R.id.tv_option);
-                TextView tvPrice = v.findViewById(R.id.tv_price);
-                TextView tvQuantity = v.findViewById(R.id.tv_quantity);
-                Glide.with(itemView.getContext()).load(data.getProduct().getImage().getThumb().getUrl()).into(ivImage);
-                tvName.setText(data.getName());
-                tvPrice.setText("¥"+(double)data.getPrice()/100);
-                tvOption.setText(data.getOptionName());
-                tvQuantity.setText("x"+data.getQuantity());
-            }
-        });
+        UtilsLog.d(order.getItems().size()+",件商品");
+        try {
+            DataBindingViewUtil.bindDataToLayout(order.getItems(), llProduct, R.layout.layout_order_item_one, new DataBindingViewUtil.OnBindingDataListener<Order.Items>() {
+                @Override
+                public void onBindData(@NonNull View v, Order.Items data, int position) {
+                    ImageView ivImage = v.findViewById(R.id.iv_image);
+                    TextView tvName = v.findViewById(R.id.tv_name);
+                    TextView tvOption = v.findViewById(R.id.tv_option);
+                    TextView tvPrice = v.findViewById(R.id.tv_price);
+                    TextView tvQuantity = v.findViewById(R.id.tv_quantity);
+                    Glide.with(itemView.getContext()).load(data.getProduct().getImage().getThumb().getUrl()).into(ivImage);
+                    tvName.setText(data.getName());
+                    tvPrice.setText("¥"+(double)data.getPrice()/100);
+                    tvOption.setText(data.getOptionName());
+                    tvQuantity.setText("x"+data.getQuantity());
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,6 +88,9 @@ public class OrderItemViewHolder extends BaseViewHolder<Order> {
         if (!TextUtils.equals(order.getPaymentStatus(),"pending")){
             btnCheck.setBackgroundColor(getColor(R.color.green_400));
             btnCheck.setText("Detail");
+        }else {
+            btnCheck.setBackgroundColor(getColor(R.color.red));
+            btnCheck.setText("Pay Now");
         }
     }
 
