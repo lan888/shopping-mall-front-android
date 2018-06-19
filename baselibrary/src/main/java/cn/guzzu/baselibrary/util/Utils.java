@@ -54,7 +54,20 @@ public class Utils {
         activity.overridePendingTransition(R.anim.push_right_in,
                 R.anim.push_right_out);
     }
+    /**
+     * 回到Activity
+     *
+     * @param activity
+     * @param cls
+     */
+    public static void back_Activity(Activity activity, Class<?> cls) {
+        Intent intent = new Intent();
+        intent.setClass(activity, cls);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(R.anim.push_right_in,
+                R.anim.push_right_out);
 
+    }
     /**
      * 打开Activity
      *

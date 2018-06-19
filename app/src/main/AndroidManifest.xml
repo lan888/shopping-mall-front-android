@@ -39,7 +39,8 @@
         <activity android:name=".ui.SettledActivity" />
         <activity android:name=".ui.AddressAddActivity" />
         <activity android:name=".ui.AddressManagerActivity" />
-        <activity android:name=".ui.OrderActivity" />
+        <activity android:name=".ui.OrderActivity"
+            android:launchMode="singleTop"/>
         <activity android:name=".ui.SearchDetailActivity" />
         <activity android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"

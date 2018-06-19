@@ -1,6 +1,7 @@
 package cn.guzzu.shoppingmall.viewholder;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -69,9 +70,19 @@ public class OrderItemViewHolder extends BaseViewHolder<Order> {
             @Override
             public void onClick(View v) {
                 Utils.start_Activity(itemView.getContext(), OrderDetailActivity.class,"orderId",order.get_id());
+
             }
         });
-
+        btnCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.start_Activity(itemView.getContext(), OrderDetailActivity.class,"orderId",order.get_id());
+            }
+        });
+        if (!TextUtils.equals(order.getPaymentStatus(),"pending")){
+            btnCheck.setBackgroundColor(getColor(R.color.green_400));
+            btnCheck.setText("Detail");
+        }
     }
 
 }

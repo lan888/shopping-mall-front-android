@@ -96,6 +96,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
     //false就是编辑，ture就是完成
     private boolean flag = false;
     private ShoppingCartAdapter adapter;
+    private List<String> itemId;
     private List<CartAll.Store> groups; //组元素的列表
     private Map<String, List<CartAll.Items>> childs; //子元素的列表
     private Gson gson;
@@ -119,6 +120,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
     protected void initData() {
         gson = new Gson();
         mContext = activity;
+        itemId = new ArrayList<>();
         groups = new ArrayList<>();
         childs = new ArrayMap<>();
         refreshLayout.setRefreshHeader(new ClassicsHeader(activity).setSpinnerStyle(SpinnerStyle.Scale));
@@ -390,6 +392,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                         if (cartStoreList.size()==1){
                             Map<String,Object> map = cartStoreList.get(0).getStoreId();
                             List<Map<String,String>> list = new ArrayList<>();
+                            itemId.clear();
                             for (int j = 0 ;j<itemsList.size();j++){
                                 if (itemsList.get(j).isChoosed()){
                                     UtilsLog.d("Ok,"+itemsList.get(j).getProductOptionId());
@@ -399,12 +402,14 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                                         productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
                                         productMap.put("productOptionId",itemsList.get(j).getProductOption().get_id());
                                         UtilsLog.d(productMap.toString());
+                                        itemId.add(itemsList.get(j).get_id());
                                         list.add(productMap);
                                     }else {
                                         Map<String,String> productMap = new ArrayMap<>();
                                         productMap.put("productId",itemsList.get(j).getProductId());
                                         productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
                                         UtilsLog.d(productMap.toString());
+                                        itemId.add(itemsList.get(j).get_id());
                                         list.add(productMap);
                                     }
 
@@ -412,6 +417,9 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                             }
                             map.put("items",list);
                             UtilsLog.d(gson.toJson(map));
+                            CartChangeEvent cartChangeEvent = new CartChangeEvent();
+                            cartChangeEvent.setItemId(itemId);
+                            EventBus.getDefault().postSticky(cartChangeEvent);
                             Utils.start_Activity(activity,SettledActivity.class,"product",gson.toJson(map));
                         }else {
                             initDialog(cartStoreList);
@@ -461,7 +469,6 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                 dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        return;
                     }
                 });
                 dialog.show();
@@ -496,7 +503,9 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
             llCart.setVisibility(View.VISIBLE);
             mToolbar.setTitle("购物车(" + count + ")");
         }
-        EventBus.getDefault().post(new CartChangeEvent(count));
+        CartChangeEvent cartChangeEvent = new CartChangeEvent();
+        cartChangeEvent.setCount(count);
+        EventBus.getDefault().postSticky(cartChangeEvent);
 
     }
 
@@ -821,6 +830,9 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                 if (null==settledRequest||settledRequest.isEmpty()){
                     storeDialog.dismiss();
                 }else {
+                    CartChangeEvent cartChangeEvent = new CartChangeEvent();
+                    cartChangeEvent.setItemId(itemId);
+                    EventBus.getDefault().postSticky(cartChangeEvent);
                     Utils.start_Activity(activity,SettledActivity.class,"product",settledRequest);
                 }
 
@@ -875,6 +887,7 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
         Map<String,Object> map = cartStoreList.get(position).getStoreId();
         List<CartAll.Items> itemsList = cartStoreList.get(position).getItemsList();
         List<Map<String,String>> list = new ArrayList<>();
+        itemId.clear();
         for (int j = 0 ;j<itemsList.size();j++){
             if (itemsList.get(j).isChoosed()){
                 UtilsLog.d("Ok,"+itemsList.get(j).getProductOptionId());
@@ -884,12 +897,14 @@ public class ShoppingCartFragment extends BaseFragment<MainActivity> implements 
                     productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
                     productMap.put("productOptionId",itemsList.get(j).getProductOption().get_id());
                     UtilsLog.d(productMap.toString());
+                    itemId.add(itemsList.get(j).get_id());
                     list.add(productMap);
                 }else {
                     Map<String,String> productMap = new ArrayMap<>();
                     productMap.put("productId",itemsList.get(j).getProductId());
                     productMap.put("quantity",String.valueOf(itemsList.get(j).getQuantity()));
                     UtilsLog.d(productMap.toString());
+                    itemId.add(itemsList.get(j).get_id());
                     list.add(productMap);
                 }
 

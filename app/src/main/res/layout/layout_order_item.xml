@@ -62,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/len_48"
         android:id="@+id/btn_check"
-        android:text="Checkout"
+        android:text="Pay Now"
         android:layout_gravity="right"
         android:background="@color/red"
         app:animate ="false"/>

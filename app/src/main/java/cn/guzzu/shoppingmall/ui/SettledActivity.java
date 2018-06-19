@@ -5,11 +5,11 @@ import android.app.Dialog;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,6 +27,7 @@ import com.gc.materialdesign.views.LayoutRipple;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,6 +56,7 @@ import cn.guzzu.baselibrary.util.UtilsLog;
 import cn.guzzu.shoppingmall.Api;
 import cn.guzzu.shoppingmall.R;
 import cn.guzzu.shoppingmall.adapter.ProductOrderListAdapter;
+import cn.guzzu.shoppingmall.bean.CartChangeEvent;
 import cn.guzzu.shoppingmall.bean.Discount;
 import cn.guzzu.shoppingmall.bean.OrderPreviewRequest;
 import cn.guzzu.shoppingmall.bean.OrderPreviewResponse;
@@ -63,6 +65,7 @@ import cn.guzzu.shoppingmall.bean.ProductItem;
 import cn.guzzu.shoppingmall.bean.WXPay;
 import cn.guzzu.shoppingmall.bean.WxPayEvent;
 import cn.guzzu.shoppingmall.util.ErrorUtil;
+import cn.guzzu.shoppingmall.util.PayUtil;
 import cn.guzzu.shoppingmall.util.WXPayUtil;
 import okhttp3.Call;
 
@@ -105,6 +108,7 @@ public class SettledActivity extends BaseActivity {
     private String mPreviewJson;
     private Dialog bottomDialog;
     private String orderId;
+    private String storeId;
     private ProductItem productItem;
     private OrderPreviewRequest.ShippingAddress addressLastUsed;
     private ProductOrderListAdapter mProductOrderListAdapter;
@@ -112,7 +116,8 @@ public class SettledActivity extends BaseActivity {
     private int lastPosition = -1;
     private int payType = 1;//1-微信支付，2-支付宝
     private boolean isPaid = false;
-    private String data = null;
+    private List<String>itemId;
+
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @SuppressWarnings("unused")
@@ -130,6 +135,7 @@ public class SettledActivity extends BaseActivity {
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                         Utils.start_Activity(context,OrderDetailActivity.class,"orderId",orderId);
+                        finish();
                         Toast.makeText(SettledActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
@@ -229,8 +235,9 @@ public class SettledActivity extends BaseActivity {
                             obj.put("nonce", simpleDateFormat.format(date));
                             obj.put("type", "default");
                             JSONObject object = new JSONObject(mProduct);
+                            storeId = object.optString("storeId");
                             obj.put("items", object.optJSONArray("items"));
-                            obj.put("storeId", object.optString("storeId"));
+                            obj.put("storeId", storeId);
                             mPreviewJson = obj.toString();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -260,7 +267,8 @@ public class SettledActivity extends BaseActivity {
                                 //循环遍历把对象添加到集合
                                 itemsList.add(gson.fromJson(elem, OrderPreviewRequest.Items.class));
                             }
-                            orderPreviewRequest.setStoreId(object.optString("storeId"));
+                            storeId = object.optString("storeId");
+                            orderPreviewRequest.setStoreId(storeId);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -526,76 +534,7 @@ public class SettledActivity extends BaseActivity {
                             Utils.showShortToast(context, "生成订单成功");
                             Map<String, String> map = new ArrayMap<>();
                             map.put("orderId", orderId);
-                            switch (payType){
-                                case 1:
-                                    OkHttp3Utils.doJsonPost(Api.GUZZU+Api.WX_PAY, map, BaseApp.Constant.userId, new JsonCallback() {
-                                        @Override
-                                        public void onUiThread(int code, String json) {
-                                            if (code==200){
-                                                WXPay wxPay = gson.fromJson(json, WXPay.class);
-                                                if (BaseApp.mWxApi != null && BaseApp.mWxApi.isWXAppInstalled()){
-                                                    WXPayUtil.WXPayBuilder builder = new WXPayUtil.WXPayBuilder();
-                                                    builder.setAppId(BaseApp.Constant.APP_ID_WX);
-                                                    builder.setPartnerId(wxPay.getPartnerId());
-                                                    builder.setPrepayId(wxPay.getPrepayId());
-                                                    builder.setNonceStr(wxPay.getNonceStr());
-                                                    builder.setTimeStamp(wxPay.getTimeStamp());
-                                                    builder.setPackageValue(wxPay.getPackageX());
-                                                    builder.setSign(wxPay.getSign()).build().toWXPayNotSign();
-                                                }else {
-                                                    Utils.showShortToast(context, "用户未安装微信");
-                                                }
-
-                                            }
-
-                                        }
-
-                                        @Override
-                                        public void onFailed(Call call, IOException exception) {
-
-                                        }
-                                    });
-                                    break;
-                                case 2:
-                                    OkHttp3Utils.doJsonPost(Api.GUZZU + Api.ALI_PAY, map, BaseApp.Constant.userId, new JsonCallback() {
-                                        @Override
-                                        public void onUiThread(int code, String json) {
-                                            if (code == 200){
-                                                try {
-                                                    JSONObject obj = new JSONObject(json);
-                                                    data = obj.optString("data");
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                                Runnable authRunnable = new Runnable() {
-
-                                                    @Override
-                                                    public void run() {
-                                                        // 构造AuthTask 对象
-                                                        AuthTask authTask = new AuthTask(SettledActivity.this);
-                                                        // 调用授权接口，获取授权结果
-                                                        Map<String, String> result = authTask.authV2(data, true);
-
-                                                        Message msg = new Message();
-                                                        msg.what = 1;
-                                                        msg.obj = result;
-                                                        mHandler.sendMessage(msg);
-                                                    }
-                                                };
-                                                // 必须异步调用
-                                                Thread authThread = new Thread(authRunnable);
-                                                authThread.start();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailed(Call call, IOException exception) {
-
-                                        }
-                                    });
-                                    break;
-                            }
-
+                            PayUtil.goPay(payType,map,SettledActivity.this,gson,mHandler);
                         }
                     }
 
@@ -604,6 +543,28 @@ public class SettledActivity extends BaseActivity {
 
                     }
                 });
+                if (itemId==null||itemId.size()==0)
+                    return;
+                for (String id:itemId){
+                    Map<String,String> map = new ArrayMap<>();
+                    map.put("itemId",id);
+                    map.put("storeId",storeId);
+                    OkHttp3Utils.doJsonPost(Api.GUZZU + Api.CART_REMOVE, map, BaseApp.Constant.userId, new JsonCallback() {
+                        @Override
+                        public void onUiThread(int code, String json) {
+                            if (code==200){
+                                return;
+                            }
+                            Utils.showShortToast(context,ErrorUtil.loginError(context,gson,json));
+                        }
+
+                        @Override
+                        public void onFailed(Call call, IOException exception) {
+
+                        }
+                    });
+                }
+
                 break;
             case R.id.ll_discount:
                 bottomDialog.show();
@@ -634,6 +595,11 @@ public class SettledActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void goOrder(WxPayEvent event){
         isPaid = event.isPaid();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void delCart(CartChangeEvent event){
+        itemId = event.getItemId();
     }
 
 }
